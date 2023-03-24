@@ -31,6 +31,7 @@ struct PokemonDetailView: View {
         }
         .onAppear {
             vm.getPokemon(pokemon: pokemon)
+            vm.playCry(pokemon: pokemon)
         }
         .onDisappear {
             vm.pokemonDetails = nil

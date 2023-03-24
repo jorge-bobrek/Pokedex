@@ -10,6 +10,7 @@ import SwiftUI
 
 final class ViewModel: ObservableObject {
     private let pokemonManager = PokemonManager()
+    private let playerManager = PlayerManager()
     
     @Published var pokemonList = [PokemonPage]()
     @Published var pokemonDetails: Pokemon?
@@ -40,5 +41,9 @@ final class ViewModel: ObservableObject {
                 self.pokemonDetails = data
             }
         }
+    }
+    
+    func playCry(pokemon: PokemonPage) {
+        self.playerManager.play(url: URL(string: "https://play.pokemonshowdown.com/audio/cries/\(pokemon.name.replacingOccurrences(of: "-", with: "")).mp3")!)
     }
 }
