@@ -28,3 +28,9 @@ extension Bundle {
         .resume()
     }
 }
+
+enum Language: String {
+    case spanish = "es"
+    case english = "en"
+    case japanese = "ja-Hrkt"
+}

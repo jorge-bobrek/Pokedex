@@ -13,7 +13,9 @@ final class ViewModel: ObservableObject {
     private let playerManager = PlayerManager()
     
     @Published var pokemonList = [PokemonPage]()
-    @Published var pokemonDetails: Pokemon?
+    @Published var pokemonDetails: PokemonModel?
+    @Published var pokemonSpecies: SpeciesModel?
+    @Published var pokemonAbilities = ["", "", ""]
     @Published var searchText = ""
     
     var filteredPokemon: [PokemonPage] {
@@ -30,17 +32,47 @@ final class ViewModel: ObservableObject {
         }
     }
     
-    func getPokemonIndex(pokemon: PokemonPage) -> Int {
-        return Int(pokemon.url.split(separator: "/").last!)!
+    func getIndex(url: String) -> Int {
+        return Int(url.split(separator: "/").last!)!
     }
     
     func getPokemon(pokemon: PokemonPage) {
-        let id = getPokemonIndex(pokemon: pokemon)
+        let id = getIndex(url: pokemon.url)
         self.pokemonManager.getPokemon(id: id) { data in
             DispatchQueue.main.async {
                 self.pokemonDetails = data
             }
         }
+    }
+    
+    func getSpecies(pokemon: PokemonPage) {
+        let id = getIndex(url: pokemon.url)
+        self.pokemonManager.getSpecies(id: id) { data in
+            DispatchQueue.main.async {
+                self.pokemonSpecies = data
+            }
+        }
+    }
+    
+    func getAbilityName(index: Int, position: Int, language: Language) {
+        self.pokemonManager.getAbility(id: index) { data in
+            DispatchQueue.main.async {
+                for element in data.names {
+                    if element.language.name == language.rawValue {
+                        self.pokemonAbilities[position] = element.name
+                    }
+                }
+            }
+        }
+    }
+    
+    func getGenusTranslation(array: [Genus], language: Language) -> String {
+        for element in array {
+            if element.language.name == language.rawValue {
+                return element.genus
+            }
+        }
+        return ""
     }
     
     func playCry(pokemon: PokemonPage) {

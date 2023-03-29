@@ -14,12 +14,12 @@ struct PokemonPageView: View {
     
     var body: some View {
         HStack(spacing: 10) {
-            pokemonImage(id: vm.getPokemonIndex(pokemon: pokemon), size: dimensions)
+            PokemonImage(id: vm.getIndex(url: pokemon.url), size: dimensions, sprite: true)
             Text(pokemon.name.uppercased())
                 .font(.custom("My Font", size: 20))
                 .foregroundColor(.black)
             Spacer(minLength: 0)
-            Text("#\(String(format: "%03d", vm.getPokemonIndex(pokemon: pokemon)))")
+            Text("#\(String(format: "%04d", vm.getIndex(url: pokemon.url)))")
                 .font(.custom("My Font", size: 20))
                 .foregroundColor(.black)
         }
