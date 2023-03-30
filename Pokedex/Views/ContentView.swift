@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject var vm = ViewModel()
+    @StateObject var vm = PokemonListViewModel()
     
     var body: some View {
         NavigationView {
@@ -16,7 +16,7 @@ struct ContentView: View {
                 LazyVStack(alignment: .leading, spacing: 10) {
                     ForEach(vm.filteredPokemon) { pokemon in
                         NavigationLink(destination: PokemonDetailView(pokemon: pokemon)) {
-                            PokemonPageView(pokemon: pokemon)
+                            PokemonItemView(pokemon: pokemon)
                         }
                     }
                 }

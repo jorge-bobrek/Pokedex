@@ -27,6 +27,10 @@ extension Bundle {
         }
         .resume()
     }
+    
+    func getIndex(url: String) -> Int {
+        return Int(url.split(separator: "/").last!)!
+    }
 }
 
 enum Language: String {

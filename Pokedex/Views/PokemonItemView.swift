@@ -7,19 +7,18 @@
 
 import SwiftUI
 
-struct PokemonPageView: View {
-    @EnvironmentObject var vm: ViewModel
+struct PokemonItemView: View {
+    @EnvironmentObject var vm: PokemonListViewModel
     let pokemon: PokemonPage
-    let dimensions: Double = 100
     
     var body: some View {
         HStack(spacing: 10) {
-            PokemonImage(id: vm.getIndex(url: pokemon.url), size: dimensions, sprite: true)
+            PokemonImage(id: Bundle.main.getIndex(url: pokemon.url), size: 100, sprite: true)
             Text(pokemon.name.uppercased())
                 .font(.custom("My Font", size: 20))
                 .foregroundColor(.black)
             Spacer(minLength: 0)
-            Text("#\(String(format: "%04d", vm.getIndex(url: pokemon.url)))")
+            Text("#\(String(format: "%04d", Bundle.main.getIndex(url: pokemon.url)))")
                 .font(.custom("My Font", size: 20))
                 .foregroundColor(.black)
         }
@@ -28,7 +27,7 @@ struct PokemonPageView: View {
 
 struct PokemonPageView_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonPageView(pokemon: PokemonPage.example)
-            .environmentObject(ViewModel())
+        PokemonItemView(pokemon: PokemonPage.example)
+            .environmentObject(PokemonListViewModel())
     }
 }

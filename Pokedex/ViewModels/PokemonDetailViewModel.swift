@@ -1,53 +1,34 @@
 //
-//  ViewModel.swift
+//  DetailViewModel.swift
 //  Pokedex
 //
-//  Created by Jorge Bobrek on 22/03/23.
+//  Created by Jorge Bobrek on 30/03/23.
 //
 
 import Foundation
 import SwiftUI
 
-final class ViewModel: ObservableObject {
-    private let pokemonManager = PokemonManager()
+final class PokemonDetailViewModel: ObservableObject {
+    private let pokemonManager = PokemonDetailManager()
     private let playerManager = PlayerManager()
     
-    @Published var pokemonList = [PokemonPage]()
     @Published var pokemonDetails: PokemonModel?
     @Published var pokemonSpecies: SpeciesModel?
     @Published var pokemonAbilities = ["", "", ""]
-    @Published var searchText = ""
-    
-    var filteredPokemon: [PokemonPage] {
-        return searchText.isEmpty ? pokemonList : pokemonList.filter {
-            $0.name.contains(searchText.lowercased())
-        }
-    }
     
     init() {
-        self.pokemonManager.getPokemonList { data in
-            DispatchQueue.main.async {
-                self.pokemonList = data
-            }
-        }
     }
     
-    func getIndex(url: String) -> Int {
-        return Int(url.split(separator: "/").last!)!
-    }
-    
-    func getPokemon(pokemon: PokemonPage) {
-        let id = getIndex(url: pokemon.url)
-        self.pokemonManager.getPokemon(id: id) { data in
+    func getPokemon(pokemon: Int) {
+        self.pokemonManager.getPokemon(id: pokemon) { data in
             DispatchQueue.main.async {
                 self.pokemonDetails = data
             }
         }
     }
     
-    func getSpecies(pokemon: PokemonPage) {
-        let id = getIndex(url: pokemon.url)
-        self.pokemonManager.getSpecies(id: id) { data in
+    func getSpecies(pokemon: Int) {
+        self.pokemonManager.getSpecies(id: pokemon) { data in
             DispatchQueue.main.async {
                 self.pokemonSpecies = data
             }

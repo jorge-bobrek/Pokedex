@@ -8,17 +8,16 @@
 import SwiftUI
 
 struct PokemonDetailView: View {
-    @EnvironmentObject var vm: ViewModel
+    @StateObject var vm = PokemonDetailViewModel()
     let pokemon: PokemonPage
-    let dimensions: Double = 300
     var body: some View {
         ScrollView {
             VStack(spacing: 10) {
                 HStack {
-                    DetailText(String(format: "#%04d", vm.getIndex(url: pokemon.url)), .Title)
+                    DetailText(String(format: "#%04d", Bundle.main.getIndex(url: pokemon.url)), .Title)
                     Spacer()
                 }
-                PokemonImage(id: vm.getIndex(url: pokemon.url), size: dimensions)
+                PokemonImage(id: Bundle.main.getIndex(url: pokemon.url), size: 300)
                 DetailText(pokemon.name, .Title)
                 if vm.pokemonDetails == nil || vm.pokemonSpecies == nil {
                     ProgressView()
@@ -55,9 +54,11 @@ struct PokemonDetailView: View {
                                 }
                             }
                         }
-                        GridRow {
-                            DetailText("Hab. oculta", .Detail)
-                            DetailText(vm.pokemonAbilities[2], .Info)
+                        if !vm.pokemonAbilities[2].isEmpty {
+                            GridRow {
+                                DetailText("Hab. oculta", .Detail)
+                                DetailText(vm.pokemonAbilities[2], .Info)
+                            }
                         }
                         GridRow {
                             DetailText("Peso", .Detail)
@@ -75,7 +76,7 @@ struct PokemonDetailView: View {
                     .padding(.top, 20)
                     .onAppear {
                         for ability in vm.pokemonDetails!.abilities {
-                            vm.getAbilityName(index: vm.getIndex(url: ability.ability.url), position: ability.slot - 1, language: .spanish)
+                            vm.getAbilityName(index: Bundle.main.getIndex(url: ability.ability.url), position: ability.slot - 1, language: .spanish)
                         }
                     }
                 }
@@ -83,14 +84,9 @@ struct PokemonDetailView: View {
             .padding(20)
         }
         .onAppear {
-            vm.getSpecies(pokemon: pokemon)
-            vm.getPokemon(pokemon: pokemon)
+            vm.getSpecies(pokemon: Bundle.main.getIndex(url: pokemon.url))
+            vm.getPokemon(pokemon: Bundle.main.getIndex(url: pokemon.url))
             vm.playCry(pokemon: pokemon)
-        }
-        .onDisappear {
-            vm.pokemonSpecies = nil
-            vm.pokemonDetails = nil
-            vm.pokemonAbilities = ["", "", ""]
         }
     }
 }
@@ -98,7 +94,6 @@ struct PokemonDetailView: View {
 struct PokemonDetailView_Previews: PreviewProvider {
     static var previews: some View {
         PokemonDetailView(pokemon: PokemonPage.example)
-            .environmentObject(ViewModel())
     }
 }
 
