@@ -15,8 +15,20 @@ final class PokemonDetailViewModel: ObservableObject {
     @Published var pokemonDetails: PokemonModel?
     @Published var pokemonSpecies: SpeciesModel?
     @Published var pokemonAbilities = ["", "", ""]
+    @Published var pokemonEvolutionChain: EvolutionChainModel?
     
-    init() {
+    func loadPokemon(pokemon: PokemonPage) {
+        let id = Bundle.main.getIndex(url: pokemon.url)
+        self.getPokemon(pokemon: id)
+        self.getSpecies(pokemon: id)
+        self.playCry(pokemon: pokemon)
+    }
+    
+    func loadData() {
+        for ability in self.pokemonDetails!.abilities {
+            self.getAbilityName(index: Bundle.main.getIndex(url: ability.ability.url), position: ability.slot - 1, language: .spanish)
+        }
+        self.getEvolutionChain(pokemon: Bundle.main.getIndex(url: self.pokemonSpecies!.evolutionChain.url))
     }
     
     func getPokemon(pokemon: Int) {
@@ -33,6 +45,23 @@ final class PokemonDetailViewModel: ObservableObject {
                 self.pokemonSpecies = data
             }
         }
+    }
+    
+    func getEvolutionChain(pokemon: Int) {
+        self.pokemonManager.getEvolutionChain(id: pokemon) { data in
+            DispatchQueue.main.async {
+                self.pokemonEvolutionChain = data
+            }
+        }
+    }
+    
+    func getSpeciesName(names: [Name], language: Language) -> String {
+        for element in names {
+            if element.language.name == language.rawValue {
+                return element.name
+            }
+        }
+        return ""
     }
     
     func getAbilityName(index: Int, position: Int, language: Language) {

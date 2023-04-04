@@ -1,5 +1,5 @@
 //
-//  Utils.swift
+//  UIUtils.swift
 //  Pokedex
 //
 //  Created by Jorge Bobrek on 23/03/23.

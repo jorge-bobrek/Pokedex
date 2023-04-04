@@ -23,7 +23,7 @@ struct PokemonPage: Codable, Identifiable, Equatable {
         case url
     }
     
-    static let example = PokemonPage(name: "bulbasaur", url: "https://pokeapi.co/api/v2/pokemon/1")
+    static let example = PokemonPage(name: "ralts", url: "https://pokeapi.co/api/v2/pokemon/280")
 }
 
 // MARK: - NameUrl

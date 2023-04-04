@@ -26,6 +26,12 @@ class PokemonDetailManager {
         }
     }
     
+    func getEvolutionChain(id: Int, _ completion: @escaping (EvolutionChainModel) -> ()) {
+        getModel(id: id, model: EvolutionChainModel.self, url: "evolution-chain") { data in
+            completion(data)
+        }
+    }
+    
     private func getModel<T: Decodable>(id: Int, model: T.Type, url: String, _ completion: @escaping (T) -> ()){
         Bundle.main.fetchData(url: "https://pokeapi.co/api/v2/\(url)/\(id)", model: model.self, completion: { data in
             completion(data)
