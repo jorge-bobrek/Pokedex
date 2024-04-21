@@ -19,7 +19,43 @@ struct PokemonDetailView: View {
     var body: some View {
         ScrollView {
             ScrollViewReader { proxy in
-                if vm.pokemonDetails == nil || vm.pokemonSpecies == nil {
+                if let details = vm.pokemonDetails, let species = vm.pokemonSpecies {
+                    LazyVStack(alignment: .center, spacing: 40) {
+                        VStack {
+                            HStack {
+                                DetailText(String(format: "#%04d", vm.pokemonDetails!.id), .Title)
+                                Spacer()
+                            }
+                            .id(0)
+                            PokemonImage(id: details.id, size: 300)
+                            DetailText(vm.getSpeciesName(names: species.names, language: language), .Title)
+                            Text(vm.getSpeciesName(names: species.names, language: .japanese))
+                                .font(.title)
+                            Text("(\(vm.getSpeciesName(names: species.names, language: .japanese).applyingTransform(.toLatin, reverse: false)!.capitalized))")
+                        }
+                        //MARK: Details
+                        PokemonInformation()
+                            .onAppear {
+                                vm.loadData()
+                            }
+                        
+                        //MARK: Evolution
+                        DetailText("Evolución", .Title)
+                        if vm.pokemonEvolutionChain == nil {
+                            ProgressView()
+                        } else {
+                            PokemonEvolution(proxy: proxy)
+                        }
+                        
+                        //MARK: Moves
+                        DetailText("Movimientos", .Title)
+                        PokemonMoves()
+                            .onAppear {
+                                vm.sortMoves()
+                            }
+                    }
+                    
+                } else {
                     VStack {
                         HStack {
                             Text("*****")
@@ -43,33 +79,6 @@ struct PokemonDetailView: View {
                         PokemonInformation()
                     }
                     .padding(20)
-                } else {
-                    LazyVStack(alignment: .center, spacing: 40) {
-                        VStack {
-                            HStack {
-                                DetailText(String(format: "#%04d", vm.pokemonDetails!.id), .Title)
-                                Spacer()
-                            }
-                            .id(0)
-                            PokemonImage(id: vm.pokemonDetails!.id, size: 300)
-                            DetailText(vm.getSpeciesName(names: vm.pokemonSpecies!.names, language: language), .Title)
-                            Text("\(vm.getSpeciesName(names: vm.pokemonSpecies!.names, language: .japanese)) (\(vm.getSpeciesName(names: vm.pokemonSpecies!.names, language: .japanese).applyingTransform(.toLatin, reverse: false)!.capitalized))")
-                                .font(.title)
-                        }
-                        //MARK: Details
-                        PokemonInformation()
-                            .onAppear {
-                                vm.loadData()
-                            }
-                        
-                        //MARK: Evolution
-                        DetailText("Evolución", .Title)
-                        if vm.pokemonEvolutionChain == nil {
-                            ProgressView()
-                        } else {
-                            PokemonEvolution(proxy: proxy)
-                        }
-                    }
                 }
             }
             .onAppear {

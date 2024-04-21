@@ -28,6 +28,7 @@
 		F7B3337C29D4A795002D56B1 /* PokemonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B3337B29D4A795002D56B1 /* PokemonModel.swift */; };
 		F7BE555C29CCAA8B006CAE3E /* UIUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BE555B29CCAA8B006CAE3E /* UIUtils.swift */; };
 		F7BE556A29CCE928006CAE3E /* My Font.otf in Resources */ = {isa = PBXBuildFile; fileRef = F7BE556929CCE928006CAE3E /* My Font.otf */; };
+		F7DF168629DCD8F0001C855F /* PokemonMoves.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DF168529DCD8F0001C855F /* PokemonMoves.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +54,7 @@
 		F7B3337B29D4A795002D56B1 /* PokemonModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonModel.swift; sourceTree = "<group>"; };
 		F7BE555B29CCAA8B006CAE3E /* UIUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIUtils.swift; sourceTree = "<group>"; };
 		F7BE556929CCE928006CAE3E /* My Font.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "My Font.otf"; sourceTree = "<group>"; };
+		F7DF168529DCD8F0001C855F /* PokemonMoves.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonMoves.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +73,7 @@
 			children = (
 				F73021E529D7705E00BE2BC0 /* PokemonInformation.swift */,
 				F73021E329D7700C00BE2BC0 /* PokemonEvolution.swift */,
+				F7DF168529DCD8F0001C855F /* PokemonMoves.swift */,
 			);
 			path = DetailData;
 			sourceTree = "<group>";
@@ -198,6 +201,8 @@
 			dependencies = (
 			);
 			name = Pokedex;
+			packageProductDependencies = (
+			);
 			productName = pokedex;
 			productReference = F744212029C511C100AFF593 /* Pokedex.app */;
 			productType = "com.apple.product-type.application";
@@ -226,6 +231,8 @@
 				Base,
 			);
 			mainGroup = F744211729C511C000AFF593;
+			packageReferences = (
+			);
 			productRefGroup = F744212129C511C100AFF593 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -255,6 +262,7 @@
 			files = (
 				F7A9D2D629CE315500748F7C /* PlayerManager.swift in Sources */,
 				F7B3337C29D4A795002D56B1 /* PokemonModel.swift in Sources */,
+				F7DF168629DCD8F0001C855F /* PokemonMoves.swift in Sources */,
 				F796730529CBB7DF0091DE83 /* PokemonListManager.swift in Sources */,
 				F796730A29CBC3CA0091DE83 /* PokemonItemView.swift in Sources */,
 				F7BE555C29CCAA8B006CAE3E /* UIUtils.swift in Sources */,

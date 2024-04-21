@@ -32,8 +32,6 @@ struct PokemonEvolution: View {
             }
         }
     }
-    
-    
 }
 
 
@@ -45,9 +43,9 @@ fileprivate struct PokemonEvolutionLine: View {
     var body: some View {
         VStack {
             ForEach(pokemon.evolvesTo!) { species in
-                HStack {
+                HStack(spacing: 10) {
                     Image(systemName: "arrow.right")
-                    PokemonImage(id: Bundle.main.getIndex(url: species.species.url), size: 100)
+                    PokemonImage(id: Bundle.main.getIndex(url: species.species.url), size: 120)
                         .onTapGesture {
                             vm.loadPokemon(pokemon: PokemonPage(name: species.species.name, url: species.species.url))
                             withAnimation {

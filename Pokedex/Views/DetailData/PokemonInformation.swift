@@ -11,54 +11,7 @@ struct PokemonInformation: View {
     @EnvironmentObject var vm: PokemonDetailViewModel
     
     var body: some View {
-        if vm.pokemonDetails == nil || vm.pokemonSpecies == nil {
-            Text("*********")
-                .font(.largeTitle)
-                .redacted(reason: .placeholder)
-                .padding(.top, 20)
-            HStack(spacing: 40) {
-                VStack {
-                    Text("********")
-                        .font(.title)
-                        .redacted(reason: .placeholder)
-                    Text("********")
-                        .font(.title)
-                        .redacted(reason: .placeholder)
-                    Text("********")
-                        .font(.title)
-                        .redacted(reason: .placeholder)
-                    Text("********")
-                        .font(.title)
-                        .redacted(reason: .placeholder)
-                    Text("********")
-                        .font(.title)
-                        .redacted(reason: .placeholder)
-                    Text("********")
-                        .font(.title)
-                        .redacted(reason: .placeholder)
-                }
-                VStack {
-                    Text("********")
-                        .font(.title)
-                        .redacted(reason: .placeholder)
-                    Text("********")
-                        .font(.title)
-                        .redacted(reason: .placeholder)
-                    Text("********")
-                        .font(.title)
-                        .redacted(reason: .placeholder)
-                    Text("********")
-                        .font(.title)
-                        .redacted(reason: .placeholder)
-                    Text("********")
-                        .font(.title)
-                        .redacted(reason: .placeholder)
-                    Text("********")
-                        .font(.title)
-                        .redacted(reason: .placeholder)
-                }
-            }
-        } else {
+        if let details = vm.pokemonDetails {
             Grid(alignment: .leading, verticalSpacing: 10) {
                 GridRow {
                     Rectangle()
@@ -69,7 +22,7 @@ struct PokemonInformation: View {
                 GridRow {
                     DetailText("Tipos", .Detail)
                     HStack {
-                        ForEach (vm.pokemonDetails!.types) { type in
+                        ForEach (details.types) { type in
                             TypeImage(type.type.name)
                         }
                     }
@@ -96,15 +49,36 @@ struct PokemonInformation: View {
                 }
                 GridRow {
                     DetailText("Peso", .Detail)
-                    DetailText(String(format: "%.1f kg", Float(vm.pokemonDetails!.weight)/10), .Info)
+                    DetailText(String(format: "%.1f kg", Float(details.weight)/10), .Info)
                 }
                 GridRow {
                     DetailText("Altura", .Detail)
-                    DetailText(String(format: "%.1f m", Float(vm.pokemonDetails!.height)/10), .Info)
+                    DetailText(String(format: "%.1f m", Float(details.height)/10), .Info)
                 }
                 GridRow {
                     DetailText("Especie", .Detail)
-                    DetailText(vm.getGenusTranslation(array: vm.pokemonSpecies!.genera, language: .spanish), .Info)
+                    DetailText(vm.getGenusTranslation(array: vm.pokemonSpecies?.genera ?? [], language: .spanish), .Info)
+                }
+            }
+        } else {
+            Text("*********")
+                .font(.largeTitle)
+                .redacted(reason: .placeholder)
+                .padding(.top, 20)
+            HStack(spacing: 40) {
+                VStack {
+                    ForEach(1..<7) { _ in
+                        Text("********")
+                            .font(.title)
+                            .redacted(reason: .placeholder)
+                    }
+                }
+                VStack {
+                    ForEach(1..<7) { _ in
+                        Text("********")
+                            .font(.title)
+                            .redacted(reason: .placeholder)
+                    }
                 }
             }
         }

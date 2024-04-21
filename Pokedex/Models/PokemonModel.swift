@@ -88,7 +88,8 @@ struct VersionDetail: Codable {
 }
 
 // MARK: - Move
-struct Move: Codable {
+struct Move: Codable, Identifiable {
+    var id = UUID()
     let move: NameUrl
     let versionGroupDetails: [VersionGroupDetail]
 
@@ -99,15 +100,49 @@ struct Move: Codable {
 }
 
 // MARK: - VersionGroupDetail
-struct VersionGroupDetail: Codable {
+struct VersionGroupDetail: Codable, Identifiable {
+    var id = UUID()
     let levelLearnedAt: Int
-    let moveLearnMethod, versionGroup: NameUrl
+    let moveLearnMethod: NameUrl
+    let versionGroup: VersionGroup
 
     enum CodingKeys: String, CodingKey {
         case levelLearnedAt = "level_learned_at"
         case moveLearnMethod = "move_learn_method"
         case versionGroup = "version_group"
     }
+}
+
+// MARK: - VersionGroup
+struct VersionGroup: Codable {
+    let name: VersionGroupEnum?
+    let url: String
+}
+
+// MARK: - VersionGroupEnum
+enum VersionGroupEnum: String, CaseIterable, Codable {
+    case redBlue = "red-blue"
+    case yellow = "yellow"
+    case goldSilver = "gold-silver"
+    case crystal = "crystal"
+    case rubySapphire = "ruby-sapphire"
+    case emerald = "emerald"
+    case frlg = "firered-leafgreen"
+    case colosseum = "colosseum"
+    case xd = "xd"
+    case diamondPearl = "diamond-pearl"
+    case platinum = "platinum"
+    case hgss = "heartgold-soulsilver"
+    case blackWhite = "black-white"
+    case btwt = "black-2-white-2"
+    case xy = "x-y"
+    case oras = "omega-ruby-alpha-sapphire"
+    case soonMoon = "sun-moon"
+    case usum = "ultra-sun-ultra-moon"
+    case gopikachueevee = "lets-go-pikachu-lets-go-eevee"
+    case swordShield = "sword-shield"
+    case bdsp = "brilliant-diamond-and-shining-pearl"
+    case scarletViolet = "scarlet-violet"
 }
 
 // MARK: - PastType
@@ -355,4 +390,11 @@ struct Stat: Codable {
         case baseStat = "base_stat"
         case effort, stat
     }
+}
+
+struct SortedMoves: Codable {
+    var level: [Move]
+    var tutor: [Move]
+    var machine: [Move]
+    var egg: [Move]
 }

@@ -20,12 +20,10 @@ struct PokemonImage: View {
     
     var body: some View{
         AsyncImage(url: URL(string: sprite ? "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/\(id).png" : "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(id).png")) { image in
-            if let image = image {
-                image
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: size, height: size)
-            }
+            image
+                .resizable()
+                .scaledToFit()
+                .frame(width: size, height: size)
         } placeholder: {
             ProgressView()
                 .frame(width: size, height: size)

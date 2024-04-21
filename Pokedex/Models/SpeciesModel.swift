@@ -29,7 +29,7 @@ struct SpeciesModel: Codable {
     let order: Int
     let palParkEncounters: [PalParkEncounter]
     let pokedexNumbers: [PokedexNumber]
-    let shape: NameUrl
+    let shape: NameUrl?
     let varieties: [Variety]
 
     enum CodingKeys: String, CodingKey {
