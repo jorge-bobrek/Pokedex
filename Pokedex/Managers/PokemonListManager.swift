@@ -6,13 +6,25 @@
 //
 
 import Foundation
+import SchemaAPI
 
 class PokemonListManager {
-    func getPokemonList(completion: @escaping ([PokemonPage]) -> ()) {
-        Bundle.main.fetchData(url: "https://pokeapi.co/api/v2/pokemon-species?limit=9999", model: PokemonList.self, completion: { data in
-            completion(data.results)
-        }) { error in
-            print(error)
+    func getPokemonList(completion: @escaping ([Species.Specy]) -> ()) {
+        Network.shared.apollo.fetch(query: GetListQuery()) { result in
+            switch result {
+            case .success(let graphQLResult):
+                if let species = graphQLResult.data?.pokemon_v2_pokemonspecies {
+                    completion(self.process(data: species))
+                } else if let errors = graphQLResult.errors {
+                    print(errors)
+                }
+            case .failure(let error):
+                print(error)
+            }
         }
+    }
+    
+    private func process(data: [SpeciesData]) -> [Species.Specy] {
+        return Species(data).species
     }
 }

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -14,7 +14,7 @@
 		F744212829C511C300AFF593 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F744212729C511C300AFF593 /* Assets.xcassets */; };
 		F744212B29C511C300AFF593 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F744212A29C511C300AFF593 /* Preview Assets.xcassets */; };
 		F79672FC29CBB3FF0091DE83 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79672FB29CBB3FF0091DE83 /* Helpers.swift */; };
-		F79672FF29CBB5A10091DE83 /* ListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79672FE29CBB5A10091DE83 /* ListModel.swift */; };
+		F79672FF29CBB5A10091DE83 /* SpeciesDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79672FE29CBB5A10091DE83 /* SpeciesDataModel.swift */; };
 		F796730329CBB7B50091DE83 /* PokemonListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F796730229CBB7B50091DE83 /* PokemonListViewModel.swift */; };
 		F796730529CBB7DF0091DE83 /* PokemonListManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F796730429CBB7DF0091DE83 /* PokemonListManager.swift */; };
 		F796730829CBC1410091DE83 /* PokemonDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F796730729CBC1410091DE83 /* PokemonDetailView.swift */; };
@@ -23,6 +23,11 @@
 		F7A0BCC429D5F74200913BCC /* PokemonDetailManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7A0BCC329D5F74200913BCC /* PokemonDetailManager.swift */; };
 		F7A0BCC629D5FD2200913BCC /* EvolutionChainModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7A0BCC529D5FD2200913BCC /* EvolutionChainModel.swift */; };
 		F7A9D2D629CE315500748F7C /* PlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7A9D2D529CE315500748F7C /* PlayerManager.swift */; };
+		F7AD62892BD6993B00CC8E7F /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = F7AD62882BD6993B00CC8E7F /* Apollo */; };
+		F7AD628D2BD6A14D00CC8E7F /* Queries.graphql in Resources */ = {isa = PBXBuildFile; fileRef = F7AD628C2BD6A14D00CC8E7F /* Queries.graphql */; };
+		F7AD62982BD6C59300CC8E7F /* Schema.json in Resources */ = {isa = PBXBuildFile; fileRef = F7AD62972BD6C59300CC8E7F /* Schema.json */; };
+		F7AD629B2BD6C7CF00CC8E7F /* SchemaAPI in Frameworks */ = {isa = PBXBuildFile; productRef = F7AD629A2BD6C7CF00CC8E7F /* SchemaAPI */; };
+		F7AD629D2BD6C81700CC8E7F /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7AD629C2BD6C81700CC8E7F /* Network.swift */; };
 		F7B3337829D48598002D56B1 /* SpeciesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B3337729D48598002D56B1 /* SpeciesModel.swift */; };
 		F7B3337A29D4A6DA002D56B1 /* AbilityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B3337929D4A6DA002D56B1 /* AbilityModel.swift */; };
 		F7B3337C29D4A795002D56B1 /* PokemonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B3337B29D4A795002D56B1 /* PokemonModel.swift */; };
@@ -40,7 +45,7 @@
 		F744212729C511C300AFF593 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F744212A29C511C300AFF593 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		F79672FB29CBB3FF0091DE83 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
-		F79672FE29CBB5A10091DE83 /* ListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListModel.swift; sourceTree = "<group>"; };
+		F79672FE29CBB5A10091DE83 /* SpeciesDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeciesDataModel.swift; sourceTree = "<group>"; };
 		F796730229CBB7B50091DE83 /* PokemonListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonListViewModel.swift; sourceTree = "<group>"; };
 		F796730429CBB7DF0091DE83 /* PokemonListManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonListManager.swift; sourceTree = "<group>"; };
 		F796730729CBC1410091DE83 /* PokemonDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDetailView.swift; sourceTree = "<group>"; };
@@ -49,6 +54,9 @@
 		F7A0BCC329D5F74200913BCC /* PokemonDetailManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDetailManager.swift; sourceTree = "<group>"; };
 		F7A0BCC529D5FD2200913BCC /* EvolutionChainModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EvolutionChainModel.swift; sourceTree = "<group>"; };
 		F7A9D2D529CE315500748F7C /* PlayerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerManager.swift; sourceTree = "<group>"; };
+		F7AD628C2BD6A14D00CC8E7F /* Queries.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = Queries.graphql; sourceTree = "<group>"; };
+		F7AD62972BD6C59300CC8E7F /* Schema.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Schema.json; sourceTree = "<group>"; };
+		F7AD629C2BD6C81700CC8E7F /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		F7B3337729D48598002D56B1 /* SpeciesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeciesModel.swift; sourceTree = "<group>"; };
 		F7B3337929D4A6DA002D56B1 /* AbilityModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbilityModel.swift; sourceTree = "<group>"; };
 		F7B3337B29D4A795002D56B1 /* PokemonModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonModel.swift; sourceTree = "<group>"; };
@@ -62,6 +70,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F7AD629B2BD6C7CF00CC8E7F /* SchemaAPI in Frameworks */,
+				F7AD62892BD6993B00CC8E7F /* Apollo in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -122,6 +132,7 @@
 			isa = PBXGroup;
 			children = (
 				F79672FB29CBB3FF0091DE83 /* Helpers.swift */,
+				F7AD629C2BD6C81700CC8E7F /* Network.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -129,7 +140,7 @@
 		F79672FD29CBB5930091DE83 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				F79672FE29CBB5A10091DE83 /* ListModel.swift */,
+				F79672FE29CBB5A10091DE83 /* SpeciesDataModel.swift */,
 				F7B3337B29D4A795002D56B1 /* PokemonModel.swift */,
 				F7B3337729D48598002D56B1 /* SpeciesModel.swift */,
 				F7B3337929D4A6DA002D56B1 /* AbilityModel.swift */,
@@ -180,6 +191,8 @@
 		F7BE556829CCE760006CAE3E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F7AD62972BD6C59300CC8E7F /* Schema.json */,
+				F7AD628C2BD6A14D00CC8E7F /* Queries.graphql */,
 				F7BE555D29CCB5DB006CAE3E /* Fonts */,
 			);
 			path = Resources;
@@ -202,6 +215,8 @@
 			);
 			name = Pokedex;
 			packageProductDependencies = (
+				F7AD62882BD6993B00CC8E7F /* Apollo */,
+				F7AD629A2BD6C7CF00CC8E7F /* SchemaAPI */,
 			);
 			productName = pokedex;
 			productReference = F744212029C511C100AFF593 /* Pokedex.app */;
@@ -232,6 +247,8 @@
 			);
 			mainGroup = F744211729C511C000AFF593;
 			packageReferences = (
+				F7AD62872BD6993B00CC8E7F /* XCRemoteSwiftPackageReference "apollo-ios" */,
+				F7AD62992BD6C7CF00CC8E7F /* XCLocalSwiftPackageReference "schemaAPI" */,
 			);
 			productRefGroup = F744212129C511C100AFF593 /* Products */;
 			projectDirPath = "";
@@ -247,6 +264,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F7AD628D2BD6A14D00CC8E7F /* Queries.graphql in Resources */,
+				F7AD62982BD6C59300CC8E7F /* Schema.json in Resources */,
 				F744212B29C511C300AFF593 /* Preview Assets.xcassets in Resources */,
 				F7BE556A29CCE928006CAE3E /* My Font.otf in Resources */,
 				F744212829C511C300AFF593 /* Assets.xcassets in Resources */,
@@ -270,8 +289,9 @@
 				F744212429C511C100AFF593 /* PokedexApp.swift in Sources */,
 				F7B3337A29D4A6DA002D56B1 /* AbilityModel.swift in Sources */,
 				F73021E629D7705E00BE2BC0 /* PokemonInformation.swift in Sources */,
+				F7AD629D2BD6C81700CC8E7F /* Network.swift in Sources */,
 				F73021E429D7700C00BE2BC0 /* PokemonEvolution.swift in Sources */,
-				F79672FF29CBB5A10091DE83 /* ListModel.swift in Sources */,
+				F79672FF29CBB5A10091DE83 /* SpeciesDataModel.swift in Sources */,
 				F7B3337829D48598002D56B1 /* SpeciesModel.swift in Sources */,
 				F796730329CBB7B50091DE83 /* PokemonListViewModel.swift in Sources */,
 				F7A0BCC429D5F74200913BCC /* PokemonDetailManager.swift in Sources */,
@@ -481,6 +501,36 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		F7AD62992BD6C7CF00CC8E7F /* XCLocalSwiftPackageReference "schemaAPI" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = schemaAPI;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		F7AD62872BD6993B00CC8E7F /* XCRemoteSwiftPackageReference "apollo-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apollographql/apollo-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.10.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F7AD62882BD6993B00CC8E7F /* Apollo */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F7AD62872BD6993B00CC8E7F /* XCRemoteSwiftPackageReference "apollo-ios" */;
+			productName = Apollo;
+		};
+		F7AD629A2BD6C7CF00CC8E7F /* SchemaAPI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SchemaAPI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F744211829C511C000AFF593 /* Project object */;
 }

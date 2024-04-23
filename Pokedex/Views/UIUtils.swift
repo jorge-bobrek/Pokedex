@@ -13,7 +13,7 @@ struct PokemonImage: View {
     let sprite: Bool
     
     init(id: Int, size: Double, sprite: Bool = false) {
-        self.id = id
+        self.id = id 
         self.size = size
         self.sprite = sprite
     }

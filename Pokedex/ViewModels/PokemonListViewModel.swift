@@ -11,10 +11,10 @@ import SwiftUI
 final class PokemonListViewModel: ObservableObject {
     private let pokemonManager = PokemonListManager()
     
-    @Published var pokemonList = [PokemonPage]()
+    @Published var pokemonList = [Species.Specy]()
     @Published var searchText = ""
     
-    var filteredPokemon: [PokemonPage] {
+    var filteredPokemon: [Species.Specy] {
         return searchText.isEmpty ? pokemonList : pokemonList.filter {
             $0.name.contains(searchText.lowercased())
         }

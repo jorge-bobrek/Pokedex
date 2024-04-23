@@ -9,16 +9,16 @@ import SwiftUI
 
 struct PokemonItemView: View {
     @EnvironmentObject var vm: PokemonListViewModel
-    let pokemon: PokemonPage
+    let pokemon: Species.Specy
     
     var body: some View {
         HStack(spacing: 10) {
-            PokemonImage(id: Bundle.main.getIndex(url: pokemon.url), size: 100, sprite: true)
+            PokemonImage(id: pokemon.id, size: 100, sprite: true)
             Text(pokemon.name.uppercased())
                 .font(.custom("My Font", size: 20))
                 .foregroundColor(.black)
             Spacer(minLength: 0)
-            Text("#\(String(format: "%04d", Bundle.main.getIndex(url: pokemon.url)))")
+            Text("#\(String(format: "%04d", pokemon.id))")
                 .font(.custom("My Font", size: 20))
                 .foregroundColor(.black)
         }
@@ -27,7 +27,7 @@ struct PokemonItemView: View {
 
 struct PokemonPageView_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonItemView(pokemon: PokemonPage.example)
+        PokemonItemView(pokemon: Species.Specy.template)
             .environmentObject(PokemonListViewModel())
     }
 }

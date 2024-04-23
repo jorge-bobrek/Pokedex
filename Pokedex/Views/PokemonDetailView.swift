@@ -10,7 +10,7 @@ import SwiftUI
 struct PokemonDetailView: View {
     @StateObject var vm = PokemonDetailViewModel()
     @State private var scrollViewID = UUID()
-    let pokemon: PokemonPage
+    let pokemon: Species.Specy
     var language: Language = .spanish
     enum ScrollPosition: Hashable {
         case image(index: Int)
@@ -92,7 +92,7 @@ struct PokemonDetailView: View {
 
 struct PokemonDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonDetailView(pokemon: PokemonPage.example)
+        PokemonDetailView(pokemon: Species.Specy.template)
     }
 }
 

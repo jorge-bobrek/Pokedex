@@ -1,0 +1,9 @@
+query GetList {
+  pokemon_v2_pokemonspecies(order_by: {id: asc}) {
+    id
+    name
+    pokemon_v2_generation {
+      id
+    }
+  }
+}

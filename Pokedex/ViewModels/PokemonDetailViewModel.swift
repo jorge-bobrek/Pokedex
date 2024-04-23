@@ -18,11 +18,10 @@ final class PokemonDetailViewModel: ObservableObject {
     @Published var pokemonEvolutionChain: EvolutionChainModel?
     @Published var sortedMoves: SortedMoves?
     
-    func loadPokemon(pokemon: PokemonPage) {
-        let id = Bundle.main.getIndex(url: pokemon.url)
-        self.getPokemon(pokemon: id)
-        self.getSpecies(pokemon: id)
-        self.playCry(pokemon: pokemon)
+    func loadPokemon(pokemon: Species.Specy) {
+        self.getPokemon(pokemon: pokemon.id)
+        self.getSpecies(pokemon: pokemon.id)
+        //self.playCry(pokemon: pokemon.id)
     }
     
     func loadData() {
@@ -109,7 +108,7 @@ final class PokemonDetailViewModel: ObservableObject {
         self.sortedMoves = sortedMoves
     }
     
-    func playCry(pokemon: PokemonPage) {
-        self.playerManager.play(url: URL(string: "https://play.pokemonshowdown.com/audio/cries/\(pokemon.name.replacingOccurrences(of: "-", with: "")).mp3")!)
+    func playCry(pokemon: String) {
+        //self.playerManager.play(url: URL(string: "https://play.pokemonshowdown.com/audio/cries/\(pokemon.name.replacingOccurrences(of: "-", with: "")).mp3")!)
     }
 }

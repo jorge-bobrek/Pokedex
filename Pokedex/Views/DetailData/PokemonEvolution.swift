@@ -22,7 +22,7 @@ struct PokemonEvolution: View {
                 HStack {
                     PokemonImage(id: Bundle.main.getIndex(url: vm.pokemonEvolutionChain!.chain.species.url), size: 100)
                         .onTapGesture {
-                            vm.loadPokemon(pokemon: PokemonPage(name: vm.pokemonEvolutionChain!.chain.species.name, url: vm.pokemonEvolutionChain!.chain.species.url))
+                            //vm.loadPokemon(pokemon: PokemonPage(name: vm.pokemonEvolutionChain!.chain.species.name, url: vm.pokemonEvolutionChain!.chain.species.url))
                             withAnimation {
                                 proxy.scrollTo(0, anchor: .bottom)
                             }
@@ -47,7 +47,7 @@ fileprivate struct PokemonEvolutionLine: View {
                     Image(systemName: "arrow.right")
                     PokemonImage(id: Bundle.main.getIndex(url: species.species.url), size: 120)
                         .onTapGesture {
-                            vm.loadPokemon(pokemon: PokemonPage(name: species.species.name, url: species.species.url))
+                            //vm.loadPokemon(pokemon: PokemonPage(name: species.species.name, url: species.species.url))
                             withAnimation {
                                 proxy.scrollTo(0, anchor: .bottom)
                             }
