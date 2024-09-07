@@ -15,7 +15,7 @@ struct ContentView: View {
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 10) {
                     ForEach(vm.filteredPokemon) { pokemon in
-                        NavigationLink(destination: PokemonDetailView(pokemon: pokemon)) {
+                        NavigationLink(destination: PokemonDetailView(pokemon: pokemon.id)) {
                             PokemonItemView(pokemon: pokemon)
                         }
                     }
@@ -26,7 +26,6 @@ struct ContentView: View {
             }
             .searchable(text: $vm.searchText, placement: .toolbar)
         }
-        .environmentObject(vm)
     }
 }
 

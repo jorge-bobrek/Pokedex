@@ -8,79 +8,125 @@
 import SwiftUI
 
 struct PokemonInformation: View {
-    @EnvironmentObject var vm: PokemonDetailViewModel
+    let details: Pokemon
     
     var body: some View {
-        if let details = vm.pokemonDetails {
-            Grid(alignment: .leading, verticalSpacing: 10) {
-                GridRow {
-                    Rectangle()
-                        .frame(maxWidth: .infinity, maxHeight: 0)
-                    Rectangle()
-                        .frame(maxWidth: .infinity, maxHeight: 0)
-                }
-                GridRow {
-                    DetailText("Tipos", .Detail)
-                    HStack {
-                        ForEach (details.types) { type in
-                            TypeImage(type.type.name)
-                        }
+        Grid(alignment: .leading, verticalSpacing: 10) {
+            GridRow {
+                Rectangle()
+                    .frame(maxWidth: .infinity, maxHeight: 0)
+                Rectangle()
+                    .frame(maxWidth: .infinity, maxHeight: 0)
+            }
+            GridRow {
+                DetailText("Tipos", .Detail)
+                HStack {
+                    ForEach(details.types) { type in
+                        TypeText(type.id ?? 0, type: Bundle.main.getLanguage(names: type.names, language: .spanish))
                     }
-                }
-                GridRow {
-                    DetailText(vm.pokemonAbilities[1].isEmpty ? "Habilidad" : "Habilidades", .Detail)
-                    if vm.pokemonAbilities[0].isEmpty {
-                        Text("********")
-                            .redacted(reason: .placeholder)
-                    } else {
-                        VStack(alignment: .leading) {
-                            DetailText(vm.pokemonAbilities[0], .Info)
-                            if !vm.pokemonAbilities[1].isEmpty {
-                                DetailText(vm.pokemonAbilities[1], .Info)
-                            }
-                        }
-                    }
-                }
-                if !vm.pokemonAbilities[2].isEmpty {
-                    GridRow {
-                        DetailText("Hab. oculta", .Detail)
-                        DetailText(vm.pokemonAbilities[2], .Info)
-                    }
-                }
-                GridRow {
-                    DetailText("Peso", .Detail)
-                    DetailText(String(format: "%.1f kg", Float(details.weight)/10), .Info)
-                }
-                GridRow {
-                    DetailText("Altura", .Detail)
-                    DetailText(String(format: "%.1f m", Float(details.height)/10), .Info)
-                }
-                GridRow {
-                    DetailText("Especie", .Detail)
-                    DetailText(vm.getGenusTranslation(array: vm.pokemonSpecies?.genera ?? [], language: .spanish), .Info)
                 }
             }
-        } else {
-            Text("*********")
-                .font(.largeTitle)
-                .redacted(reason: .placeholder)
-                .padding(.top, 20)
-            HStack(spacing: 40) {
-                VStack {
-                    ForEach(1..<7) { _ in
-                        Text("********")
-                            .font(.title)
-                            .redacted(reason: .placeholder)
+            GridRow {
+                DetailText(details.abilities.filter({!$0.isHidden}).count > 1 ? "Habilidades" : "Habilidad", .Detail)
+                VStack(alignment: .leading) {
+                    ForEach(details.abilities.filter { !$0.isHidden }) { ability in
+                        DetailText(Bundle.main.getLanguage(names: ability.names, language: .spanish), .Info)
                     }
                 }
-                VStack {
-                    ForEach(1..<7) { _ in
-                        Text("********")
-                            .font(.title)
-                            .redacted(reason: .placeholder)
+            }
+            GridRow {
+                DetailText("Hab. Oculta", .Detail)
+                ForEach(details.abilities.filter { $0.isHidden }) { ability in
+                    DetailText(Bundle.main.getLanguage(names: ability.names, language: .spanish), .Info)
+                }
+            }
+            GridRow {
+                DetailText("Rat. Captura", .Detail)
+                DetailText(String(details.specy.captureRate ?? 0), .Info)
+            }
+            GridRow {
+                DetailText("Rat. Género", .Detail)
+                GenderRate(rate: details.specy.genderRate ?? 0)
+            }
+            GridRow {
+                DetailText("Ciclos ecl.", .Detail)
+                DetailText(String(details.specy.hatchCounter ?? 0), .Info)
+            }
+            GridRow {
+                DetailText("Color", .Detail)
+                DetailText(Bundle.main.getLanguage(names: details.specy.color?.names, language: .spanish), .Info)
+            }
+        }
+    }
+    
+    private struct GenderRate: View {
+        let rate: Int
+        
+        var body: some View {
+            VStack {
+                HStack(spacing: 1) {
+                    if rate == -1 {
+                        Rectangle()
+                            .fill(.gray)
+                            .frame(width: 128, height: 10)
+                            .clipShape(
+                                .rect(
+                                    topLeadingRadius: 16,
+                                    bottomLeadingRadius: 16,
+                                    bottomTrailingRadius: 16,
+                                    topTrailingRadius: 16
+                                )
+                            )
+                    } else {
+                        Rectangle()
+                            .fill(.cyan)
+                            .frame(width: CGFloat(128 / 8 * (8 - rate)), height: 10)
+                            .clipShape(
+                                .rect(
+                                    topLeadingRadius: 16,
+                                    bottomLeadingRadius: 16,
+                                    bottomTrailingRadius: 8 - rate == 8 ? 16 : 0,
+                                    topTrailingRadius: 8 - rate == 8 ? 16 : 0
+                                )
+                            )
+                        Rectangle()
+                            .fill(.pink)
+                            .frame(width: CGFloat(128 / 8 * rate), height: 10)
+                            .clipShape(
+                                .rect(
+                                    topLeadingRadius: rate == 8 ? 16 : 0,
+                                    bottomLeadingRadius: rate == 8 ? 16 : 0,
+                                    bottomTrailingRadius: 16,
+                                    topTrailingRadius: 16
+                                )
+                            )
+                    }
+                }
+                HStack(alignment: .center) {
+                    if rate == -1 {
+                        DetailText("No tiene género", .Hint)
+                    } else if rate == 0 {
+                        DetailText("Siempre es macho ♂", .Hint)
+                    } else if rate == 8 {
+                        DetailText("Siempre es hembra ♀", .Hint)
+                    } else {
+                        DetailText("\(calculate(rate))% ♂", .Hint)
+                        DetailText("\(calculate(8 - rate))% ♀", .Hint)
                     }
                 }
             }
         }
+        
+        private func calculate(_ rate: Int) -> String {
+            let percent = 100.0 / 8.0 * Float(rate)
+            return String(format: "%g", 100 - percent)
+        }
     }
 }
+
+struct PokemonInformation_Previews: PreviewProvider {
+    static var previews: some View {
+        PokemonInformation(details: Pokemon.template)
+    }
+}
+

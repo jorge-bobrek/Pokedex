@@ -11,18 +11,18 @@ import SwiftUI
 final class PokemonListViewModel: ObservableObject {
     private let pokemonManager = PokemonListManager()
     
-    @Published var pokemonList = [Species.Specy]()
+    @Published var pokemonList = [Species.ListSpecy]()
     @Published var searchText = ""
     
-    var filteredPokemon: [Species.Specy] {
+    var filteredPokemon: [Species.ListSpecy] {
         return searchText.isEmpty ? pokemonList : pokemonList.filter {
             $0.name.contains(searchText.lowercased())
         }
     }
     
     init() {
-        self.pokemonManager.getPokemonList { data in
-            DispatchQueue.main.async {
+        DispatchQueue.main.async {
+            self.pokemonManager.getPokemonList { data in
                 self.pokemonList = data
             }
         }

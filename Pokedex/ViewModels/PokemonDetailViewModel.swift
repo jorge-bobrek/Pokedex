@@ -12,103 +12,47 @@ final class PokemonDetailViewModel: ObservableObject {
     private let pokemonManager = PokemonDetailManager()
     private let playerManager = PlayerManager()
     
-    @Published var pokemonDetails: PokemonModel?
-    @Published var pokemonSpecies: SpeciesModel?
-    @Published var pokemonAbilities = ["", "", ""]
-    @Published var pokemonEvolutionChain: EvolutionChainModel?
-    @Published var sortedMoves: SortedMoves?
+    @Published var pokemonDetails: Pokemon?
+    @Published var pokemonEvolutionChain: EvolutionChain?
+    @Published var pokemonMovements: [String: [Move]]?
     
-    func loadPokemon(pokemon: Species.Specy) {
-        self.getPokemon(pokemon: pokemon.id)
-        self.getSpecies(pokemon: pokemon.id)
-        //self.playCry(pokemon: pokemon.id)
+    func getPokemon(_ pokemon: Int) {
+        self.getPokemonData(pokemon)
+        self.getMovements(pokemon)
     }
     
-    func loadData() {
-        if let abilities = self.pokemonDetails?.abilities {
-            for ability in abilities {
-                self.getAbilityName(index: Bundle.main.getIndex(url: ability.ability.url), position: ability.slot - 1, language: .spanish)
-            }
-        }
-        if let species = self.pokemonSpecies {
-            self.getEvolutionChain(pokemon: Bundle.main.getIndex(url: species.evolutionChain.url))
-        }
-    }
-    
-    func getPokemon(pokemon: Int) {
-        self.pokemonManager.getPokemon(id: pokemon) { data in
-            DispatchQueue.main.async {
+    func getPokemonData(_ pokemon: Int) {
+        DispatchQueue.main.async {
+            self.pokemonDetails = nil
+            self.pokemonManager.getPokemon(id: pokemon) { data in
                 self.pokemonDetails = data
-            }
-        }
-    }
-    
-    func getSpecies(pokemon: Int) {
-        self.pokemonManager.getSpecies(id: pokemon) { data in
-            DispatchQueue.main.async {
-                self.pokemonSpecies = data
-            }
-        }
-    }
-    
-    func getEvolutionChain(pokemon: Int) {
-        self.pokemonManager.getEvolutionChain(id: pokemon) { data in
-            DispatchQueue.main.async {
-                self.pokemonEvolutionChain = data
-            }
-        }
-    }
-    
-    func getSpeciesName(names: [Name], language: Language) -> String {
-        for element in names {
-            if element.language.name == language.rawValue {
-                return element.name
-            }
-        }
-        return ""
-    }
-    
-    func getAbilityName(index: Int, position: Int, language: Language) {
-        self.pokemonManager.getAbility(id: index) { data in
-            DispatchQueue.main.async {
-                for element in data.names {
-                    if element.language.name == language.rawValue {
-                        self.pokemonAbilities[position] = element.name
-                    }
+                if let evo = data.specy.evolutionChain {
+                    self.getEvolutionChain(evo)
+                }
+                if let cry = data.cry {
+                    self.playCry(url: cry)
                 }
             }
         }
     }
     
-    func getGenusTranslation(array: [Genus], language: Language) -> String {
-        for element in array {
-            if element.language.name == language.rawValue {
-                return element.genus
+    func getEvolutionChain(_ chain: Int) {
+        DispatchQueue.main.async {
+            self.pokemonManager.getEvolutionChain(id: chain) { data in
+                self.pokemonEvolutionChain = data
             }
         }
-        return ""
     }
-    
-    func sortMoves() {
-        guard let pokemonDetails = self.pokemonDetails else { return }
-        let sortedMoves = SortedMoves(
-            level: pokemonDetails.moves.filter { move in
-                move.versionGroupDetails.contains { $0.moveLearnMethod.name == "level-up" }
-            },
-            tutor: pokemonDetails.moves.filter { move in
-                move.versionGroupDetails.contains { $0.moveLearnMethod.name == "tutor" }
-            },
-            machine: pokemonDetails.moves.filter { move in
-                move.versionGroupDetails.contains { $0.moveLearnMethod.name == "machine" }
-            },
-            egg: pokemonDetails.moves.filter { move in
-                move.versionGroupDetails.contains { $0.moveLearnMethod.name == "egg" }
+    func getMovements(_ pokemon: Int) {
+        DispatchQueue.main.async {
+            self.pokemonMovements = nil
+            self.pokemonManager.getMovements(id: pokemon) { data in
+                Task { self.pokemonMovements = await Bundle.main.sortMoves(data, filterMethod: 1) }
             }
-        )
-        self.sortedMoves = sortedMoves
+        }
     }
     
-    func playCry(pokemon: String) {
-        //self.playerManager.play(url: URL(string: "https://play.pokemonshowdown.com/audio/cries/\(pokemon.name.replacingOccurrences(of: "-", with: "")).mp3")!)
+    private func playCry(url: String) {
+        self.playerManager.play(url: URL(string: url)!)
     }
 }

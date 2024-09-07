@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import Combine
+import Foundation
 
 @main
 struct PokedexApp: App {

@@ -8,26 +8,24 @@
 import SwiftUI
 
 struct PokemonItemView: View {
-    @EnvironmentObject var vm: PokemonListViewModel
-    let pokemon: Species.Specy
+    let pokemon: Species.ListSpecy
     
     var body: some View {
         HStack(spacing: 10) {
-            PokemonImage(id: pokemon.id, size: 100, sprite: true)
+            PokemonImage(url: Bundle.main.getSprite(for: pokemon.id), size: 100)
             Text(pokemon.name.uppercased())
                 .font(.custom("My Font", size: 20))
-                .foregroundColor(.black)
+                .foregroundColor(.primary)
             Spacer(minLength: 0)
             Text("#\(String(format: "%04d", pokemon.id))")
                 .font(.custom("My Font", size: 20))
-                .foregroundColor(.black)
+                .foregroundColor(.primary)
         }
     }
 }
 
 struct PokemonPageView_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonItemView(pokemon: Species.Specy.template)
-            .environmentObject(PokemonListViewModel())
+        PokemonItemView(pokemon: Species.ListSpecy.template)
     }
 }

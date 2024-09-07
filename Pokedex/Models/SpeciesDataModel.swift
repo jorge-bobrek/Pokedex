@@ -11,48 +11,35 @@ import SchemaAPI
 typealias SpeciesData = GetListQuery.Data.Pokemon_v2_pokemonspecy
 
 struct Species: Decodable {
-    var species: [Specy]
+    var species: [ListSpecy]
 
     init(_ species: [SpeciesData]) {
-        self.species = species.map({ specy -> Specy in
-            Specy(specy)
+        self.species = species.map({ specy in
+            ListSpecy(specy)
         })
     }
 
-    struct Specy: Identifiable, Decodable {
+    struct ListSpecy: Identifiable, Decodable {
         let id: Int
         let name: String
         let sprite: String
-        let generation: Int
+        //let generation: Int
         
         init(_ species: SpeciesData) {
             self.id = species.id
             self.name = species.name
-            self.sprite = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/\(species.id).png"
-            self.generation = species.pokemon_v2_generation?.id ?? 0
+            self.sprite = Bundle.main.getSprite(for: species.id)
+            //self.generation = species.pokemon_v2_generation?.id ?? 0
         }
         
-        init(id: Int, name: String, sprite: String, generation: Int) {
+        init(id: Int, name: String, sprite: String/*, generation: Int*/) {
             self.id = id
             self.name = name
             self.sprite = sprite
-            self.generation = generation
+            //self.generation = generation
         }
         
-        static let template = Specy(id: 280, name: "ralts", sprite: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/280.png", generation: 3)
+        static let template = ListSpecy(id: 133, name: "eevee", sprite: Bundle.main.getSprite(for: 133)/*, generation: 1*/)
     }
     
-}
-
-
-// MARK: - NameUrl
-struct NameUrl: Codable {
-    let name: String
-    let url: String
-}
-
-// MARK: - Name
-struct Name: Codable {
-    let language: NameUrl
-    let name: String
 }
