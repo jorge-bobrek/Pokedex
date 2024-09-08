@@ -8,48 +8,85 @@
 import SwiftUI
 
 struct PokemonMoves: View {
-    let moves: [String: [Move]]
+    let moves: [Move]
+    @State var selected: Int = 1
     var body: some View {
-        HStack {
-            VStack(alignment: .leading) {
-                ForEach(Array(moves.keys), id: \.self) { name in
-                    Text(name)
-                        .font(.headline)
-                        .frame(height: 30)
+        VStack {
+            VersionsSection(selected: $selected)
+            Grid {
+                GridRow {
+                    Text("")
+                    DetailText("Level", .Table)
+                    DetailText("Power", .Table)
+                    DetailText("Accuracy", .Table)
+                    DetailText("PP", .Table)
+                    DetailText("Type", .Table)
+                    DetailText("Category", .Table)
                 }
-            }
-            .padding(.top, 40)
-            VStack {
-                ScrollView(.horizontal) {
-                    VersionsSection()
-                        .padding(.bottom, 2)
-                    ForEach(Array(moves.keys), id: \.self) { name in
-                        NamesSection(name: name, moves: moves[name]!)
+                ForEach(moves) { move in
+                    if move.versionGroupID == selected {
+                        if let level = move.level, level > 0 {
+                            GridRow {
+                                DetailText(Bundle.main.getLanguage(names: move.names?.names, language: .spanish), .Typing)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                DetailText("\(level)", .Typing)
+                                DetailText(move.power == nil ? "--" : "\(move.power!)", .Typing)
+                                DetailText(move.accuracy == nil ? "--" : "\(move.accuracy!)%", .Typing)
+                                DetailText("\(move.pp!)", .Typing)
+                                Image(MonType[move.typeID!]!)
+                                    .resizable()
+                                    .frame(width: 19, height: 19)
+                                DamageType(damageId: move.damageClassId ?? 0)
+                            }
+                        }
                     }
                 }
             }
         }
-        
     }
 }
 
-struct NamesSection: View {
-    let name: String
-    let moves: [Move]
-    let versions: [Int] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 14, 15, 16, 17, 18, 19, 20, 23, 25]
+struct Stroke: ViewModifier {
+    var width: CGFloat
+    var color: Color
     
-    var body: some View {
-        LazyVStack(alignment: .leading) {
-            HStack(spacing: 10) {
-                ForEach(versions, id: \.self) { index in
-                    MoveView(move: moves.first(where: { $0.version?.id == index }))
-                }
+    func body(content: Content) -> some View {
+        ZStack{
+            ZStack{
+                content.offset(x:  width, y:  width)
+                content.offset(x: -width, y: -width)
+                content.offset(x: -width, y:  width)
+                content.offset(x:  width, y: -width)
             }
+            .foregroundColor(color)
+            content
+        }
+    }
+}
+
+extension View {
+    func stroke(color: Color = .black, width: CGFloat = 1) -> some View {
+        modifier(Stroke(width: width, color: color))
+    }
+}
+
+struct DamageType: View {
+    let damageId: Int
+    var body: some View {
+        if damageId == 1 {
+            Image("status")
+        } else if damageId == 2 {
+            Image("physical")
+        } else if damageId == 3 {
+            Image("special")
+        } else {
+            EmptyView()
         }
     }
 }
 
 struct VersionsSection: View {
+    @Binding var selected: Int
     let versions: [(String, [Color])] = [
         ("RB",[Color("red"), Color("blue")]), // 1
         ("Y",[Color("yellow"), Color("yellow")]), // 2
@@ -67,38 +104,41 @@ struct VersionsSection: View {
         ("ORAS",[Color("omegaruby"), Color("alphasapphire")]), // 16
         ("SM",[Color("sun"), Color("moon")]), // 17
         ("USUM",[Color("ultrasun"), Color("ultramoon")]), // 18
-        ("GPGE",[Color("gopikachu"), Color("goeevee")]), // 19
         ("SWSH",[Color("sword"), Color("shield")]), // 20
         ("BDSP",[Color("brilliantdiamond"), Color("shiningpearl")]), // 23
         ("SV",[Color("scarlet"), Color("violet")]), // 25
     ]
+    // Array que contiene los valores correspondientes al índice comentado
+    let versionIndices: [Int] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 14, 15, 16, 17, 18, 20, 23, 25]
     
     var body: some View {
-        HStack(spacing: 10) {
-            ForEach(versions, id: \.0) { version in
-                Text(version.0) // Mostrar el nombre del string
-                    .bold()
-                    .frame(width: 52, height: 30)
-                    .background(
-                        LinearGradient(
-                            gradient: Gradient(colors: [version.1[0], version.1[1]]),
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
-                    )
-                    .cornerRadius(2)
-                    .foregroundColor(.white)
+        ScrollView(.horizontal) {
+            HStack(spacing: 10) {
+                ForEach(Array(versions.enumerated()), id: \.1.0) { index, version in
+                    let actualIndex = versionIndices[index] // Obtener el índice real comentado
+                    Button {
+                        selected = actualIndex // Asignar el índice real al seleccionado
+                    } label: {
+                        DetailText(version.0, .Info)
+                            .stroke(color: .black.opacity(actualIndex == selected ? 1 : 0.3))
+                            .frame(width: 64, height: 32)
+                            .background(
+                                LinearGradient(
+                                    gradient: Gradient(colors: [
+                                        version.1[0].opacity(actualIndex == selected ? 1 : 0.3),
+                                        version.1[1].opacity(actualIndex == selected ? 1 : 0.3)
+                                    ]),
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
+                            )
+                            .cornerRadius(8)
+                            .foregroundColor(.white)
+                            .disabled(actualIndex == selected)
+                    }
+                }
             }
+            .padding(.bottom, 8)
         }
-    }
-}
-
-struct MoveView: View {
-    let move: Move?
-    var body: some View {
-        Text(move?.level?.description ?? "")
-            .frame(width: 52, height: 30)
-            .background(Color.gray.opacity(0.1))
-            .cornerRadius(2)
     }
 }

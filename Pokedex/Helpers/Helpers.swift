@@ -45,24 +45,6 @@ extension Bundle {
         return names?.first(where: { $0.id == language.rawValue })?.name ?? ""
     }
     
-    func sortMoves(_ movements: Movements?, filterMethod: Int) async -> [String: [Move]]? {
-        guard let moves = movements?.moves else { return nil }
-        
-        return await Task.detached(priority: .userInitiated) {
-            return moves.reduce(into: [String: [Move]]()) { result, move in
-                let method = move.method
-                
-                // Filtrar solo los métodos que coinciden con el 'filterMethod'
-                guard method == filterMethod else { return }
-                
-                let name = Bundle.main.getLanguage(names: move.names?.names, language: .spanish)
-                
-                // Utilizamos 'default' para evitar comprobar si existen o no
-                result[name, default: []].append(move)
-            }
-        }.value
-    }
-    
 }
 
 enum Language: Int {

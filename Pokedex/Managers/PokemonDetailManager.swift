@@ -8,15 +8,17 @@
 import Foundation
 import SchemaAPI
 
-class PokemonDetailManager {   
+class PokemonDetailManager {
     
     func getPokemon(id: Int, _ completion: @escaping (Pokemon) -> ()) {
-        DispatchQueue.main.async {
+        DispatchQueue.global(qos: .userInitiated).async {
             Network.shared.apollo.fetch(query: GetDetailQuery(id: GraphQLNullable<Int>(integerLiteral: id))) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let pokemon = graphQLResult.data?.pokemon_v2_pokemon.first {
-                        completion(self.process(data: pokemon))
+                        DispatchQueue.main.async {
+                            completion(self.process(data: pokemon))
+                        }
                     } else if let errors = graphQLResult.errors {
                         print(errors)
                     }
@@ -28,12 +30,14 @@ class PokemonDetailManager {
     }
     
     func getEvolutionChain(id: Int, _ completion: @escaping (EvolutionChain) -> ()) {
-        DispatchQueue.main.async {
+        DispatchQueue.global(qos: .userInitiated).async {
             Network.shared.apollo.fetch(query: GetEvolutionChainQuery(id: GraphQLNullable<Int>(integerLiteral: id))) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let chain = graphQLResult.data?.pokemon_v2_evolutionchain.first {
-                        completion(self.process(data: chain))
+                        DispatchQueue.main.async {
+                            completion(self.process(data: chain))
+                        }
                     } else if let errors = graphQLResult.errors {
                         print(errors)
                     }
@@ -45,12 +49,14 @@ class PokemonDetailManager {
     }
     
     func getMovements(id: Int, _ completion: @escaping (Movements) -> ()) {
-        DispatchQueue.main.async {
+        DispatchQueue.global(qos: .userInitiated).async {  // Procesamiento en un hilo secundario
             Network.shared.apollo.fetch(query: GetMovesQuery(id: GraphQLNullable<Int>(integerLiteral: id))) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let moves = graphQLResult.data?.pokemon_v2_pokemon.first {
-                        completion(self.process(data: moves))
+                        DispatchQueue.main.async {
+                            completion(self.process(data: moves))
+                        }
                     } else if let errors = graphQLResult.errors {
                         print(errors)
                     }

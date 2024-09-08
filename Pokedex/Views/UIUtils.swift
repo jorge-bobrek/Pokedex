@@ -99,6 +99,7 @@ enum Size: CGFloat {
     case Info = 22
     case Typing = 16
     case Hint = 12
+    case Table = 10
 }
 
 let MonType = [

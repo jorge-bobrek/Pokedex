@@ -46,8 +46,6 @@ public enum SchemaMetadata: ApolloAPI.SchemaMetadata {
     case "pokemon_v2_move": return SchemaAPI.Objects.Pokemon_v2_move
     case "pokemon_v2_pokemonmove": return SchemaAPI.Objects.Pokemon_v2_pokemonmove
     case "pokemon_v2_movename": return SchemaAPI.Objects.Pokemon_v2_movename
-    case "pokemon_v2_language": return SchemaAPI.Objects.Pokemon_v2_language
-    case "pokemon_v2_versiongroup": return SchemaAPI.Objects.Pokemon_v2_versiongroup
     default: return nil
     }
   }

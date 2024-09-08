@@ -111,21 +111,18 @@ query GetMoves($id: Int) {
     pokemon_v2_pokemonmoves(order_by: {id: asc}) {
       id
       level
-      move_learn_method_id
+      version_group_id
       pokemon_v2_move {
         id
-        pokemon_v2_movenames(order_by: {language_id: asc}) {
-          language_id
+        power
+        pp
+        accuracy
+        type_id
+        move_damage_class_id
+        pokemon_v2_movenames {
           name
-          pokemon_v2_language {
-            name
-            id
-          }
+          language_id
         }
-      }
-      pokemon_v2_versiongroup {
-        id
-        name
       }
     }
   }

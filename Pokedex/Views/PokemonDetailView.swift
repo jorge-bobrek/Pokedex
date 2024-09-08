@@ -48,7 +48,7 @@ struct PokemonDetailView: View {
                         //MARK: Moves
                         DetailText("Movimientos", .Title)
                         if let moves = vm.pokemonMovements {
-                            PokemonMoves(moves: moves)
+                            PokemonMoves(moves: moves.movements)
                         } else {
                             ProgressView()
                         }
@@ -80,7 +80,7 @@ struct PokemonDetailView: View {
                     .padding(20)
                 }
             }
-            .padding(20)
+            .padding(10)
         }
         .onAppear {
             vm.getPokemon(pokemon)

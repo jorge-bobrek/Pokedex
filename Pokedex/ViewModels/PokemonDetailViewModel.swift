@@ -14,7 +14,7 @@ final class PokemonDetailViewModel: ObservableObject {
     
     @Published var pokemonDetails: Pokemon?
     @Published var pokemonEvolutionChain: EvolutionChain?
-    @Published var pokemonMovements: [String: [Move]]?
+    @Published var pokemonMovements: Movements?
     
     func getPokemon(_ pokemon: Int) {
         self.getPokemonData(pokemon)
@@ -47,7 +47,7 @@ final class PokemonDetailViewModel: ObservableObject {
         DispatchQueue.main.async {
             self.pokemonMovements = nil
             self.pokemonManager.getMovements(id: pokemon) { data in
-                Task { self.pokemonMovements = await Bundle.main.sortMoves(data, filterMethod: 1) }
+                self.pokemonMovements = data
             }
         }
     }
