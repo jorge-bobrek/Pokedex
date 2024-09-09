@@ -61,11 +61,12 @@ struct TypeText: View {
             DetailText(type, .Typing)
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.white)
-                .frame(width: 80, height: 24)
+                .frame(width: 90, height: 30)
                 .background(Color(UIColor(named: monType) ?? .white))
                 .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
                 .overlay(RoundedRectangle(cornerRadius: 4).stroke(.white, lineWidth: 1))
                 .shadow(color: .gray, radius: 1)
+                .stroke()
         }
         
     }
@@ -102,7 +103,7 @@ enum Size: CGFloat {
     case Table = 10
 }
 
-let MonType = [
+let MonType: [Int: String] = [
     1: "normal",
     2: "fighting",
     3: "flying",

@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct PokemonInformation: View {
+    @EnvironmentObject var languageManager: LanguageManager
     let details: Pokemon
     
     var body: some View {
@@ -22,7 +23,7 @@ struct PokemonInformation: View {
                 DetailText("Tipos", .Detail)
                 HStack {
                     ForEach(details.types) { type in
-                        TypeText(type.id ?? 0, type: Bundle.main.getLanguage(names: type.names, language: .spanish))
+                        TypeText(type.id ?? 0, type: languageManager.getLanguage(from: type.names))
                     }
                 }
             }
@@ -30,14 +31,14 @@ struct PokemonInformation: View {
                 DetailText(details.abilities.filter({!$0.isHidden}).count > 1 ? "Habilidades" : "Habilidad", .Detail)
                 VStack(alignment: .leading) {
                     ForEach(details.abilities.filter { !$0.isHidden }) { ability in
-                        DetailText(Bundle.main.getLanguage(names: ability.names, language: .spanish), .Info)
+                        DetailText(languageManager.getLanguage(from: ability.names), .Info)
                     }
                 }
             }
             GridRow {
                 DetailText("Hab. Oculta", .Detail)
                 ForEach(details.abilities.filter { $0.isHidden }) { ability in
-                    DetailText(Bundle.main.getLanguage(names: ability.names, language: .spanish), .Info)
+                    DetailText(languageManager.getLanguage(from: ability.names), .Info)
                 }
             }
             GridRow {
@@ -54,7 +55,7 @@ struct PokemonInformation: View {
             }
             GridRow {
                 DetailText("Color", .Detail)
-                DetailText(Bundle.main.getLanguage(names: details.specy.color?.names, language: .spanish), .Info)
+                DetailText(languageManager.getLanguage(from: details.specy.color?.names), .Info)
             }
         }
     }

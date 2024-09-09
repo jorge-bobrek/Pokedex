@@ -34,6 +34,7 @@
 		F7BE555C29CCAA8B006CAE3E /* UIUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BE555B29CCAA8B006CAE3E /* UIUtils.swift */; };
 		F7BE556A29CCE928006CAE3E /* My Font.otf in Resources */ = {isa = PBXBuildFile; fileRef = F7BE556929CCE928006CAE3E /* My Font.otf */; };
 		F7DF168629DCD8F0001C855F /* PokemonMoves.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DF168529DCD8F0001C855F /* PokemonMoves.swift */; };
+		FF17B1AC2C8E5F17007E1653 /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF17B1AB2C8E5F17007E1653 /* LanguageManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,6 +64,7 @@
 		F7BE555B29CCAA8B006CAE3E /* UIUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIUtils.swift; sourceTree = "<group>"; };
 		F7BE556929CCE928006CAE3E /* My Font.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "My Font.otf"; sourceTree = "<group>"; };
 		F7DF168529DCD8F0001C855F /* PokemonMoves.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonMoves.swift; sourceTree = "<group>"; };
+		FF17B1AB2C8E5F17007E1653 /* LanguageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,6 +166,7 @@
 				F796730429CBB7DF0091DE83 /* PokemonListManager.swift */,
 				F7A0BCC329D5F74200913BCC /* PokemonDetailManager.swift */,
 				F7A9D2D529CE315500748F7C /* PlayerManager.swift */,
+				FF17B1AB2C8E5F17007E1653 /* LanguageManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -294,6 +297,7 @@
 				F73021E429D7700C00BE2BC0 /* PokemonEvolution.swift in Sources */,
 				F79672FF29CBB5A10091DE83 /* SpeciesDataModel.swift in Sources */,
 				F796730329CBB7B50091DE83 /* PokemonListViewModel.swift in Sources */,
+				FF17B1AC2C8E5F17007E1653 /* LanguageManager.swift in Sources */,
 				F7A0BCC429D5F74200913BCC /* PokemonDetailManager.swift in Sources */,
 				F7927FE12BD8587F00643C40 /* LanguageModel.swift in Sources */,
 				F796730829CBC1410091DE83 /* PokemonDetailView.swift in Sources */,

@@ -24,12 +24,12 @@ public enum SchemaMetadata: ApolloAPI.SchemaMetadata {
     switch typename {
     case "query_root": return SchemaAPI.Objects.Query_root
     case "pokemon_v2_pokemonspecies": return SchemaAPI.Objects.Pokemon_v2_pokemonspecies
-    case "pokemon_v2_generation": return SchemaAPI.Objects.Pokemon_v2_generation
-    case "pokemon_v2_pokemon": return SchemaAPI.Objects.Pokemon_v2_pokemon
     case "pokemon_v2_pokemonspeciesname": return SchemaAPI.Objects.Pokemon_v2_pokemonspeciesname
+    case "pokemon_v2_pokemon": return SchemaAPI.Objects.Pokemon_v2_pokemon
     case "pokemon_v2_pokemoncolor": return SchemaAPI.Objects.Pokemon_v2_pokemoncolor
     case "pokemon_v2_pokemoncolorname": return SchemaAPI.Objects.Pokemon_v2_pokemoncolorname
     case "pokemon_v2_growthrate": return SchemaAPI.Objects.Pokemon_v2_growthrate
+    case "pokemon_v2_generation": return SchemaAPI.Objects.Pokemon_v2_generation
     case "pokemon_v2_pokemonability": return SchemaAPI.Objects.Pokemon_v2_pokemonability
     case "pokemon_v2_ability": return SchemaAPI.Objects.Pokemon_v2_ability
     case "pokemon_v2_abilityname": return SchemaAPI.Objects.Pokemon_v2_abilityname

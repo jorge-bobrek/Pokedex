@@ -9,16 +9,15 @@ import SwiftUI
 
 struct PokemonItemView: View {
     let pokemon: Species.ListSpecy
+    @EnvironmentObject var languageManager: LanguageManager
     
     var body: some View {
         HStack(spacing: 10) {
             PokemonImage(url: Bundle.main.getSprite(for: pokemon.id), size: 100)
-            Text(pokemon.name.uppercased())
-                .font(.custom("My Font", size: 20))
+            DetailText(languageManager.getLanguage(from: pokemon.names), .Info)
                 .foregroundColor(.primary)
             Spacer(minLength: 0)
-            Text("#\(String(format: "%04d", pokemon.id))")
-                .font(.custom("My Font", size: 20))
+            DetailText("#\(String(format: "%04d", pokemon.id))", .Info)
                 .foregroundColor(.primary)
         }
     }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PokemonDetailView: View {
     @StateObject private var vm: PokemonDetailViewModel = PokemonDetailViewModel()
-    var language: Language = .spanish
+    @EnvironmentObject var languageManager: LanguageManager
     let pokemon: Int
     
     var body: some View {
@@ -24,10 +24,7 @@ struct PokemonDetailView: View {
                             }
                             .id(0)
                             PokemonImage(url: Bundle.main.getSpriteArtwork(for: details.id, canBeShiny: true), size: 300)
-                            DetailText(Bundle.main.getLanguage(names: details.specy.names, language: language), .Title)
-                            Text(Bundle.main.getLanguage(names: details.specy.names, language: .jaHrkt))
-                                .font(.title)
-                            Text(Bundle.main.getLanguage(names: details.specy.names, language: .roomaji).capitalized)
+                            DetailText(languageManager.getLanguage(from: details.specy.names), .Title)
                         }
                         //MARK: Details
                         PokemonInformation(details: details)

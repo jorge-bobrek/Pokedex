@@ -8,29 +8,38 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject var vm = PokemonListViewModel()
+    @EnvironmentObject var languageManager: LanguageManager
+    @StateObject var viewModel: PokemonListViewModel
     
     var body: some View {
-        NavigationView {
-            ScrollView {
-                LazyVStack(alignment: .leading, spacing: 10) {
-                    ForEach(vm.filteredPokemon) { pokemon in
-                        NavigationLink(destination: PokemonDetailView(pokemon: pokemon.id)) {
-                            PokemonItemView(pokemon: pokemon)
+        VStack(spacing: 0) {
+            NavigationView {
+                ScrollView {
+                    LazyVStack(alignment: .leading, spacing: 10) {
+                        ForEach(viewModel.filteredPokemon) { pokemon in
+                            NavigationLink(destination: PokemonDetailView(pokemon: pokemon.id)) {
+                                PokemonItemView(pokemon: pokemon)
+                            }
                         }
                     }
+                    .padding(.horizontal, 10)
+                    .animation(.easeIn(duration: 0.3), value: viewModel.filteredPokemon.count)
+                    .navigationBarTitleDisplayMode(.inline)
                 }
-                .padding(.horizontal, 10)
-                .animation(.easeIn(duration: 0.3), value: vm.filteredPokemon.count)
-                .navigationBarTitleDisplayMode(.inline)
+                .searchable(text: $viewModel.searchText, placement: .toolbar)
             }
-            .searchable(text: $vm.searchText, placement: .toolbar)
+            HStack {
+                ForEach(Array(Language.allCases.enumerated()), id: \.element) { id, language in
+                    Button {
+                        languageManager.changeLanguage(to: language)
+                    } label: {
+                        Text(Flags[id])
+                            .font(.system(size: 42))
+                    }
+                }
+            }
+            .padding(.horizontal, 10)
+            .background(.gray)
         }
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
     }
 }

@@ -11,9 +11,12 @@ import Foundation
 
 @main
 struct PokedexApp: App {
+    @StateObject var languageManager = LanguageManager()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(viewModel: PokemonListViewModel(languageManager: languageManager))
+                .environmentObject(languageManager)
         }
     }
 }

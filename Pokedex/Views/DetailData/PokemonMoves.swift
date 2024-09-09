@@ -8,8 +8,10 @@
 import SwiftUI
 
 struct PokemonMoves: View {
-    let moves: [Move]
+    @EnvironmentObject var languageManager: LanguageManager
     @State var selected: Int = 1
+    let moves: [Move]
+    
     var body: some View {
         VStack {
             VersionsSection(selected: $selected)
@@ -27,7 +29,7 @@ struct PokemonMoves: View {
                     if move.versionGroupID == selected {
                         if let level = move.level, level > 0 {
                             GridRow {
-                                DetailText(Bundle.main.getLanguage(names: move.names?.names, language: .spanish), .Typing)
+                                DetailText(languageManager.getLanguage(from: move.names?.names), .Typing)
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                 DetailText("\(level)", .Typing)
                                 DetailText(move.power == nil ? "--" : "\(move.power!)", .Typing)
