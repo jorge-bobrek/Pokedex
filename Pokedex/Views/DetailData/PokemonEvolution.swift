@@ -12,15 +12,15 @@ struct PokemonEvolution: View {
     let completion: (Int) -> ()
     
     var body: some View {
-        if (chain.species.count == 1) {
+        if (chain.pokemonSpecies.count == 1) {
             VStack(spacing: 0) {
-                PokemonImage(url: Bundle.main.getSpriteArtwork(for: chain.species.first?.id ?? 0), size: 100)
+                PokemonImage(url: Bundle.main.getSpriteArtwork(for: chain.pokemonSpecies.first?.id ?? 0), size: 100)
                 DetailText("Este Pokémon no evoluciona.", .Info)
             }
         } else {
             ScrollView(.horizontal) {
                 HStack {
-                    ForEach(chain.species) { specy in
+                    ForEach(chain.pokemonSpecies) { specy in
                         PokemonImage(url: Bundle.main.getSpriteArtwork(for: specy.id), size: 100)
                             .onTapGesture {
                                 completion(specy.id)

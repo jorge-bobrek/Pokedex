@@ -10,7 +10,7 @@ import SwiftUI
 struct PokemonMoves: View {
     @EnvironmentObject var languageManager: LanguageManager
     @State var selected: Int = 1
-    let moves: [Move]
+    let moves: [PokemonMoveDetail]
     
     var body: some View {
         VStack {
@@ -25,20 +25,20 @@ struct PokemonMoves: View {
                     DetailText("Type", .Table)
                     DetailText("Category", .Table)
                 }
-                ForEach(moves) { move in
-                    if move.versionGroupID == selected {
-                        if let level = move.level, level > 0 {
+                ForEach(moves, id: \.move.id) { move in
+                    if move.move.versionGroupId == selected {
+                        if move.move.level > 0 {
                             GridRow {
-                                DetailText(languageManager.getLanguage(from: move.names?.names), .Typing)
+                                DetailText(languageManager.getLanguage(from: move.detail.moveNames), .Typing)
                                     .frame(maxWidth: .infinity, alignment: .leading)
-                                DetailText("\(level)", .Typing)
-                                DetailText(move.power == nil ? "--" : "\(move.power!)", .Typing)
-                                DetailText(move.accuracy == nil ? "--" : "\(move.accuracy!)%", .Typing)
-                                DetailText("\(move.pp!)", .Typing)
-                                Image(MonType[move.typeID!]!)
+                                DetailText("\(move.move.level)", .Typing)
+                                DetailText(move.detail.power == nil ? "--" : "\(move.detail.power!)", .Typing)
+                                DetailText(move.detail.accuracy == nil ? "--" : "\(move.detail.accuracy!)%", .Typing)
+                                DetailText("\(move.detail.pp!)", .Typing)
+                                Image(MonType[move.detail.typeId]!)
                                     .resizable()
                                     .frame(width: 19, height: 19)
-                                DamageType(damageId: move.damageClassId ?? 0)
+                                DamageType(damageId: move.detail.moveDamageClassId)
                             }
                         }
                     }

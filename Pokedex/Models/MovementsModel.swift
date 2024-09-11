@@ -7,59 +7,81 @@
 
 import Foundation
 
-import SchemaAPI
+struct PokemonMovesResponse: Decodable {
+    let pokemon: [Pokemon]
 
-typealias MovementsData = GetMovesQuery.Data.Pokemon_v2_pokemon
-
-struct Movements: Decodable {
-    let movements: [Move]
-    
-    init(_ movements: MovementsData) {
-        self.movements = movements.pokemon_v2_pokemonmoves.map {
-            Move($0)
-        }
+    enum CodingKeys: String, CodingKey {
+        case pokemon = "pokemon_v2_pokemon"
     }
 }
 
-struct Move: Decodable, Identifiable {
-    let id: Int?
-    let level: Int?
-    let versionGroupID: Int?
-    let names: MoveLanguage?
+struct Pokemon: Identifiable, Decodable {
+    let id: Int
+    let moves: [PokemonMove]
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case moves = "pokemon_v2_pokemonmoves"
+    }
+}
+
+
+struct MoveDetailsResponse: Decodable {
+    let moves: [MoveDetail]
+
+    enum CodingKeys: String, CodingKey {
+        case moves = "pokemon_v2_move"
+    }
+}
+
+struct PokemonMove: Decodable, Identifiable, Hashable {
+    let id: Int
+    let moveId: Int
+    let level: Int
+    let versionGroupId: Int
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case moveId = "move_id"
+        case level
+        case versionGroupId = "version_group_id"
+    }
+
+    // Conformidad a Hashable
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+
+    static func == (lhs: PokemonMove, rhs: PokemonMove) -> Bool {
+        return lhs.moveId == rhs.moveId && lhs.level == rhs.level && lhs.versionGroupId == rhs.versionGroupId
+    }
+}
+
+struct MoveDetail: Identifiable, Decodable, Hashable {
+    let id: Int
     let power: Int?
     let pp: Int?
     let accuracy: Int?
-    let typeID: Int?
-    let damageClassId: Int?
-    
-    init(_ move: MovementsData.Pokemon_v2_pokemonmofe) {
-        self.id = move.id
-        self.level = move.level
-        self.versionGroupID = move.version_group_id
-        if let move = move.pokemon_v2_move {
-            self.power = move.power
-            self.pp = move.pp
-            self.accuracy = move.accuracy
-            self.typeID = move.type_id
-            self.names = MoveLanguage(move.pokemon_v2_movenames)
-            self.damageClassId = move.move_damage_class_id
-        } else {
-            self.power = nil
-            self.pp = nil
-            self.accuracy = nil
-            self.typeID = nil
-            self.names = nil
-            self.damageClassId = nil
-        }
+    let typeId: Int
+    let moveDamageClassId: Int
+    let moveNames: [LanguageModel]
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case power
+        case pp
+        case accuracy
+        case typeId = "type_id"
+        case moveDamageClassId = "move_damage_class_id"
+        case moveNames = "pokemon_v2_movenames"
     }
-    
-    struct MoveLanguage: Decodable {
-        let names: [LanguageModel]
-        
-        init(_ moveNames: [MovementsData.Pokemon_v2_pokemonmofe.Pokemon_v2_move.Pokemon_v2_movename]) {
-            self.names = moveNames.map { name in
-                LanguageModel(id: name.language_id, name: name.name)
-            }
-        }
+
+    // Conformidad a Hashable
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+
+    static func == (lhs: MoveDetail, rhs: MoveDetail) -> Bool {
+        return lhs.id == rhs.id
     }
 }

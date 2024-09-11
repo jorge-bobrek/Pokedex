@@ -24,7 +24,7 @@ struct PokemonDetailView: View {
                             }
                             .id(0)
                             PokemonImage(url: Bundle.main.getSpriteArtwork(for: details.id, canBeShiny: true), size: 300)
-                            DetailText(languageManager.getLanguage(from: details.specy.names), .Title)
+                            DetailText(languageManager.getLanguage(from: details.species.speciesNames), .Title)
                         }
                         //MARK: Details
                         PokemonInformation(details: details)
@@ -40,12 +40,12 @@ struct PokemonDetailView: View {
                                 }
                             }
                         } else {
-                            ProgressView()
+                            Text(String(details.species.evolutionChainId ?? -1))
                         }
                         //MARK: Moves
                         DetailText("Movimientos", .Title)
-                        if let moves = vm.pokemonMovements {
-                            PokemonMoves(moves: moves.movements)
+                        if !vm.pokemonMoves.isEmpty {
+                            PokemonMoves(moves: vm.pokemonMoves)
                         } else {
                             ProgressView()
                         }

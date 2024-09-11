@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PokemonItemView: View {
-    let pokemon: Species.ListSpecy
+    let pokemon: Species
     @EnvironmentObject var languageManager: LanguageManager
     
     var body: some View {
@@ -25,6 +25,6 @@ struct PokemonItemView: View {
 
 struct PokemonPageView_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonItemView(pokemon: Species.ListSpecy.template)
+        PokemonItemView(pokemon: Species.template)
     }
 }

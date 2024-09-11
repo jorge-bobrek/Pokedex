@@ -10,11 +10,13 @@ import SwiftUI
 
 final class PokemonDetailViewModel: ObservableObject {
     private let pokemonManager = PokemonDetailManager()
+    private let movesManager = PokemonMovesManager()
+    private let evolutionManager = EvolutionManager()
     private let playerManager = PlayerManager()
     
-    @Published var pokemonDetails: Pokemon?
+    @Published var pokemonDetails: PokemonDetail?
     @Published var pokemonEvolutionChain: EvolutionChain?
-    @Published var pokemonMovements: Movements?
+    @Published var pokemonMoves: [PokemonMoveDetail] = []
     
     func getPokemon(_ pokemon: Int) {
         self.getPokemonData(pokemon)
@@ -22,33 +24,29 @@ final class PokemonDetailViewModel: ObservableObject {
     }
     
     func getPokemonData(_ pokemon: Int) {
-        DispatchQueue.main.async {
-            self.pokemonDetails = nil
-            self.pokemonManager.getPokemon(id: pokemon) { data in
-                self.pokemonDetails = data
-                if let evo = data.specy.evolutionChain {
-                    self.getEvolutionChain(evo)
-                }
-                if let cry = data.cry {
-                    self.playCry(url: cry)
-                }
+        self.pokemonDetails = nil
+        self.pokemonManager.getPokemon(id: pokemon) { data in
+            self.pokemonDetails = data
+            if let evo = data?.species.evolutionChainId {
+                self.getEvolutionChain(evo)
             }
+//                if let cry = data.cries.first {
+//                    self.playCry(url: cry.cries)
+//                }
         }
+        
     }
     
     func getEvolutionChain(_ chain: Int) {
-        DispatchQueue.main.async {
-            self.pokemonManager.getEvolutionChain(id: chain) { data in
-                self.pokemonEvolutionChain = data
-            }
+        self.pokemonEvolutionChain = nil
+        self.evolutionManager.getEvolutionChain(for: chain) { data in
+            self.pokemonEvolutionChain = data
         }
     }
     func getMovements(_ pokemon: Int) {
-        DispatchQueue.main.async {
-            self.pokemonMovements = nil
-            self.pokemonManager.getMovements(id: pokemon) { data in
-                self.pokemonMovements = data
-            }
+        self.pokemonMoves = []
+        self.movesManager.loadPokemonMoves(forPokemonId: pokemon) { data in
+            self.pokemonMoves = data
         }
     }
     

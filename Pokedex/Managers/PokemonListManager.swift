@@ -6,27 +6,18 @@
 //
 
 import Foundation
-import SchemaAPI
 
 class PokemonListManager {
-    func getPokemonList(completion: @escaping ([Species.ListSpecy]) -> ()) {
-        DispatchQueue.main.async {
-            Network.shared.apollo.fetch(query: GetListQuery()) { result in
-                switch result {
-                case .success(let graphQLResult):
-                    if let species = graphQLResult.data?.pokemon_v2_pokemonspecies {
-                        completion(self.process(data: species))
-                    } else if let errors = graphQLResult.errors {
-                        print(errors)
-                    }
-                case .failure(let error):
-                    print(error)
+    func getPokemonList(completion: @escaping ([Species]) -> ()) {
+        JSONManager.shared.load(fileName: "Species", as: SpeciesResponse.self) { result in
+            switch result {
+            case .success(let response):
+                DispatchQueue.main.async {
+                    completion(response.species)
                 }
+            case .failure(let error):
+                print("Error loading Pokémon species: \(error)")
             }
         }
-    }
-    
-    private func process(data: [SpeciesData]) -> [Species.ListSpecy] {
-        return Species(data).species
     }
 }

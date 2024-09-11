@@ -6,42 +6,27 @@
 //
 
 import Foundation
-import SchemaAPI
 
-typealias SpeciesData = GetListQuery.Data.Pokemon_v2_pokemonspecy
+struct SpeciesResponse: Decodable {
+    let species: [Species]
 
-struct Species: Decodable {
-    var species: [ListSpecy]
-
-    init(_ species: [SpeciesData]) {
-        self.species = species.map({ specy in
-            ListSpecy(specy)
-        })
+    enum CodingKeys: String, CodingKey {
+        case species = "pokemon_v2_pokemonspecies"
     }
+}
 
-    struct ListSpecy: Identifiable, Decodable {
-        let id: Int
-        let names: [LanguageModel]
-        let sprite: String
-        //let generation: Int
-        
-        init(_ species: SpeciesData) {
-            self.id = species.id
-            self.names = species.pokemon_v2_pokemonspeciesnames.map({ name in
-                LanguageModel(id: name.language_id, name: name.name)
-            })
-            self.sprite = Bundle.main.getSprite(for: species.id)
-            //self.generation = species.pokemon_v2_generation?.id ?? 0
-        }
-        
-        init(id: Int, names: [LanguageModel], sprite: String/*, generation: Int*/) {
-            self.id = id
-            self.names = names
-            self.sprite = sprite
-            //self.generation = generation
-        }
-        
-        static let template = ListSpecy(id: 133, names: [LanguageModel(id: 7, name: "eevee")], sprite: Bundle.main.getSprite(for: 133)/*, generation: 1*/)
+struct Species: Identifiable, Decodable {
+    let id: Int
+    let generationId: Int
+    let evolvesFromSpeciesId: Int?
+    let names: [LanguageModel]
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case generationId = "generation_id"
+        case evolvesFromSpeciesId = "evolves_from_species_id"
+        case names = "pokemon_v2_pokemonspeciesnames"
     }
     
+    static let template = Species(id: 133, generationId: 1, evolvesFromSpeciesId: nil, names: [LanguageModel(id: 7, name: "Eevee")])
 }

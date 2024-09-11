@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PokemonInformation: View {
     @EnvironmentObject var languageManager: LanguageManager
-    let details: Pokemon
+    let details: PokemonDetail
     
     var body: some View {
         Grid(alignment: .leading, verticalSpacing: 10) {
@@ -22,40 +22,40 @@ struct PokemonInformation: View {
             GridRow {
                 DetailText("Tipos", .Detail)
                 HStack {
-                    ForEach(details.types) { type in
-                        TypeText(type.id ?? 0, type: languageManager.getLanguage(from: type.names))
+                    ForEach(details.types, id: \.type.id) { type in
+                        TypeText(type.type.id, type: languageManager.getLanguage(from: type.type.typeNames))
                     }
                 }
             }
             GridRow {
                 DetailText(details.abilities.filter({!$0.isHidden}).count > 1 ? "Habilidades" : "Habilidad", .Detail)
                 VStack(alignment: .leading) {
-                    ForEach(details.abilities.filter { !$0.isHidden }) { ability in
-                        DetailText(languageManager.getLanguage(from: ability.names), .Info)
+                    ForEach(details.abilities.filter { !$0.isHidden }, id: \.id) { ability in
+                        DetailText(languageManager.getLanguage(from: ability.ability.abilityNames), .Info)
                     }
                 }
             }
             GridRow {
                 DetailText("Hab. Oculta", .Detail)
-                ForEach(details.abilities.filter { $0.isHidden }) { ability in
-                    DetailText(languageManager.getLanguage(from: ability.names), .Info)
+                ForEach(details.abilities.filter { $0.isHidden }, id: \.id) { ability in
+                    DetailText(languageManager.getLanguage(from: ability.ability.abilityNames), .Info)
                 }
             }
             GridRow {
                 DetailText("Rat. Captura", .Detail)
-                DetailText(String(details.specy.captureRate ?? 0), .Info)
+                DetailText(String(details.species.captureRate), .Info)
             }
             GridRow {
                 DetailText("Rat. Género", .Detail)
-                GenderRate(rate: details.specy.genderRate ?? 0)
+                GenderRate(rate: details.species.genderRate)
             }
             GridRow {
                 DetailText("Ciclos ecl.", .Detail)
-                DetailText(String(details.specy.hatchCounter ?? 0), .Info)
+                DetailText(String(details.species.hatchCounter ?? 0), .Info)
             }
             GridRow {
                 DetailText("Color", .Detail)
-                DetailText(languageManager.getLanguage(from: details.specy.color?.names), .Info)
+                DetailText(languageManager.getLanguage(from: details.species.color.colorNames), .Info)
             }
         }
     }
@@ -127,7 +127,7 @@ struct PokemonInformation: View {
 
 struct PokemonInformation_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonInformation(details: Pokemon.template)
+        PokemonInformation(details: PokemonDetail.template)
     }
 }
 

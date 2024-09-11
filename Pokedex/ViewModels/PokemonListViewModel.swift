@@ -12,10 +12,10 @@ final class PokemonListViewModel: ObservableObject {
     private let pokemonManager = PokemonListManager()
     
     @ObservedObject var languageManager: LanguageManager
-    @Published var pokemonList = [Species.ListSpecy]()
+    @Published var pokemonList = [Species]()
     @Published var searchText = ""
     
-    var filteredPokemon: [Species.ListSpecy] {
+    var filteredPokemon: [Species] {
         return searchText.isEmpty ? pokemonList : pokemonList.filter {
             languageManager.getLanguage(from: $0.names).lowercased().contains(searchText.lowercased())
         }
@@ -23,10 +23,9 @@ final class PokemonListViewModel: ObservableObject {
     
     init(languageManager: LanguageManager) {
         self.languageManager = languageManager
-        DispatchQueue.main.async {
-            self.pokemonManager.getPokemonList { data in
-                self.pokemonList = data
-            }
+        self.pokemonManager.getPokemonList { data in
+            self.pokemonList = data
         }
     }
 }
+
