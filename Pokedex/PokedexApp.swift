@@ -10,7 +10,7 @@ import Combine
 import Foundation
 
 @main
-struct PokedexApp: App {
+ struct PokedexApp: App {
     @StateObject var languageManager = LanguageManager()
     
     var body: some Scene {

@@ -13,30 +13,29 @@ struct PokemonDetailView: View {
     let pokemon: Int
     
     var body: some View {
-        ScrollView {
-            ScrollViewReader { proxy in
+        ScrollViewReader { proxy in
+            ScrollView {
                 if let details = vm.pokemonDetails {
-                    LazyVStack(alignment: .center, spacing: 40) {
+                    VStack(alignment: .center, spacing: 40) {
                         VStack {
                             HStack {
                                 DetailText(String(format: "#%04d", details.id), .Title)
                                 Spacer()
                             }
-                            .id(0)
+                            .id("top")
                             PokemonImage(url: Bundle.main.getSpriteArtwork(for: details.id, canBeShiny: true), size: 300)
                             DetailText(languageManager.getLanguage(from: details.species.speciesNames), .Title)
                         }
                         //MARK: Details
                         PokemonInformation(details: details)
                         
-                    
                         //MARK: Evolution
                         DetailText("Evolución", .Title)
                         if let chain = vm.pokemonEvolutionChain {
                             PokemonEvolution(chain: chain) { index in
                                 withAnimation {
                                     vm.getPokemon(index)
-                                    proxy.scrollTo(0, anchor: .bottom)
+                                    proxy.scrollTo("top", anchor: .top)
                                 }
                             }
                         } else {

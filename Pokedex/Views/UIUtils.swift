@@ -64,7 +64,6 @@ struct TypeText: View {
                 .frame(width: 90, height: 30)
                 .background(Color(UIColor(named: monType) ?? .white))
                 .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
-                .overlay(RoundedRectangle(cornerRadius: 4).stroke(.white, lineWidth: 1))
                 .shadow(color: .gray, radius: 1)
                 .stroke()
         }
@@ -89,7 +88,7 @@ struct DetailText: View {
     
     var body: some View{
         Text(text.uppercased())
-            .font(.custom("My Font", size: size.rawValue))
+            .font(.custom("Pokemon Regular", size: size.rawValue))
             .lineLimit(2)
     }
 }

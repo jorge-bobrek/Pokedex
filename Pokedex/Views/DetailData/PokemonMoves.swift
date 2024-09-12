@@ -35,10 +35,10 @@ struct PokemonMoves: View {
                                 DetailText(move.detail.power == nil ? "--" : "\(move.detail.power!)", .Typing)
                                 DetailText(move.detail.accuracy == nil ? "--" : "\(move.detail.accuracy!)%", .Typing)
                                 DetailText("\(move.detail.pp!)", .Typing)
-                                Image(MonType[move.detail.typeId]!)
+                                Image(MonType[move.detail.typeId!]!)
                                     .resizable()
                                     .frame(width: 19, height: 19)
-                                DamageType(damageId: move.detail.moveDamageClassId)
+                                DamageType(damageId: move.detail.moveDamageClassId!)
                             }
                         }
                     }
@@ -67,7 +67,7 @@ struct Stroke: ViewModifier {
 }
 
 extension View {
-    func stroke(color: Color = .black, width: CGFloat = 1) -> some View {
+    func stroke(color: Color = .primary, width: CGFloat = 1) -> some View {
         modifier(Stroke(width: width, color: color))
     }
 }

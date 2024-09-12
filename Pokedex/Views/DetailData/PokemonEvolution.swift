@@ -12,52 +12,84 @@ struct PokemonEvolution: View {
     let completion: (Int) -> ()
     
     var body: some View {
-        if (chain.pokemonSpecies.count == 1) {
-            VStack(spacing: 0) {
-                PokemonImage(url: Bundle.main.getSpriteArtwork(for: chain.pokemonSpecies.first?.id ?? 0), size: 100)
-                DetailText("Este Pokémon no evoluciona.", .Info)
-            }
-        } else {
+        if let rootSpecies = chain.pokemonSpecies.first(where: { $0.evolvesFromSpeciesId == nil }) {
             ScrollView(.horizontal) {
+                EvolutionLine(species: rootSpecies, groupedSpecies: groupSpeciesByEvolvesFrom(species: chain), completion: completion)
+            }
+        }
+    }
+    
+    struct EvolutionLine: View {
+        @EnvironmentObject var languageManager: LanguageManager
+        let species: Species
+        let groupedSpecies: [Int: [Species]]
+        let completion: (Int) -> ()
+        var body: some View {
+            HStack(alignment: .center) {
                 HStack {
-                    ForEach(chain.pokemonSpecies) { specy in
-                        PokemonImage(url: Bundle.main.getSpriteArtwork(for: specy.id), size: 100)
-                            .onTapGesture {
-                                completion(specy.id)
-                                //vm.loadPokemon(pokemon: PokemonPage(name: vm.pokemonEvolutionChain!.chain.species.name, url: vm.pokemonEvolutionChain!.chain.species.url))
+                    if let evolutions = species.evolutions, !evolutions.isEmpty {
+                        VStack {
+                            Image(systemName: "arrow.right")
+                            ForEach(evolutions, id: \.id) { evolution in
+                                EvolutionRequeriments(evolution: evolution)
                             }
+                        }
                     }
-                    //PokemonEvolutionLine(proxy: proxy, pokemon: vm.pokemonEvolutionChain!.chain)
+                    VStack(spacing: 0) {
+                        PokemonImage(url: Bundle.main.getSpriteArtwork(for: species.id), size: 100)
+                            .onTapGesture {
+                                completion(species.id)
+                            }
+                        DetailText(languageManager.getLanguage(from:species.names), .Typing)
+                    }
+                    if let evolutions = groupedSpecies[species.id], !evolutions.isEmpty {
+                        VStack {
+                            ForEach(evolutions, id: \.id) { evolution in
+                                // Mostrar la cadena evolutiva de la siguiente especie
+                                EvolutionLine(species: evolution, groupedSpecies: groupedSpecies, completion: completion)
+                            }
+                        }
+                    }
                 }
             }
         }
     }
-}
-
-
-fileprivate struct PokemonEvolutionLine: View {
-    @EnvironmentObject var vm: PokemonDetailViewModel
-    let proxy: ScrollViewProxy
-    //var pokemon: Chain
     
-    var body: some View {
-        VStack {
-            Text("Evolution line placeholder")/*
-            ForEach(pokemon.evolvesTo!) { species in
-                HStack(spacing: 10) {
-                    Image(systemName: "arrow.right")
-                    PokemonImage(id: Bundle.main.getIndex(url: species.species.url), size: 120)
-                        .onTapGesture {
-                            //vm.loadPokemon(pokemon: PokemonPage(name: species.species.name, url: species.species.url))
-                            withAnimation {
-                                proxy.scrollTo(0, anchor: .bottom)
-                            }
-                        }
-                    if (!((species.evolvesTo?.isEmpty) == nil)) {
-                        PokemonEvolutionLine(proxy: proxy, pokemon: species)
-                    }
-                }
-            }*/
+    struct EvolutionRequeriments: View {
+        @EnvironmentObject var languageManager: LanguageManager
+        let evolution: Evolution
+        var body: some View {
+            VStack {
+                Text("\(evolution.trigger.name)")
+                if let minLevel = evolution.minLevel { Text("Nivel: \(minLevel)") }
+                if let minAffection = evolution.minAffection { Text("Afecto: \(minAffection)") }
+                if let minHappiness = evolution.minHappiness { Text("Felicidad: \(minHappiness)") }
+                if let minBeauty = evolution.minBeauty { Text("Belleza: \(minBeauty)") }
+                if evolution.needsOverworldRain { Text("Lluvia") }
+                if let timeOfDay = TimeOfDay(rawValue: evolution.timeOfDay)?.toLanguageModels() { Text("Hora: \(languageManager.getLanguage(from: timeOfDay))") }
+                if let relativePhysicalStats = evolution.relativePhysicalStats { Text("stats: \(relativePhysicalStats)") }
+                if let heldItem = evolution.heldItem?.names { Text("heldItem: \(languageManager.getLanguage(from: heldItem))") }
+                if let location = evolution.location?.names { Text("location: \(languageManager.getLanguage(from: location))") }
+                if let knownMove = evolution.knownMove { Text("knownMove: \(knownMove)") }
+                if let knownMoveType = evolution.knownMoveType?.typeNames { Text("knownMoveType: \(languageManager.getLanguage(from: knownMoveType))") }
+                if let tradeSpecies = evolution.tradeSpecies { Text("tradeSpecies: \(tradeSpecies)") }
+                if let partySpecies = evolution.partySpecies { Text("partySpecies: \(partySpecies)") }
+                if let partyType = evolution.partyType { Text("partyType: \(partyType)") }
+                if evolution.turnUpsideDown { Text("turnUpsideDown") }
+            }
         }
+    }
+
+    
+    // Función para agrupar las especies por evolvesFromSpeciesId
+    private func groupSpeciesByEvolvesFrom(species: EvolutionChain) -> [Int: [Species]] {
+        var speciesDict: [Int: [Species]] = [:]
+        
+        for specie in species.pokemonSpecies {
+            if let evolvesFromId = specie.evolvesFromSpeciesId {
+                speciesDict[evolvesFromId, default: []].append(specie)
+            }
+        }
+        return speciesDict
     }
 }

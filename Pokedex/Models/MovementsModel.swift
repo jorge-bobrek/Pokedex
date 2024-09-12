@@ -62,8 +62,8 @@ struct MoveDetail: Identifiable, Decodable, Hashable {
     let power: Int?
     let pp: Int?
     let accuracy: Int?
-    let typeId: Int
-    let moveDamageClassId: Int
+    let typeId: Int?
+    let moveDamageClassId: Int?
     let moveNames: [LanguageModel]
 
     enum CodingKeys: String, CodingKey {

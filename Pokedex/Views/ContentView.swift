@@ -15,7 +15,7 @@ struct ContentView: View {
         VStack(spacing: 0) {
             NavigationView {
                 ScrollView {
-                    LazyVStack(alignment: .leading, spacing: 10) {
+                    LazyVStack(alignment: .leading, spacing: 0) {
                         ForEach(viewModel.filteredPokemon) { pokemon in
                             NavigationLink(destination: PokemonDetailView(pokemon: pokemon.id)) {
                                 PokemonItemView(pokemon: pokemon)
