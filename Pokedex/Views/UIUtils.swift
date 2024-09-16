@@ -95,8 +95,8 @@ struct DetailText: View {
 
 enum Size: CGFloat {
     case Title = 30
-    case Detail = 26
     case Info = 22
+    case Detail = 20
     case Typing = 16
     case Hint = 12
     case Table = 10
@@ -122,3 +122,74 @@ let MonType: [Int: String] = [
     17: "dark",
     18: "fairy",
 ]
+
+extension View {
+    func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
+        clipShape(RoundedCorner(radius: radius, corners: corners))
+    }
+}
+
+struct RoundedCorner: Shape {
+    let radius: CGFloat
+    let corners: UIRectCorner
+
+    init(radius: CGFloat = .infinity, corners: UIRectCorner = .allCorners) {
+        self.radius = radius
+        self.corners = corners
+    }
+
+    func path(in rect: CGRect) -> Path {
+        let path = UIBezierPath(roundedRect: rect, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+        return Path(path.cgPath)
+    }
+}
+
+struct Stroke: ViewModifier {
+    var width: CGFloat
+    var color: Color
+    
+    func body(content: Content) -> some View {
+        ZStack{
+            ZStack{
+                content.offset(x:  width, y:  width)
+                content.offset(x: -width, y: -width)
+                content.offset(x: -width, y:  width)
+                content.offset(x:  width, y: -width)
+            }
+            .foregroundColor(color)
+            content
+        }
+    }
+}
+
+extension View {
+    func stroke(color: Color = .primary, width: CGFloat = 1) -> some View {
+        modifier(Stroke(width: width, color: color))
+    }
+}
+
+struct ArrowShape: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+
+        // Define the proportion of the arrowhead to the tail
+        let arrowWidth = rect.width * 0.4
+        let arrowHeight = rect.height * 0.8
+
+        // Draw the arrow tail
+        path.move(to: CGPoint(x: rect.midX - arrowWidth / 2, y: rect.maxY))
+        path.addLine(to: CGPoint(x: rect.midX + arrowWidth / 2, y: rect.maxY))
+        path.addLine(to: CGPoint(x: rect.midX + arrowWidth / 2, y: rect.maxY - arrowHeight))
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY - arrowHeight))
+
+        // Draw the arrowhead
+        path.addLine(to: CGPoint(x: rect.midX, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY - arrowHeight))
+        path.addLine(to: CGPoint(x: rect.midX - arrowWidth / 2, y: rect.maxY - arrowHeight))
+
+        // Complete the path by closing the shape
+        path.closeSubpath()
+
+        return path
+    }
+}

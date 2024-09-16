@@ -9,6 +9,7 @@ import Foundation
 
 class LanguageManager: ObservableObject {
     @Published var selectedLanguage: Language = .english
+    @Published var evolution: Evolution? = nil
     private var romaji = true
     
     // Cambiar el idioma utilizando el enum Language

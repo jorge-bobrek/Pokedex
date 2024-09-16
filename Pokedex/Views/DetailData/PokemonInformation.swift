@@ -4,60 +4,61 @@
 //
 //  Created by Jorge Bobrek on 31/03/23.
 //
-
 import SwiftUI
 
 struct PokemonInformation: View {
     @EnvironmentObject var languageManager: LanguageManager
     let details: PokemonDetail
     
+    // Definir las columnas para la cuadrícula
+    let columns = [
+        GridItem(.flexible(), alignment: .leading),
+        GridItem(.flexible(), alignment: .leading)
+    ]
+    
     var body: some View {
-        Grid(alignment: .leading, verticalSpacing: 10) {
-            GridRow {
-                Rectangle()
-                    .frame(maxWidth: .infinity, maxHeight: 0)
-                Rectangle()
-                    .frame(maxWidth: .infinity, maxHeight: 0)
-            }
-            GridRow {
-                DetailText("Tipos", .Detail)
-                HStack {
-                    ForEach(details.types, id: \.type.id) { type in
-                        TypeText(type.type.id, type: languageManager.getLanguage(from: type.type.typeNames))
-                    }
+        LazyVGrid(columns: columns, spacing: 10) {            
+            // Tipos de Pokémon
+            DetailText("Tipos", .Info)
+            HStack {
+                ForEach(details.types, id: \.type.id) { type in
+                    TypeText(type.type.id, type: languageManager.getLanguage(from: type.type.typeNames))
                 }
             }
-            GridRow {
-                DetailText(details.abilities.filter({!$0.isHidden}).count > 1 ? "Habilidades" : "Habilidad", .Detail)
-                VStack(alignment: .leading) {
-                    ForEach(details.abilities.filter { !$0.isHidden }, id: \.id) { ability in
-                        DetailText(languageManager.getLanguage(from: ability.ability.abilityNames), .Info)
-                    }
+            
+            // Habilidades visibles
+            DetailText(details.abilities.filter({!$0.isHidden}).count > 1 ? "Habilidades" : "Habilidad", .Info)
+            VStack(alignment: .leading) {
+                ForEach(details.abilities.filter { !$0.isHidden }, id: \.id) { ability in
+                    DetailText(languageManager.getLanguage(from: ability.ability.abilityNames), .Detail)
                 }
             }
-            GridRow {
-                DetailText("Hab. Oculta", .Detail)
+            
+            // Habilidad oculta
+            DetailText("Hab. Oculta", .Info)
+            VStack(alignment: .leading) {
                 ForEach(details.abilities.filter { $0.isHidden }, id: \.id) { ability in
-                    DetailText(languageManager.getLanguage(from: ability.ability.abilityNames), .Info)
+                    DetailText(languageManager.getLanguage(from: ability.ability.abilityNames), .Detail)
                 }
             }
-            GridRow {
-                DetailText("Rat. Captura", .Detail)
-                DetailText(String(details.species.captureRate), .Info)
-            }
-            GridRow {
-                DetailText("Rat. Género", .Detail)
-                GenderRate(rate: details.species.genderRate)
-            }
-            GridRow {
-                DetailText("Ciclos ecl.", .Detail)
-                DetailText(String(details.species.hatchCounter ?? 0), .Info)
-            }
-            GridRow {
-                DetailText("Color", .Detail)
-                DetailText(languageManager.getLanguage(from: details.species.color.colorNames), .Info)
-            }
+            
+            // Tasa de captura
+            DetailText("Rat. Captura", .Info)
+            DetailText(String(details.species.captureRate), .Detail)
+            
+            // Tasa de género
+            DetailText("Rat. Género", .Info)
+            GenderRate(rate: details.species.genderRate)
+            
+            // Ciclos de eclosión
+            DetailText("Ciclos ecl.", .Info)
+            DetailText(String(details.species.hatchCounter ?? 0), .Detail)
+            
+            // Color
+            DetailText("Color", .Info)
+            DetailText(languageManager.getLanguage(from: details.species.color.colorNames), .Detail)
         }
+        .padding()
     }
     
     private struct GenderRate: View {
@@ -70,37 +71,18 @@ struct PokemonInformation: View {
                         Rectangle()
                             .fill(.gray)
                             .frame(width: 128, height: 10)
-                            .clipShape(
-                                .rect(
-                                    topLeadingRadius: 16,
-                                    bottomLeadingRadius: 16,
-                                    bottomTrailingRadius: 16,
-                                    topTrailingRadius: 16
-                                )
-                            )
+                            .cornerRadius(16, corners: [.topLeft, .topRight, .bottomLeft, .bottomRight])
                     } else {
                         Rectangle()
                             .fill(.cyan)
                             .frame(width: CGFloat(128 / 8 * (8 - rate)), height: 10)
-                            .clipShape(
-                                .rect(
-                                    topLeadingRadius: 16,
-                                    bottomLeadingRadius: 16,
-                                    bottomTrailingRadius: 8 - rate == 8 ? 16 : 0,
-                                    topTrailingRadius: 8 - rate == 8 ? 16 : 0
-                                )
-                            )
+                            .cornerRadius(16, corners: [.topLeft, .bottomLeft])
+                            .cornerRadius(8 - rate == 8 ? 16 : 0, corners: [.topRight, .bottomRight])
                         Rectangle()
                             .fill(.pink)
                             .frame(width: CGFloat(128 / 8 * rate), height: 10)
-                            .clipShape(
-                                .rect(
-                                    topLeadingRadius: rate == 8 ? 16 : 0,
-                                    bottomLeadingRadius: rate == 8 ? 16 : 0,
-                                    bottomTrailingRadius: 16,
-                                    topTrailingRadius: 16
-                                )
-                            )
+                            .cornerRadius(rate == 8 ? 16 : 0, corners: [.topLeft, .bottomLeft])
+                            .cornerRadius(16, corners: [.topRight, .bottomRight])
                     }
                 }
                 HStack(alignment: .center) {
@@ -130,4 +112,3 @@ struct PokemonInformation_Previews: PreviewProvider {
         PokemonInformation(details: PokemonDetail.template)
     }
 }
-

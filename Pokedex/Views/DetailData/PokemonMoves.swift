@@ -6,69 +6,54 @@
 //
 
 import SwiftUI
-
 struct PokemonMoves: View {
     @EnvironmentObject var languageManager: LanguageManager
     @State var selected: Int = 1
     let moves: [PokemonMoveDetail]
     
+    // Definir las columnas para la cuadrícula
+    let columns = [
+        GridItem(.flexible(), alignment: .leading),
+        GridItem(.fixed(28), alignment: .center),
+        GridItem(.fixed(28), alignment: .center),
+        GridItem(.fixed(44), alignment: .center),
+        GridItem(.fixed(18), alignment: .center),
+        GridItem(.fixed(22), alignment: .center),
+        GridItem(.fixed(44), alignment: .center)
+    ]
+    
     var body: some View {
         VStack {
             VersionsSection(selected: $selected)
-            Grid {
-                GridRow {
-                    Text("")
-                    DetailText("Level", .Table)
-                    DetailText("Power", .Table)
-                    DetailText("Accuracy", .Table)
-                    DetailText("PP", .Table)
-                    DetailText("Type", .Table)
-                    DetailText("Category", .Table)
-                }
+            
+            LazyVGrid(columns: columns, spacing: 10) {
+                // Encabezado de la tabla
+                Text("").frame(maxWidth: .infinity, alignment: .leading)
+                DetailText("Level", .Table)
+                DetailText("Power", .Table)
+                DetailText("Accuracy", .Table)
+                DetailText("PP", .Table)
+                DetailText("Type", .Table)
+                DetailText("Category", .Table)
+                
+                // Movimientos Pokémon
                 ForEach(moves, id: \.move.id) { move in
-                    if move.move.versionGroupId == selected {
-                        if move.move.level > 0 {
-                            GridRow {
-                                DetailText(languageManager.getLanguage(from: move.detail.moveNames), .Typing)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                DetailText("\(move.move.level)", .Typing)
-                                DetailText(move.detail.power == nil ? "--" : "\(move.detail.power!)", .Typing)
-                                DetailText(move.detail.accuracy == nil ? "--" : "\(move.detail.accuracy!)%", .Typing)
-                                DetailText("\(move.detail.pp!)", .Typing)
-                                Image(MonType[move.detail.typeId!]!)
-                                    .resizable()
-                                    .frame(width: 19, height: 19)
-                                DamageType(damageId: move.detail.moveDamageClassId!)
-                            }
-                        }
+                    if move.move.versionGroupId == selected && move.move.level > 0 {
+                        DetailText(languageManager.getLanguage(from: move.detail.moveNames), .Typing)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        DetailText("\(move.move.level)", .Typing)
+                        DetailText(move.detail.power == nil ? "--" : "\(move.detail.power!)", .Typing)
+                        DetailText(move.detail.accuracy == nil ? "--" : "\(move.detail.accuracy!)%", .Typing)
+                        DetailText("\(move.detail.pp!)", .Typing)
+                        Image(MonType[move.detail.typeId!]!)
+                            .resizable()
+                            .frame(width: 19, height: 19)
+                        DamageType(damageId: move.detail.moveDamageClassId!)
                     }
                 }
             }
+            .padding(.horizontal, 0)
         }
-    }
-}
-
-struct Stroke: ViewModifier {
-    var width: CGFloat
-    var color: Color
-    
-    func body(content: Content) -> some View {
-        ZStack{
-            ZStack{
-                content.offset(x:  width, y:  width)
-                content.offset(x: -width, y: -width)
-                content.offset(x: -width, y:  width)
-                content.offset(x:  width, y: -width)
-            }
-            .foregroundColor(color)
-            content
-        }
-    }
-}
-
-extension View {
-    func stroke(color: Color = .primary, width: CGFloat = 1) -> some View {
-        modifier(Stroke(width: width, color: color))
     }
 }
 
@@ -136,7 +121,6 @@ struct VersionsSection: View {
                             )
                             .cornerRadius(8)
                             .foregroundColor(.white)
-                            .disabled(actualIndex == selected)
                     }
                 }
             }
