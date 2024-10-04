@@ -10,26 +10,25 @@ import Foundation
 class LanguageManager: ObservableObject {
     @Published var selectedLanguage: Language = .english
     @Published var evolution: Evolution? = nil
-    private var romaji = true
     
     // Cambiar el idioma utilizando el enum Language
     func changeLanguage(to language: Language) {
-        if language == .jaHrkt { romaji.toggle() } else { romaji = true }
         selectedLanguage = language
     }
     
     func getLanguage(from names: [LanguageModel]?) -> String {
-        if selectedLanguage == .jaHrkt && romaji {
-            return (names?.first(where: { $0.id == Language.jaHrkt.rawValue })?.name ?? "").applyingTransform(.toLatin, reverse: false) ?? "❌"
+        if selectedLanguage == .roomaji {
+            return (names?.first(where: { $0.id == Language.jaHrkt.rawValue })?.name ?? "").applyingTransform(.toLatin, reverse: false) ?? "Traducción no disponible"
         }
-        return names?.first(where: { $0.id == selectedLanguage.rawValue })?.name ?? "❌"
+        return names?.first(where: { $0.id == selectedLanguage.rawValue })?.name ?? "Traducción no disponible"
     }
 }
 
-let Flags: [String] = ["🇯🇵", "🇰🇷", "🇨🇳", "🇫🇷", "🇩🇪", "🇪🇸", "🇮🇹", "🇺🇸"]
+let Flags: [String] = ["🇯🇵", "🇯🇵", "🇰🇷", "🇨🇳", "🇫🇷", "🇩🇪", "🇪🇸", "🇮🇹", "🇺🇸"]
 
 enum Language: Int, CaseIterable {
     case jaHrkt = 1
+    case roomaji = 2
     case korean = 3
     case zhHant = 4
     case french = 5
@@ -47,23 +46,25 @@ enum TimeOfDay: String {
         let translations: [String: [Language: String]] = [
             "day": [
                 .jaHrkt: "昼",
+                .roomaji: "昼",
                 .korean: "낮",
                 .zhHant: "日",
-                .french: "jour",
+                .french: "Jour",
                 .deutsch: "Tag",
-                .spanish: "día",
-                .italian: "giorno",
-                .english: "day"
+                .spanish: "Día",
+                .italian: "Giorno",
+                .english: "Day"
             ],
             "night": [
                 .jaHrkt: "夜",
+                .roomaji: "夜",
                 .korean: "밤",
                 .zhHant: "夜",
-                .french: "nuit",
+                .french: "Nuit",
                 .deutsch: "Nacht",
-                .spanish: "noche",
-                .italian: "notte",
-                .english: "night"
+                .spanish: "Noche",
+                .italian: "Notte",
+                .english: "Night"
             ]
         ]
         guard let dayTranslations = translations[self.rawValue] else { return [] }

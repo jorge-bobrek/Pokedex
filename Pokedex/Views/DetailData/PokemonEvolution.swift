@@ -30,19 +30,21 @@ struct PokemonEvolution: View {
             HStack(alignment: .center) {
                 HStack {
                     if let evolutions = species.evolutions {
-                        ForEach(evolutions, id: \.id) { evolution in
-                            ZStack {
-                                ArrowShape()
-                                    .fill(Color.secondary.opacity(0.4))
-                                    .frame(width: 32, height: 92)
-                                    .rotationEffect(.degrees(90))
-                                    .aspectRatio(1, contentMode: .fit)
-                                Text("\(evolution.trigger.name)")
-                            }
-                            .frame(width: 120, height: 30)
-                            .onTapGesture {
-                                withAnimation(.snappy(duration: 0.2)) {
-                                    languageManager.evolution = evolution
+                        VStack(spacing: 0) {
+                            ForEach(evolutions, id: \.id) { evolution in
+                                ZStack {
+                                    ArrowShape()
+                                        .fill(Color.secondary.opacity(0.4))
+                                        .frame(width: 32, height: 92)
+                                        .rotationEffect(.degrees(90))
+                                        .aspectRatio(1, contentMode: .fit)
+                                    Text("\(evolution.trigger.name)")
+                                }
+                                .frame(width: 120, height: 30)
+                                .onTapGesture {
+                                    withAnimation(.snappy(duration: 0.2)) {
+                                        languageManager.evolution = evolution
+                                    }
                                 }
                             }
                         }
@@ -102,7 +104,7 @@ struct EvolutionRequeriments: View {
             if let timeOfDay = TimeOfDay(rawValue: evolution.timeOfDay)?.toLanguageModels() { Text("Hora: \(languageManager.getLanguage(from: timeOfDay))") }
             if let relativePhysicalStats = evolution.relativePhysicalStats { Text("stats: \(relativePhysicalStats)") }
             if let heldItem = evolution.heldItem?.names { Text("Usando: \(languageManager.getLanguage(from: heldItem))") }
-            if let location = evolution.location?.names { Text("En: \(languageManager.getLanguage(from: location))") }
+            if let location = evolution.location?.names { Text("Ubicación: \(languageManager.getLanguage(from: location))") }
             if let knownMove = evolution.knownMove { Text("Conociendo movimiento: \(knownMove)") }
             if let knownMoveType = evolution.knownMoveType?.typeNames { Text("Conociendo movimiento tipo: \(languageManager.getLanguage(from: knownMoveType))") }
             if let tradeSpecies = evolution.tradeSpecies { Text("tradeSpecies: \(tradeSpecies)") }
