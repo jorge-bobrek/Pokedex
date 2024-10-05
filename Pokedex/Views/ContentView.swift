@@ -15,15 +15,15 @@ struct ContentView: View {
         VStack(spacing: 0) {
             NavigationView {
                 VStack {
-                    HStack(spacing: 0) {
+                    HStack {
                         Spacer()
-                        DetailText("Generation", .Detail)
-                            .padding(.trailing, 2)
-                        Picker("Generation", selection: $viewModel.generation) {
-                            ForEach(1..<10) { gen in
+                        Picker("Gen", selection: $viewModel.generation) {
+                            ForEach(0..<10) { gen in
                                 DetailText("\(gen)", .Detail).tag(gen)
                             }
                         }
+                        DetailText("Gen", .Detail)
+                            .padding(.trailing, 2)
                         .pickerStyle(.menu)
                         Spacer()
                         NavigationLink(destination: NaturesView(viewModel: PokemonNaturesViewModel())) {
@@ -62,6 +62,7 @@ struct ContentView: View {
                             .navigationBarTitleDisplayMode(.inline)
                             .searchable(text: $viewModel.searchText, placement: .toolbar)
                             .onChange(of: viewModel.filteredPokemon) { newValue in
+                                UserDefaults.standard.set(viewModel.generation, forKey: "generation")
                                 if let firstPokemonId = newValue.first?.id {
                                     withAnimation {
                                         proxy.scrollTo(firstPokemonId, anchor: .top)
@@ -79,6 +80,9 @@ struct ContentView: View {
                     ForEach(Array(Language.allCases.enumerated()), id: \.element) { id, language in
                         DetailText("\(Flags[id]) \(language)", .Detail).tag(language)
                     }
+                }
+                .onChange(of: languageManager.selectedLanguage) { language in
+                    UserDefaults.standard.set(language.rawValue, forKey: "language")
                 }
                 Spacer()
             }

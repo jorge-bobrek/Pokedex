@@ -13,13 +13,15 @@ final class PokemonListViewModel: ObservableObject {
     @Published private var pokemonList = [Species]()
     
     @ObservedObject var languageManager: LanguageManager
+    @Published var generation: Int
     @Published var searchText = ""
-    @Published var generation = 1
     
     var filteredPokemon: [Species] {
         var filtered = pokemonList
-        filtered = filtered.filter {
-            $0.generationId == generation
+        if generation > 0 {
+            filtered = filtered.filter {
+                $0.generationId == generation
+            }
         }
         return searchText.isEmpty ? filtered : filtered.filter {
             languageManager.getLanguage(from: $0.names).lowercased().contains(searchText.lowercased())
@@ -27,6 +29,7 @@ final class PokemonListViewModel: ObservableObject {
     }
     
     init(languageManager: LanguageManager) {
+        self.generation = UserDefaults.standard.integer(forKey: "generation")
         self.languageManager = languageManager
         self.pokemonManager.getPokemonList { data in
             self.pokemonList = data

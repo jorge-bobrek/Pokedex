@@ -19,12 +19,18 @@ final class PokemonDetailViewModel: ObservableObject {
     @Published var pokemonMoves: [PokemonMoveDetail] = []
     
     func getPokemon(_ pokemon: Int) {
+        self.reset()
         self.getPokemonData(pokemon)
         self.getMovements(pokemon)
     }
     
-    func getPokemonData(_ pokemon: Int) {
+    func reset() {
         self.pokemonDetails = nil
+        self.pokemonEvolutionChain = nil
+        self.pokemonMoves = []
+    }
+    
+    func getPokemonData(_ pokemon: Int) {
         self.pokemonManager.getPokemon(id: pokemon) { data in
             self.pokemonDetails = data
             if let evo = data?.species.evolutionChainId {
@@ -38,13 +44,12 @@ final class PokemonDetailViewModel: ObservableObject {
     }
     
     func getEvolutionChain(_ chain: Int) {
-        self.pokemonEvolutionChain = nil
         self.evolutionManager.getEvolutionChain(for: chain) { data in
             self.pokemonEvolutionChain = data
         }
     }
+    
     func getMovements(_ pokemon: Int) {
-        self.pokemonMoves = []
         self.movesManager.loadPokemonMoves(forPokemonId: pokemon) { data in
             self.pokemonMoves = data
         }

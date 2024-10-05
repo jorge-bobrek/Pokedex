@@ -62,5 +62,5 @@ struct NaturesView: View {
 
 #Preview {
     NaturesView(viewModel: PokemonNaturesViewModel())
-        .environmentObject(LanguageManager(selectedLanguage: .roomaji))
+        .environmentObject(LanguageManager())
 }

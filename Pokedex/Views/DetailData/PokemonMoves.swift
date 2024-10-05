@@ -6,10 +6,18 @@
 //
 
 import SwiftUI
+
 struct PokemonMoves: View {
     @EnvironmentObject var languageManager: LanguageManager
-    @State var selected: Int = 1
+    @State var selected: Int
     let moves: [PokemonMoveDetail]
+    let generations: [Int]
+    
+    init(moves: [PokemonMoveDetail]) {
+        self.moves = moves
+        self.generations = Array(Set(moves.map { $0.move.versionGroupId })).sorted()
+        self.selected = generations.first!
+    }
     
     // Definir las columnas para la cuadrícula
     let columns = [
@@ -24,7 +32,7 @@ struct PokemonMoves: View {
     
     var body: some View {
         VStack {
-            VersionsSection(selected: $selected)
+            VersionsSection(selected: $selected, generations: generations)
             
             LazyVGrid(columns: columns, spacing: 10) {
                 // Encabezado de la tabla
@@ -74,6 +82,7 @@ struct DamageType: View {
 
 struct VersionsSection: View {
     @Binding var selected: Int
+    let generations: [Int]
     let versions: [(String, [Color])] = [
         ("RB",[Color("red"), Color("blue")]), // 1
         ("Y",[Color("yellow"), Color("yellow")]), // 2
@@ -103,24 +112,26 @@ struct VersionsSection: View {
             HStack(spacing: 10) {
                 ForEach(Array(versions.enumerated()), id: \.1.0) { index, version in
                     let actualIndex = versionIndices[index] // Obtener el índice real comentado
-                    Button {
-                        selected = actualIndex // Asignar el índice real al seleccionado
-                    } label: {
-                        DetailText(version.0, .Info)
-                            .stroke(color: .black.opacity(actualIndex == selected ? 1 : 0.3))
-                            .frame(width: 64, height: 32)
-                            .background(
-                                LinearGradient(
-                                    gradient: Gradient(colors: [
-                                        version.1[0].opacity(actualIndex == selected ? 1 : 0.3),
-                                        version.1[1].opacity(actualIndex == selected ? 1 : 0.3)
-                                    ]),
-                                    startPoint: .leading,
-                                    endPoint: .trailing
+                    if generations.contains(actualIndex) {
+                        Button {
+                            selected = actualIndex // Asignar el índice real al seleccionado
+                        } label: {
+                            DetailText(version.0, .Info)
+                                .stroke(color: .black.opacity(actualIndex == selected ? 1 : 0.3))
+                                .frame(width: 64, height: 32)
+                                .background(
+                                    LinearGradient(
+                                        gradient: Gradient(colors: [
+                                            version.1[0].opacity(actualIndex == selected ? 1 : 0.3),
+                                            version.1[1].opacity(actualIndex == selected ? 1 : 0.3)
+                                        ]),
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
                                 )
-                            )
-                            .cornerRadius(8)
-                            .foregroundColor(.white)
+                                .cornerRadius(8)
+                                .foregroundColor(.white)
+                        }
                     }
                 }
             }

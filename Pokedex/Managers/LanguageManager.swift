@@ -11,8 +11,8 @@ class LanguageManager: ObservableObject {
     @Published var selectedLanguage: Language
     @Published var evolution: Evolution? = nil
     
-    init(selectedLanguage: Language = .english) {
-        self.selectedLanguage = selectedLanguage
+    init() {
+        self.selectedLanguage = Language(rawValue: UserDefaults.standard.integer(forKey: "language")) ?? .english
     }
     
     // Cambiar el idioma utilizando el enum Language
