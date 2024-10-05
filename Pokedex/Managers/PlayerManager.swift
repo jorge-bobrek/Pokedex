@@ -10,12 +10,10 @@ import AVKit
 
 class PlayerManager {
     var player: AVPlayer?
-    var playerItem: AVPlayerItem?
     
     func play(url: URL) {
         let playerItem = AVPlayerItem(url: url)
         self.player = AVPlayer(playerItem: playerItem)
-        player!.volume = 1.0
-        player!.play()
+        player?.play()
     }
 }
