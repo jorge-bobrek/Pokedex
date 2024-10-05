@@ -10,13 +10,18 @@ import SwiftUI
 
 final class PokemonListViewModel: ObservableObject {
     private let pokemonManager = PokemonListManager()
+    @Published private var pokemonList = [Species]()
     
     @ObservedObject var languageManager: LanguageManager
-    @Published var pokemonList = [Species]()
     @Published var searchText = ""
+    @Published var generation = 1
     
     var filteredPokemon: [Species] {
-        return searchText.isEmpty ? pokemonList : pokemonList.filter {
+        var filtered = pokemonList
+        filtered = filtered.filter {
+            $0.generationId == generation
+        }
+        return searchText.isEmpty ? filtered : filtered.filter {
             languageManager.getLanguage(from: $0.names).lowercased().contains(searchText.lowercased())
         }
     }

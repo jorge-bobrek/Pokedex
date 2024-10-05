@@ -8,8 +8,12 @@
 import Foundation
 
 class LanguageManager: ObservableObject {
-    @Published var selectedLanguage: Language = .english
+    @Published var selectedLanguage: Language
     @Published var evolution: Evolution? = nil
+    
+    init(selectedLanguage: Language = .english) {
+        self.selectedLanguage = selectedLanguage
+    }
     
     // Cambiar el idioma utilizando el enum Language
     func changeLanguage(to language: Language) {

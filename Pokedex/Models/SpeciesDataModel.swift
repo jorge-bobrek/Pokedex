@@ -15,7 +15,9 @@ struct SpeciesResponse: Decodable {
     }
 }
 
-struct Species: Identifiable, Decodable {
+struct Species: Identifiable, Decodable, Equatable {
+    static func == (lhs: Species, rhs: Species) -> Bool { lhs.id == rhs.id }
+    
     let id: Int
     let generationId: Int
     let evolvesFromSpeciesId: Int?

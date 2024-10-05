@@ -123,6 +123,15 @@ let MonType: [Int: String] = [
     18: "fairy",
 ]
 
+enum Stat: Int, CaseIterable {
+    case hp = 1
+    case attack = 2
+    case defense = 3
+    case specialattack = 4
+    case specialdefense = 5
+    case speed = 6
+}
+
 extension View {
     func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
         clipShape(RoundedCorner(radius: radius, corners: corners))
