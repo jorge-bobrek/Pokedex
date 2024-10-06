@@ -16,16 +16,16 @@ struct SkeletonView: View {
     var body: some View {
         VStack {
             ZStack {
-                Color.black.opacity(0.09)
+                Color.primary.opacity(0.1)
                     .frame(height: self.cellFrame.heigth)
                     .cornerRadius(self.cornerRadius)
-                Color.white.cornerRadius(self.cornerRadius).mask(
+                Color.secondary.opacity(0.1).cornerRadius(self.cornerRadius).mask(
                         Rectangle()
                             .fill(
                                 LinearGradient(gradient: .init(colors: [.clear, .white, .clear]), startPoint: .top, endPoint: .bottom)
                             )
                             .rotationEffect(.init(degrees: 90))
-                            .offset(x: self.showAnimation ? self.cellFrame.width : -self.cellFrame.width)
+                            .offset(x: self.showAnimation ? self.cellFrame.width*1.3 : -self.cellFrame.width*1.3)
                             .frame(width: (self.cellFrame.heigth))
                     )
             }.onAppear {
