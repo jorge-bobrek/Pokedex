@@ -43,38 +43,18 @@ struct PokemonDetailView: View {
                                 Text(String(details.species.evolutionChainId ?? -1))
                             }
                             //MARK: Moves
-                            DetailText("Movimientos", .Title)
-                            if !vm.pokemonMoves.isEmpty {
-                                PokemonMoves(moves: vm.pokemonMoves)
-                            } else {
-                                ProgressView()
+                            VStack {
+                                DetailText("Movimientos", .Title)
+                                VersionsSection(selected: $vm.selected, games: vm.games)
+                                if !vm.pokemonMoves.isEmpty {
+                                    PokemonMoves(selected: $vm.selected, moves: vm.pokemonMoves)
+                                } else {
+                                    MovementsSkeletonView()
+                                }
                             }
-                            
                         }
                     } else {
-                        VStack {
-                            HStack {
-                                Text("*****")
-                                    .font(.largeTitle)
-                                    .redacted(reason: .placeholder)
-                                Spacer()
-                            }
-                            ProgressView()
-                                .frame(width: 300, height: 300)
-                            Text("*********")
-                                .font(.largeTitle)
-                                .redacted(reason: .placeholder)
-                            HStack {
-                                Text("********")
-                                    .font(.title)
-                                    .redacted(reason: .placeholder)
-                                Text("********")
-                                    .font(.title)
-                                    .redacted(reason: .placeholder)
-                            }
-                            //PokemonInformation(details: details)
-                        }
-                        .padding(20)
+                        DetailSkeletonView()
                     }
                 }
                 .padding(.horizontal, 10)
@@ -94,9 +74,85 @@ struct PokemonDetailView: View {
     }
 }
 
+struct DetailSkeletonView: View {
+    let columns = [
+        GridItem(.fixed(150), alignment: .leading),
+        GridItem(.flexible(), alignment: .leading)
+    ]
+    var body: some View {
+        VStack {
+            HStack {
+                SkeletonView(cellFrame: (90, 40), cornerRadius: 5)
+                Spacer()
+            }
+            SkeletonView(cellFrame: (300, 300), cornerRadius: 20)
+                .padding(.bottom, 10)
+            SkeletonView(cellFrame: (120, 40), cornerRadius: 5)
+                .padding(.bottom, 30)
+            LazyVGrid(columns: columns, spacing: 10) {
+                DetailText("Tipos", .Info)
+                SkeletonView(cellFrame: (100, 30), cornerRadius: 5)
+                DetailText("Habilidad", .Info)
+                SkeletonView(cellFrame: (120, 28), cornerRadius: 5)
+                DetailText("Hab. Oculta", .Info)
+                SkeletonView(cellFrame: (90, 28), cornerRadius: 5)
+                DetailText("Rat. Captura", .Info)
+                SkeletonView(cellFrame: (30, 28), cornerRadius: 5)
+                DetailText("Rat. Género", .Info)
+                SkeletonView(cellFrame: (130, 28), cornerRadius: 5)
+                DetailText("Ciclos ecl.", .Info)
+                SkeletonView(cellFrame: (40, 28), cornerRadius: 5)
+                DetailText("Color", .Info)
+                SkeletonView(cellFrame: (60, 28), cornerRadius: 5)
+            }
+        }
+    }
+}
+
+struct MovementsSkeletonView: View {
+    let columns = [
+        GridItem(.flexible(), alignment: .leading),
+        GridItem(.fixed(28), alignment: .center),
+        GridItem(.fixed(28), alignment: .center),
+        GridItem(.fixed(44), alignment: .center),
+        GridItem(.fixed(18), alignment: .center),
+        GridItem(.fixed(22), alignment: .center),
+        GridItem(.fixed(44), alignment: .center)
+    ]
+    var body: some View {
+        LazyVGrid(columns: columns, spacing: 10) {
+            // Encabezado de la tabla
+            Text("").frame(maxWidth: .infinity, alignment: .leading)
+            DetailText("Level", .Table)
+            DetailText("Power", .Table)
+            DetailText("Accuracy", .Table)
+            DetailText("PP", .Table)
+            DetailText("Type", .Table)
+            DetailText("Category", .Table)
+            
+            ForEach(1..<10) { _ in
+                SkeletonView(cellFrame: (100, 20), cornerRadius: 5)
+                SkeletonView(cellFrame: (28, 20), cornerRadius: 5)
+                SkeletonView(cellFrame: (28, 20), cornerRadius: 5)
+                SkeletonView(cellFrame: (44, 20), cornerRadius: 5)
+                SkeletonView(cellFrame: (18, 20), cornerRadius: 5)
+                SkeletonView(cellFrame: (22, 20), cornerRadius: 5)
+                SkeletonView(cellFrame: (44, 20), cornerRadius: 5)
+            }
+        }
+    }
+}
+
 struct PokemonDetailView_Previews: PreviewProvider {
     static var previews: some View {
         PokemonDetailView(pokemon: 133)
+            .environmentObject(LanguageManager())
+    }
+}
+
+struct DetailSkeletonView_Previews: PreviewProvider {
+    static var previews: some View {
+        DetailSkeletonView()
     }
 }
 

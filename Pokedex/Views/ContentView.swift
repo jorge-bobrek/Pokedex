@@ -81,13 +81,14 @@ struct ContentView: View {
                         DetailText("\(Flags[id]) \(language)", .Detail).tag(language)
                     }
                 }
+                .background(RoundedRectangle(cornerRadius: 20).foregroundStyle(.background))
                 .onChange(of: languageManager.selectedLanguage) { language in
                     UserDefaults.standard.set(language.rawValue, forKey: "language")
                 }
                 Spacer()
             }
-            .padding(.horizontal, 10)
-            .background(.gray)
+            .padding(.top, 10)
+            .background(.tertiary)
         }
     }
 }

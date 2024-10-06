@@ -12,7 +12,7 @@ struct PokemonInformation: View {
     
     // Definir las columnas para la cuadrícula
     let columns = [
-        GridItem(.flexible(), alignment: .leading),
+        GridItem(.fixed(150), alignment: .leading),
         GridItem(.flexible(), alignment: .leading)
     ]
     
@@ -35,10 +35,13 @@ struct PokemonInformation: View {
             }
             
             // Habilidad oculta
-            DetailText("Hab. Oculta", .Info)
-            VStack(alignment: .leading) {
-                ForEach(details.abilities.filter { $0.isHidden }, id: \.id) { ability in
-                    DetailText(languageManager.getLanguage(from: ability.ability.abilityNames), .Detail)
+            let hidden = details.abilities.filter({ $0.isHidden })
+            if hidden.count > 0 {
+                DetailText("Hab. Oculta", .Info)
+                VStack(alignment: .leading) {
+                    ForEach(hidden, id: \.id) { ability in
+                        DetailText(languageManager.getLanguage(from: ability.ability.abilityNames), .Detail)
+                    }
                 }
             }
             
@@ -58,7 +61,6 @@ struct PokemonInformation: View {
             DetailText("Color", .Info)
             DetailText(languageManager.getLanguage(from: details.species.color.colorNames), .Detail)
         }
-        .padding()
     }
     
     private struct GenderRate: View {
@@ -110,5 +112,6 @@ struct PokemonInformation: View {
 struct PokemonInformation_Previews: PreviewProvider {
     static var previews: some View {
         PokemonInformation(details: PokemonDetail.template)
+            .environmentObject(LanguageManager())
     }
 }

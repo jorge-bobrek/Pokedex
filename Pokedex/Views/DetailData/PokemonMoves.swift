@@ -9,15 +9,8 @@ import SwiftUI
 
 struct PokemonMoves: View {
     @EnvironmentObject var languageManager: LanguageManager
-    @State var selected: Int
+    @Binding var selected: Int
     let moves: [PokemonMoveDetail]
-    let generations: [Int]
-    
-    init(moves: [PokemonMoveDetail]) {
-        self.moves = moves
-        self.generations = Array(Set(moves.map { $0.move.versionGroupId })).sorted()
-        self.selected = generations.first!
-    }
     
     // Definir las columnas para la cuadrícula
     let columns = [
@@ -31,36 +24,31 @@ struct PokemonMoves: View {
     ]
     
     var body: some View {
-        VStack {
-            VersionsSection(selected: $selected, generations: generations)
+        LazyVGrid(columns: columns, spacing: 10) {
+            // Encabezado de la tabla
+            Text("").frame(maxWidth: .infinity, alignment: .leading)
+            DetailText("Level", .Table)
+            DetailText("Power", .Table)
+            DetailText("Accuracy", .Table)
+            DetailText("PP", .Table)
+            DetailText("Type", .Table)
+            DetailText("Category", .Table)
             
-            LazyVGrid(columns: columns, spacing: 10) {
-                // Encabezado de la tabla
-                Text("").frame(maxWidth: .infinity, alignment: .leading)
-                DetailText("Level", .Table)
-                DetailText("Power", .Table)
-                DetailText("Accuracy", .Table)
-                DetailText("PP", .Table)
-                DetailText("Type", .Table)
-                DetailText("Category", .Table)
-                
-                // Movimientos Pokémon
-                ForEach(moves, id: \.move.id) { move in
-                    if move.move.versionGroupId == selected && move.move.level > 0 {
-                        DetailText(languageManager.getLanguage(from: move.detail.moveNames), .Typing)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        DetailText("\(move.move.level)", .Typing)
-                        DetailText(move.detail.power == nil ? "--" : "\(move.detail.power!)", .Typing)
-                        DetailText(move.detail.accuracy == nil ? "--" : "\(move.detail.accuracy!)%", .Typing)
-                        DetailText("\(move.detail.pp!)", .Typing)
-                        Image(MonType[move.detail.typeId!]!)
-                            .resizable()
-                            .frame(width: 19, height: 19)
-                        DamageType(damageId: move.detail.moveDamageClassId!)
-                    }
+            // Movimientos Pokémon
+            ForEach(moves, id: \.move.id) { move in
+                if move.move.versionGroupId == selected && move.move.level > 0 {
+                    DetailText(languageManager.getLanguage(from: move.detail.moveNames), .Typing)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    DetailText("\(move.move.level)", .Typing)
+                    DetailText(move.detail.power == nil ? "--" : "\(move.detail.power!)", .Typing)
+                    DetailText(move.detail.accuracy == nil ? "--" : "\(move.detail.accuracy!)%", .Typing)
+                    DetailText("\(move.detail.pp!)", .Typing)
+                    Image(MonType[move.detail.typeId!]!)
+                        .resizable()
+                        .frame(width: 19, height: 19)
+                    DamageType(damageId: move.detail.moveDamageClassId!)
                 }
             }
-            .padding(.horizontal, 0)
         }
     }
 }
@@ -82,7 +70,7 @@ struct DamageType: View {
 
 struct VersionsSection: View {
     @Binding var selected: Int
-    let generations: [Int]
+    let games: [Int]
     let versions: [(String, [Color])] = [
         ("RB",[Color("red"), Color("blue")]), // 1
         ("Y",[Color("yellow"), Color("yellow")]), // 2
@@ -112,7 +100,7 @@ struct VersionsSection: View {
             HStack(spacing: 10) {
                 ForEach(Array(versions.enumerated()), id: \.1.0) { index, version in
                     let actualIndex = versionIndices[index] // Obtener el índice real comentado
-                    if generations.contains(actualIndex) {
+                    if games.contains(actualIndex) {
                         Button {
                             selected = actualIndex // Asignar el índice real al seleccionado
                         } label: {

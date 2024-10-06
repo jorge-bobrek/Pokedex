@@ -17,6 +17,14 @@ final class PokemonDetailViewModel: ObservableObject {
     @Published var pokemonDetails: PokemonDetail?
     @Published var pokemonEvolutionChain: EvolutionChain?
     @Published var pokemonMoves: [PokemonMoveDetail] = []
+    @Published var selected: Int = 1
+    var games: [Int] = [] {
+        didSet {
+            if !games.contains(self.selected) {
+                self.selected = games.first ?? 1
+            }
+        }
+    }
     
     func getPokemon(_ pokemon: Int) {
         self.reset()
@@ -28,6 +36,7 @@ final class PokemonDetailViewModel: ObservableObject {
         self.pokemonDetails = nil
         self.pokemonEvolutionChain = nil
         self.pokemonMoves = []
+        self.games = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 14, 15, 16, 17, 18, 20, 23, 25]
     }
     
     func getPokemonData(_ pokemon: Int) {
@@ -52,6 +61,7 @@ final class PokemonDetailViewModel: ObservableObject {
     func getMovements(_ pokemon: Int) {
         self.movesManager.loadPokemonMoves(forPokemonId: pokemon) { data in
             self.pokemonMoves = data
+            self.games = Array(Set(data.map { $0.move.versionGroupId })).sorted()
         }
     }
 }

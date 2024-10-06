@@ -21,8 +21,8 @@ class LanguageManager: ObservableObject {
     }
     
     func getLanguage(from names: [LanguageModel]?) -> String {
-        if selectedLanguage == .roomaji {
-            return (names?.first(where: { $0.id == Language.jaHrkt.rawValue })?.name ?? "").applyingTransform(.toLatin, reverse: false) ?? "Traducción no disponible"
+        if selectedLanguage == .romanji {
+            return (names?.first(where: { $0.id == Language.japanese.rawValue })?.name ?? "").applyingTransform(.toLatin, reverse: false) ?? "Traducción no disponible"
         }
         return names?.first(where: { $0.id == selectedLanguage.rawValue })?.name ?? "Traducción no disponible"
     }
@@ -31,10 +31,10 @@ class LanguageManager: ObservableObject {
 let Flags: [String] = ["🇯🇵", "🇯🇵", "🇰🇷", "🇨🇳", "🇫🇷", "🇩🇪", "🇪🇸", "🇮🇹", "🇺🇸"]
 
 enum Language: Int, CaseIterable {
-    case jaHrkt = 1
-    case roomaji = 2
+    case japanese = 1
+    case romanji = 2
     case korean = 3
-    case zhHant = 4
+    case chinese = 4
     case french = 5
     case deutsch = 6
     case spanish = 7
@@ -49,10 +49,10 @@ enum TimeOfDay: String {
     func toLanguageModels() -> [LanguageModel] {
         let translations: [String: [Language: String]] = [
             "day": [
-                .jaHrkt: "昼",
-                .roomaji: "昼",
+                .japanese: "昼",
+                .romanji: "昼",
                 .korean: "낮",
-                .zhHant: "日",
+                .chinese: "日",
                 .french: "Jour",
                 .deutsch: "Tag",
                 .spanish: "Día",
@@ -60,10 +60,10 @@ enum TimeOfDay: String {
                 .english: "Day"
             ],
             "night": [
-                .jaHrkt: "夜",
-                .roomaji: "夜",
+                .japanese: "夜",
+                .romanji: "夜",
                 .korean: "밤",
-                .zhHant: "夜",
+                .chinese: "夜",
                 .french: "Nuit",
                 .deutsch: "Nacht",
                 .spanish: "Noche",
