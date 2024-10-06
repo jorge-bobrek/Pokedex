@@ -24,7 +24,7 @@ struct PokemonDetailView: View {
                                     Spacer()
                                 }
                                 .id("top")
-                                PokemonImage(url: Bundle.main.getSpriteArtwork(for: details.id, canBeShiny: true), size: 300)
+                                PokemonImage(url: Bundle.main.getSpriteArtwork(for: details.id, canBeShiny: true), size: 300) { vm.playCry(details.id) }
                                 DetailText(languageManager.getLanguage(from: details.species.speciesNames), .Title)
                             }
                             //MARK: Details
@@ -42,6 +42,7 @@ struct PokemonDetailView: View {
                             } else {
                                 Text(String(details.species.evolutionChainId ?? -1))
                             }
+                            
                             //MARK: Moves
                             VStack {
                                 DetailText("Movimientos", .Title)
@@ -51,6 +52,12 @@ struct PokemonDetailView: View {
                                 } else {
                                     MovementsSkeletonView()
                                 }
+                            }
+                            
+                            //MARK: Stats
+                            VStack {
+                                DetailText("Características", .Title)
+                                PokemonStats(stats: details.stats)
                             }
                         }
                     } else {

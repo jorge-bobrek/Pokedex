@@ -12,12 +12,14 @@ struct PokemonEvolution: View {
     let completion: (Int) -> ()
     
     var body: some View {
-        if let rootSpecies = chain.pokemonSpecies.first(where: { $0.evolvesFromSpeciesId == nil }) {
+        if let rootSpecies = chain.pokemonSpecies.first(where: { $0.evolvesFromSpeciesId == nil }), chain.pokemonSpecies.count > 1 {
             ScrollView(.horizontal) {
                 HStack {
                     EvolutionLine(species: rootSpecies, groupedSpecies: groupSpeciesByEvolvesFrom(species: chain), completion: completion)
                 }
             }
+        } else {
+            DetailText("Este pokémon no evoluciona", .Info)
         }
     }
     

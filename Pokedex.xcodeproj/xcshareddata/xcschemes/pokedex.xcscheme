@@ -17,7 +17,7 @@
                BlueprintIdentifier = "F744211F29C511C100AFF593"
                BuildableName = "Pokedex.app"
                BlueprintName = "Pokedex"
-               ReferencedContainer = "container:pokedex.xcodeproj">
+               ReferencedContainer = "container:Pokedex.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -47,7 +47,7 @@
             BlueprintIdentifier = "F744211F29C511C100AFF593"
             BuildableName = "Pokedex.app"
             BlueprintName = "Pokedex"
-            ReferencedContainer = "container:pokedex.xcodeproj">
+            ReferencedContainer = "container:Pokedex.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -64,7 +64,7 @@
             BlueprintIdentifier = "F744211F29C511C100AFF593"
             BuildableName = "Pokedex.app"
             BlueprintName = "Pokedex"
-            ReferencedContainer = "container:pokedex.xcodeproj">
+            ReferencedContainer = "container:Pokedex.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

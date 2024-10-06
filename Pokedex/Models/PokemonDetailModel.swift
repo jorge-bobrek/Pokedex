@@ -18,17 +18,16 @@ struct PokemonDetail: Identifiable, Decodable {
     let species: PokemonSpecies
     let abilities: [PokemonAbility]
     let types: [PokemonType]
-    let cries: [PokemonCry]
+    let stats: [PokemonStat]
     
     enum CodingKeys: String, CodingKey {
         case id
         case species = "pokemon_v2_pokemonspecy"
         case abilities = "pokemon_v2_pokemonabilities"
         case types = "pokemon_v2_pokemontypes"
-        case cries = "pokemon_v2_pokemoncries"
+        case stats = "pokemon_v2_pokemonstats"
     }
-    static let template =
-    PokemonDetail(
+    static let template = PokemonDetail(
         id: 133,
         species: PokemonSpecies(
             genderRate: 1,
@@ -79,9 +78,13 @@ struct PokemonDetail: Identifiable, Decodable {
                     ]
                 )
             )
-        ],
-        cries: [
-            PokemonCry(cries: "https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/133.ogg")
+        ], stats: [
+            PokemonStat(id: 1, stat: 55),
+            PokemonStat(id: 2, stat: 55),
+            PokemonStat(id: 3, stat: 50),
+            PokemonStat(id: 4, stat: 45),
+            PokemonStat(id: 5, stat: 65),
+            PokemonStat(id: 6, stat: 55)
         ]
     )
 }
@@ -135,6 +138,16 @@ struct PokemonType: Decodable {
     }
 }
 
+struct PokemonStat: Decodable, Identifiable {
+    let id: Int
+    let stat: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case id = "stat_id"
+        case stat = "base_stat"
+    }
+}
+
 struct TypeDetail: Decodable {
     let id: Int
     let typeNames: [LanguageModel]
@@ -143,10 +156,6 @@ struct TypeDetail: Decodable {
         case id
         case typeNames = "pokemon_v2_typenames"
     }
-}
-
-struct PokemonCry: Decodable {
-    let cries: String
 }
 
 struct PokemonColor: Decodable {

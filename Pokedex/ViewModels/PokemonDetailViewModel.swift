@@ -45,11 +45,7 @@ final class PokemonDetailViewModel: ObservableObject {
             if let evo = data?.species.evolutionChainId {
                 self.getEvolutionChain(evo)
             }
-            if let id = data?.id, let cry = URL(string: "https://pokemoncries.com/cries/\(id).mp3") {
-                self.playerManager.play(url: cry)
-            }
         }
-        
     }
     
     func getEvolutionChain(_ chain: Int) {
@@ -62,6 +58,12 @@ final class PokemonDetailViewModel: ObservableObject {
         self.movesManager.loadPokemonMoves(forPokemonId: pokemon) { data in
             self.pokemonMoves = data
             self.games = Array(Set(data.map { $0.move.versionGroupId })).sorted()
+        }
+    }
+    
+    func playCry(_ pokemon: Int) {
+        if let cry = URL(string: "https://pokemoncries.com/cries/\(pokemon).mp3") {
+            self.playerManager.play(url: cry)
         }
     }
 }

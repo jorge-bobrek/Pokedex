@@ -10,10 +10,12 @@ import SwiftUI
 struct PokemonImage: View {
     let url: String
     let size: Double
+    let onAppear: (() -> Void)?
     
-    init(url: String, size: Double) {
+    init(url: String, size: Double, onAppear: (() -> Void)? = nil) {
         self.url = url
         self.size = size
+        self.onAppear = onAppear
     }
     
     var body: some View{
@@ -22,6 +24,7 @@ struct PokemonImage: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: size, height: size)
+                .onAppear(perform: onAppear)
         } placeholder: {
             ProgressView()
                 .frame(width: size, height: size)
@@ -123,14 +126,14 @@ let MonType: [Int: String] = [
     18: "fairy",
 ]
 
-enum Stat: Int, CaseIterable {
-    case hp = 1
-    case attack = 2
-    case defense = 3
-    case specialattack = 4
-    case specialdefense = 5
-    case speed = 6
-}
+let Stat: [Int: String] = [
+    1: "hp",
+    2: "atk",
+    3: "def",
+    4: "spa",
+    5: "spd",
+    6: "spe"
+]
 
 extension View {
     func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
