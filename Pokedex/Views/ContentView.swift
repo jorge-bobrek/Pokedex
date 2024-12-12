@@ -23,7 +23,7 @@ struct ContentView: View {
                             }
                         }
                         DetailText("Gen", .Detail)
-                            .padding(.trailing, 2)
+                            .foregroundStyle(.primary)
                         .pickerStyle(.menu)
                         Spacer()
                         NavigationLink(destination: NaturesView(viewModel: PokemonNaturesViewModel())) {
@@ -33,16 +33,16 @@ struct ContentView: View {
                                         .foregroundStyle(.green, .red)
                                 }
                                 DetailText("Natures", .Detail)
-                                    .foregroundStyle(.black)
+                                    .foregroundStyle(.primary)
                             }
                         }
                         Spacer()
                         NavigationLink(destination: Text("TO DO")) {
                             HStack {
-                                Image(systemName: "duffle.bag.fill")
+                                Image(systemName: "gym.bag.fill")
                                     .foregroundStyle(.orange)
                                 DetailText("Items", .Detail)
-                                    .foregroundStyle(.black)
+                                    .foregroundStyle(.primary)
                             }
                         }
                         Spacer()

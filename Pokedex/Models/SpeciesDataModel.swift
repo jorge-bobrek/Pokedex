@@ -22,15 +22,13 @@ struct Species: Identifiable, Decodable, Equatable {
     let generationId: Int
     let evolvesFromSpeciesId: Int?
     let names: [LanguageModel]
-    let evolutions: [Evolution]?
 
     enum CodingKeys: String, CodingKey {
         case id
         case generationId = "generation_id"
         case evolvesFromSpeciesId = "evolves_from_species_id"
         case names = "pokemon_v2_pokemonspeciesnames"
-        case evolutions = "pokemon_v2_pokemonevolutions"
     }
     
-    static let template = Species(id: 133, generationId: 1, evolvesFromSpeciesId: nil, names: [LanguageModel(id: 7, name: "Eevee")], evolutions: [])
+    static let template = Species(id: 133, generationId: 1, evolvesFromSpeciesId: nil, names: [LanguageModel(id: 7, name: "Eevee")])
 }

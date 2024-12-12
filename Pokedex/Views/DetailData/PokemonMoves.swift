@@ -120,10 +120,14 @@ struct VersionsSection: View {
                                 .cornerRadius(8)
                                 .foregroundColor(.white)
                         }
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(.secondary, lineWidth: 1)
+                        )
                     }
                 }
             }
-            .padding(.bottom, 8)
+            .padding(4)
         }
     }
 }

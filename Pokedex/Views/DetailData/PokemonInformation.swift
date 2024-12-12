@@ -46,16 +46,16 @@ struct PokemonInformation: View {
             }
             
             // Tasa de captura
-            DetailText("Rat. Captura", .Info)
-            DetailText(String(details.species.captureRate), .Detail)
+            // DetailText("Rat. Captura", .Info)
+            // DetailText(String(details.species.captureRate), .Detail)
             
             // Tasa de género
             DetailText("Rat. Género", .Info)
             GenderRate(rate: details.species.genderRate)
             
             // Ciclos de eclosión
-            DetailText("Ciclos ecl.", .Info)
-            DetailText(String(details.species.hatchCounter ?? 0), .Detail)
+            // DetailText("Ciclos ecl.", .Info)
+            // DetailText(String(details.species.hatchCounter ?? 0), .Detail)
             
             // Color
             DetailText("Color", .Info)

@@ -18,6 +18,7 @@ struct PokemonDetailView: View {
                 ScrollView {
                     if let details = vm.pokemonDetails {
                         VStack(alignment: .center, spacing: 40) {
+                            //MARK: Information
                             VStack {
                                 HStack {
                                     DetailText(String(format: "#%04d", details.id), .Title)
@@ -27,8 +28,18 @@ struct PokemonDetailView: View {
                                 PokemonImage(url: Bundle.main.getSpriteArtwork(for: details.id, canBeShiny: true), size: 300) { vm.playCry(details.id) }
                                 DetailText(languageManager.getLanguage(from: details.species.speciesNames), .Title)
                             }
-                            //MARK: Details
                             PokemonInformation(details: details)
+                            
+                            //MARK: Moves
+                            VStack {
+                                DetailText("Movimientos", .Title)
+                                VersionsSection(selected: $vm.selected, games: vm.games)
+                                if !vm.pokemonMoves.isEmpty {
+                                    PokemonMoves(selected: $vm.selected, moves: vm.pokemonMoves)
+                                } else {
+                                    MovementsSkeletonView()
+                                }
+                            }
                             
                             //MARK: Evolution
                             DetailText("Evolución", .Title)
@@ -43,17 +54,6 @@ struct PokemonDetailView: View {
                                 Text(String(details.species.evolutionChainId ?? -1))
                             }
                             
-                            //MARK: Moves
-                            VStack {
-                                DetailText("Movimientos", .Title)
-                                VersionsSection(selected: $vm.selected, games: vm.games)
-                                if !vm.pokemonMoves.isEmpty {
-                                    PokemonMoves(selected: $vm.selected, moves: vm.pokemonMoves)
-                                } else {
-                                    MovementsSkeletonView()
-                                }
-                            }
-                            
                             //MARK: Stats
                             VStack {
                                 DetailText("Características", .Title)
@@ -65,14 +65,6 @@ struct PokemonDetailView: View {
                     }
                 }
                 .padding(.horizontal, 10)
-            }
-            if let info = languageManager.evolution {
-                EvolutionRequeriments(evolution: info)
-            }
-        }
-        .onTapGesture {
-            withAnimation(.snappy(duration: 0.2)) {
-                languageManager.evolution = nil
             }
         }
         .onAppear {
@@ -103,12 +95,12 @@ struct DetailSkeletonView: View {
                 SkeletonView(cellFrame: (120, 28), cornerRadius: 5)
                 DetailText("Hab. Oculta", .Info)
                 SkeletonView(cellFrame: (90, 28), cornerRadius: 5)
-                DetailText("Rat. Captura", .Info)
-                SkeletonView(cellFrame: (30, 28), cornerRadius: 5)
+                // DetailText("Rat. Captura", .Info)
+                // SkeletonView(cellFrame: (50, 28), cornerRadius: 5)
                 DetailText("Rat. Género", .Info)
                 SkeletonView(cellFrame: (130, 28), cornerRadius: 5)
-                DetailText("Ciclos ecl.", .Info)
-                SkeletonView(cellFrame: (40, 28), cornerRadius: 5)
+                // DetailText("Ciclos ecl.", .Info)
+                // SkeletonView(cellFrame: (30, 28), cornerRadius: 5)
                 DetailText("Color", .Info)
                 SkeletonView(cellFrame: (60, 28), cornerRadius: 5)
             }
