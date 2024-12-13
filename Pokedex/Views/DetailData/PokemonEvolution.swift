@@ -28,11 +28,12 @@ struct PokemonEvolution: View {
         let species: Species
         let groupedSpecies: [Int: [Species]]
         let completion: (Int) -> ()
+        var pokemonImageURL: URL { return Bundle.main.getSpriteArtwork(for: species.id)! }
         var body: some View {
             HStack(alignment: .center) {
                 HStack {
                     VStack(spacing: 0) {
-                        PokemonImage(url: Bundle.main.getSpriteArtwork(for: species.id), size: 100)
+                        PokemonURLImage(url: pokemonImageURL, size: 100)
                             .onTapGesture {
                                 completion(species.id)
                             }

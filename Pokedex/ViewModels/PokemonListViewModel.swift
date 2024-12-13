@@ -10,9 +10,8 @@ import SwiftUI
 
 final class PokemonListViewModel: ObservableObject {
     private let pokemonManager = PokemonListManager()
+    @EnvironmentObject var languageManager: LanguageManager
     @Published private var pokemonList = [Species]()
-    
-    @ObservedObject var languageManager: LanguageManager
     @Published var generation: Int
     @Published var searchText = ""
     
@@ -28,9 +27,8 @@ final class PokemonListViewModel: ObservableObject {
         }
     }
     
-    init(languageManager: LanguageManager) {
+    init() {
         self.generation = UserDefaults.standard.integer(forKey: "generation")
-        self.languageManager = languageManager
         self.pokemonManager.getPokemonList { data in
             self.pokemonList = data
         }

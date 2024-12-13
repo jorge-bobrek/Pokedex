@@ -7,19 +7,19 @@
 
 import SwiftUI
 
-struct PokemonImage: View {
-    let url: String
+struct PokemonURLImage: View {
+    let url: URL
     let size: Double
     let onAppear: (() -> Void)?
     
-    init(url: String, size: Double, onAppear: (() -> Void)? = nil) {
+    init(url: URL, size: Double, onAppear: (() -> Void)? = nil) {
         self.url = url
         self.size = size
         self.onAppear = onAppear
     }
     
     var body: some View{
-        AsyncImage(url: URL(string: url)) { image in
+        AsyncImage(url: url) { image in
             image
                 .resizable()
                 .scaledToFit()
@@ -29,6 +29,26 @@ struct PokemonImage: View {
             ProgressView()
                 .frame(width: size, height: size)
         }
+    }
+}
+
+struct PokemonImage: View {
+    let id: Int
+    let size: Double
+    let onAppear: (() -> Void)?
+    
+    init(id: Int, size: Double, onAppear: (() -> Void)? = nil) {
+        self.id = id
+        self.size = size
+        self.onAppear = onAppear
+    }
+    
+    var body: some View{
+        Image(String(id))
+            .resizable()
+            .scaledToFit()
+            .frame(width: size, height: size)
+            .onAppear(perform: onAppear)
     }
 }
 

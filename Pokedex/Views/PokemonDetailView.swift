@@ -25,7 +25,9 @@ struct PokemonDetailView: View {
                                     Spacer()
                                 }
                                 .id("top")
-                                PokemonImage(url: Bundle.main.getSpriteArtwork(for: details.id, canBeShiny: true), size: 300) { vm.playCry(details.id) }
+                                if let pokemonImageURL = Bundle.main.getSpriteArtwork(for: details.id, true) {
+                                    PokemonURLImage(url: pokemonImageURL, size: 300) { vm.playCry(details.id) }
+                                }
                                 DetailText(languageManager.getLanguage(from: details.species.speciesNames), .Title)
                             }
                             PokemonInformation(details: details)

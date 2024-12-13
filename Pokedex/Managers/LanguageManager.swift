@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 class LanguageManager: ObservableObject {
-    @Published var selectedLanguage: Language
+    var selectedLanguage: Language
     @Published var latinToggle: Bool = false
     @Published var showDropdown: Bool = false
     
