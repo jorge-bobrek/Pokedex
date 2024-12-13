@@ -76,19 +76,57 @@ struct ContentView: View {
             // MARK: Bottom View
             HStack {
                 Spacer()
-                Picker("Language", selection: $languageManager.selectedLanguage) {
-                    ForEach(Array(Language.allCases.enumerated()), id: \.element) { id, language in
-                        DetailText("\(Flags[id]) \(language)", .Detail).tag(language)
+                DropdownLanguage()
+                if !languageManager.isLatin() {
+                    Toggle(isOn: $languageManager.latinToggle) {
+                        DetailText("To latin", .Typing)
                     }
-                }
-                .background(RoundedRectangle(cornerRadius: 20).foregroundStyle(.background))
-                .onChange(of: languageManager.selectedLanguage) { language in
-                    UserDefaults.standard.set(language.rawValue, forKey: "language")
+                    .frame(width: 128)
                 }
                 Spacer()
             }
+            .animation(.bouncy(duration: 0.3, extraBounce: 0.2), value: languageManager.isLatin())
             .padding(.top, 10)
             .background(.tertiary)
+        }
+    }
+    
+    struct DropdownLanguage: View {
+        @EnvironmentObject var languageManager: LanguageManager
+        
+        var body: some View {
+            DetailText("\(languageManager.selectedLanguage)", .Detail)
+                .frame(width: 120)
+                .padding(4)
+                .borderBackground(cornerRadius: 20)
+                .onTapGesture {
+                    withAnimation(.snappy(duration: 0.2)) {
+                        languageManager.showDropdown.toggle()
+                    }
+                }
+                .overlay(alignment: .bottom) {
+                    VStack {
+                        if languageManager.showDropdown {
+                            VStack(alignment: .leading, spacing: 12) {
+                                ForEach(Array(Language.allCases.enumerated()), id: \.element) { id, language in
+                                    Button {
+                                        withAnimation(.snappy(duration: 0.2)) {
+                                            languageManager.selectedLanguage = language
+                                            languageManager.showDropdown.toggle()
+                                            UserDefaults.standard.set(language.rawValue, forKey: "language")
+                                        }
+                                    } label: {
+                                        DetailText("\(Flags[id]) \(language)", .Detail).tag(language)
+                                    }
+                                }
+                            }
+                            .padding(10)
+                            .borderBackground(cornerRadius: 4)
+                        }
+                        Spacer(minLength: 36)
+                    }
+                    .frame(width: 160)
+                }
         }
     }
 }

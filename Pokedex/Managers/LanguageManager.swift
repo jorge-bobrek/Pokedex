@@ -6,9 +6,12 @@
 //
 
 import Foundation
+import SwiftUI
 
 class LanguageManager: ObservableObject {
     @Published var selectedLanguage: Language
+    @Published var latinToggle: Bool = false
+    @Published var showDropdown: Bool = false
     
     init() {
         self.selectedLanguage = Language(rawValue: UserDefaults.standard.integer(forKey: "language")) ?? .english
@@ -19,19 +22,23 @@ class LanguageManager: ObservableObject {
         selectedLanguage = language
     }
     
+    func isLatin() -> Bool {
+        let transform: Set<Language> = [.japanese, .korean, .chinese]
+        return !transform.contains(self.selectedLanguage)
+    }
+    
     func getLanguage(from names: [LanguageModel]?) -> String {
-        if selectedLanguage == .romanji {
-            return (names?.first(where: { $0.id == Language.japanese.rawValue })?.name ?? "").applyingTransform(.toLatin, reverse: false) ?? "Traducción no disponible"
+        if self.latinToggle {
+            return (names?.first(where: { $0.id == selectedLanguage.rawValue })?.name ?? "").applyingTransform(.toLatin, reverse: false) ?? "Traducción no disponible"
         }
         return names?.first(where: { $0.id == selectedLanguage.rawValue })?.name ?? "Traducción no disponible"
     }
 }
 
-let Flags: [String] = ["🇯🇵", "🇯🇵", "🇰🇷", "🇨🇳", "🇫🇷", "🇩🇪", "🇪🇸", "🇮🇹", "🇺🇸"]
+let Flags: [String] = ["🇯🇵", "🇰🇷", "🇨🇳", "🇫🇷", "🇩🇪", "🇪🇸", "🇮🇹", "🇺🇸"]
 
 enum Language: Int, CaseIterable {
     case japanese = 1
-    case romanji = 2
     case korean = 3
     case chinese = 4
     case french = 5

@@ -135,28 +135,22 @@ let Stat: [Int: String] = [
     6: "spe"
 ]
 
-extension View {
-    func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
-        clipShape(RoundedCorner(radius: radius, corners: corners))
-    }
-}
-
-struct RoundedCorner: Shape {
+private struct RoundedCorner: Shape {
     let radius: CGFloat
     let corners: UIRectCorner
-
+    
     init(radius: CGFloat = .infinity, corners: UIRectCorner = .allCorners) {
         self.radius = radius
         self.corners = corners
     }
-
+    
     func path(in rect: CGRect) -> Path {
         let path = UIBezierPath(roundedRect: rect, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
         return Path(path.cgPath)
     }
 }
 
-struct Stroke: ViewModifier {
+private struct Stroke: ViewModifier {
     var width: CGFloat
     var color: Color
     
@@ -174,8 +168,29 @@ struct Stroke: ViewModifier {
     }
 }
 
+private struct BorderBackground: ViewModifier {
+    var radius: CGFloat
+    
+    func body(content: Content) -> some View {
+        content.background(
+            RoundedRectangle(cornerRadius: radius)
+                .stroke(.primary)
+                .background(
+                    RoundedRectangle(cornerRadius: radius)
+                        .fill(.background)
+                )
+        )
+    }
+}
+
 extension View {
     func stroke(color: Color = .primary, width: CGFloat = 1) -> some View {
         modifier(Stroke(width: width, color: color))
+    }
+    func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
+        clipShape(RoundedCorner(radius: radius, corners: corners))
+    }
+    func borderBackground(cornerRadius: CGFloat = 0) -> some View {
+        modifier(BorderBackground(radius: cornerRadius))
     }
 }
