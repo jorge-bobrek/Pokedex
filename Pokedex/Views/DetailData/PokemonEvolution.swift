@@ -15,7 +15,9 @@ struct PokemonEvolution: View {
         if let rootSpecies = chain.pokemonSpecies.first(where: { $0.evolvesFromSpeciesId == nil }), chain.pokemonSpecies.count > 1 {
             ScrollView(.horizontal) {
                 HStack {
+                    Spacer()
                     EvolutionLine(species: rootSpecies, groupedSpecies: groupSpeciesByEvolvesFrom(species: chain), completion: completion)
+                    Spacer()
                 }
             }
         } else {
@@ -24,20 +26,18 @@ struct PokemonEvolution: View {
     }
     
     struct EvolutionLine: View {
-        @EnvironmentObject var languageManager: LanguageManager
         let species: Species
         let groupedSpecies: [Int: [Species]]
         let completion: (Int) -> ()
-        var pokemonImageURL: URL { return Bundle.main.getSpriteArtwork(for: species.id)! }
         var body: some View {
             HStack(alignment: .center) {
                 HStack {
                     VStack(spacing: 0) {
-                        PokemonURLImage(url: pokemonImageURL, size: 100)
-                            .onTapGesture {
-                                completion(species.id)
-                            }
-                        DetailText(languageManager.getLanguage(from:species.names), .Typing)
+                        PokemonURLImage(url: Bundle.main.getSpriteArtwork(for: species.id)!, size: 100)
+                        DetailLanguageText(of: species.names, .Typing)
+                    }
+                    .onTapGesture {
+                        completion(species.id)
                     }
                     if let evolutions = groupedSpecies[species.id], !evolutions.isEmpty {
                         VStack {

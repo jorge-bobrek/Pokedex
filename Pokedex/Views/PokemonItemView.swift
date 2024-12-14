@@ -9,12 +9,11 @@ import SwiftUI
 
 struct PokemonItemView: View {
     let pokemon: Species
-    @EnvironmentObject var languageManager: LanguageManager
     
     var body: some View {
         HStack(spacing: 10) {
             PokemonImage(id: pokemon.id, size: 100)
-            DetailText(languageManager.getLanguage(from: pokemon.names), .Info)
+            DetailLanguageText(of: pokemon.names, .Info)
                 .foregroundColor(.primary)
             Spacer(minLength: 0)
             DetailText("#\(String(format: "%04d", pokemon.id))", .Info)

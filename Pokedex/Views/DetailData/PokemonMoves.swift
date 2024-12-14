@@ -34,20 +34,17 @@ struct PokemonMoves: View {
             DetailText("Type", .Table)
             DetailText("Category", .Table)
             
-            // Movimientos Pokémon
-            ForEach(moves, id: \.move.id) { move in
-                if move.move.versionGroupId == selected && move.move.level > 0 {
-                    DetailText(languageManager.getLanguage(from: move.detail.moveNames), .Typing)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    DetailText("\(move.move.level)", .Typing)
-                    DetailText(move.detail.power == nil ? "--" : "\(move.detail.power!)", .Typing)
-                    DetailText(move.detail.accuracy == nil ? "--" : "\(move.detail.accuracy!)%", .Typing)
-                    DetailText("\(move.detail.pp!)", .Typing)
-                    Image(MonType[move.detail.typeId!]!)
-                        .resizable()
-                        .frame(width: 19, height: 19)
-                    DamageType(damageId: move.detail.moveDamageClassId!)
-                }
+            ForEach(moves.filter { $0.move.versionGroupId == selected && $0.move.level > 0 }, id: \.move.id) { move in
+                DetailText(languageManager.getLanguage(from: move.detail.moveNames), .Typing)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                DetailText("\(move.move.level)", .Typing)
+                DetailText(move.detail.power == nil ? "--" : "\(move.detail.power!)", .Typing)
+                DetailText(move.detail.accuracy == nil ? "--" : "\(move.detail.accuracy!)%", .Typing)
+                DetailText("\(move.detail.pp!)", .Typing)
+                Image(MonType[move.detail.typeId!]!)
+                    .resizable()
+                    .frame(width: 19, height: 19)
+                DamageType(damageId: move.detail.moveDamageClassId!)
             }
         }
     }

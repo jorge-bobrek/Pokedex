@@ -7,7 +7,6 @@
 import SwiftUI
 
 struct PokemonInformation: View {
-    @EnvironmentObject var languageManager: LanguageManager
     let details: PokemonDetail
     
     // Definir las columnas para la cuadrícula
@@ -22,7 +21,16 @@ struct PokemonInformation: View {
             DetailText("Tipos", .Info)
             HStack {
                 ForEach(details.types, id: \.type.id) { type in
-                    TypeText(type.type.id, type: languageManager.getLanguage(from: type.type.typeNames))
+                    if let monType = MonType[type.type.id] {
+                        DetailLanguageText(of: type.type.typeNames, .Typing)
+                            .multilineTextAlignment(.center)
+                            .foregroundStyle(.white)
+                            .frame(width: 90, height: 30)
+                            .background(Color(UIColor(named: monType) ?? .white))
+                            .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
+                            .shadow(color: .gray, radius: 1)
+                            .stroke()
+                    }
                 }
             }
             
@@ -30,7 +38,7 @@ struct PokemonInformation: View {
             DetailText(details.abilities.filter({!$0.isHidden}).count > 1 ? "Habilidades" : "Habilidad", .Info)
             VStack(alignment: .leading) {
                 ForEach(details.abilities.filter { !$0.isHidden }, id: \.id) { ability in
-                    DetailText(languageManager.getLanguage(from: ability.ability.abilityNames), .Detail)
+                    DetailLanguageText(of: ability.ability.abilityNames, .Detail)
                 }
             }
             
@@ -40,7 +48,7 @@ struct PokemonInformation: View {
                 DetailText("Hab. Oculta", .Info)
                 VStack(alignment: .leading) {
                     ForEach(hidden, id: \.id) { ability in
-                        DetailText(languageManager.getLanguage(from: ability.ability.abilityNames), .Detail)
+                        DetailLanguageText(of: ability.ability.abilityNames, .Detail)
                     }
                 }
             }
@@ -59,7 +67,7 @@ struct PokemonInformation: View {
             
             // Color
             DetailText("Color", .Info)
-            DetailText(languageManager.getLanguage(from: details.species.color.colorNames), .Detail)
+            DetailLanguageText(of: details.species.color.colorNames, .Detail)
         }
     }
     

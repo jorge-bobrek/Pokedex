@@ -9,7 +9,6 @@ import SwiftUI
 
 struct NaturesView: View {
     @StateObject var viewModel: PokemonNaturesViewModel
-    @EnvironmentObject var languageManager: LanguageManager
     
     let columns = [
         GridItem(.flexible(), alignment: .leading),
@@ -39,7 +38,7 @@ struct NaturesView: View {
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 10) {
                     ForEach(viewModel.natureList) { nature in
-                        DetailText(languageManager.getLanguage(from: nature.names), .Detail)
+                        DetailLanguageText(of: nature.names, .Detail)
                         ForEach(1..<7) { index in
                             if nature.increased == index {
                                 Image(systemName: "arrowtriangle.up.fill")
@@ -62,5 +61,4 @@ struct NaturesView: View {
 
 #Preview {
     NaturesView(viewModel: PokemonNaturesViewModel())
-        .environmentObject(LanguageManager())
 }

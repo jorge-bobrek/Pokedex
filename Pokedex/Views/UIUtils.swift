@@ -70,33 +70,18 @@ struct TypeImage: View {
     }
 }
 
-struct TypeText: View {
-    let index: Int
-    let type: String
+struct DetailLanguageText: View {
+    @EnvironmentObject var languageManager: LanguageManager
+    let names: [LanguageModel]?
+    let size: Size
     
-    init(_ index: Int, type: String) {
-        self.index = index
-        self.type = type
+    init(of names: [LanguageModel]?,_ size: Size) {
+        self.names = names
+        self.size = size
     }
     
-    var body: some View {
-        if let monType = MonType[index] {
-            DetailText(type, .Typing)
-                .multilineTextAlignment(.center)
-                .foregroundStyle(.white)
-                .frame(width: 90, height: 30)
-                .background(Color(UIColor(named: monType) ?? .white))
-                .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
-                .shadow(color: .gray, radius: 1)
-                .stroke()
-        }
-        
-    }
-    
-    struct TypeText_Previews: PreviewProvider {
-        static var previews: some View {
-            TypeText(2, type: "Lucha")
-        }
+    var body: some View{
+        DetailText(languageManager.getLanguage(from: names), size)
     }
 }
 

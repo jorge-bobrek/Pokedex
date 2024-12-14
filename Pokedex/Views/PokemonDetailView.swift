@@ -9,7 +9,6 @@ import SwiftUI
 
 struct PokemonDetailView: View {
     @StateObject private var vm: PokemonDetailViewModel = PokemonDetailViewModel()
-    @EnvironmentObject var languageManager: LanguageManager
     let pokemon: Int
     
     var body: some View {
@@ -17,6 +16,7 @@ struct PokemonDetailView: View {
             ScrollViewReader { proxy in
                 ScrollView {
                     if let details = vm.pokemonDetails {
+                        let pokemonImageURL = Bundle.main.getSpriteArtwork(for: details.id, true)
                         VStack(alignment: .center, spacing: 40) {
                             //MARK: Information
                             VStack {
@@ -25,10 +25,10 @@ struct PokemonDetailView: View {
                                     Spacer()
                                 }
                                 .id("top")
-                                if let pokemonImageURL = Bundle.main.getSpriteArtwork(for: details.id, true) {
+                                if let pokemonImageURL {
                                     PokemonURLImage(url: pokemonImageURL, size: 300) { vm.playCry(details.id) }
                                 }
-                                DetailText(languageManager.getLanguage(from: details.species.speciesNames), .Title)
+                                DetailLanguageText(of: details.species.speciesNames, .Title)
                             }
                             PokemonInformation(details: details)
                             
@@ -44,16 +44,19 @@ struct PokemonDetailView: View {
                             }
                             
                             //MARK: Evolution
-                            DetailText("Evolución", .Title)
-                            if let chain = vm.pokemonEvolutionChain {
-                                PokemonEvolution(chain: chain) { index in
-                                    withAnimation {
-                                        vm.getPokemon(index)
-                                        proxy.scrollTo("top", anchor: .top)
+                            VStack {
+                                DetailText("Evolución", .Title)
+                                if let chain = vm.pokemonEvolutionChain {
+                                    PokemonEvolution(chain: chain) { index in
+                                        withAnimation {
+                                            vm.getPokemon(index)
+                                            print("getPokemon called with index: \(index)")
+                                            proxy.scrollTo("top", anchor: .top)
+                                        }
                                     }
+                                } else {
+                                    Text(String(details.species.evolutionChainId ?? -1))
                                 }
-                            } else {
-                                Text(String(details.species.evolutionChainId ?? -1))
                             }
                             
                             //MARK: Stats
@@ -111,34 +114,27 @@ struct DetailSkeletonView: View {
 }
 
 struct MovementsSkeletonView: View {
-    let columns = [
-        GridItem(.flexible(), alignment: .leading),
-        GridItem(.fixed(28), alignment: .center),
-        GridItem(.fixed(28), alignment: .center),
-        GridItem(.fixed(44), alignment: .center),
-        GridItem(.fixed(18), alignment: .center),
-        GridItem(.fixed(22), alignment: .center),
-        GridItem(.fixed(44), alignment: .center)
-    ]
     var body: some View {
-        LazyVGrid(columns: columns, spacing: 10) {
-            // Encabezado de la tabla
-            Text("").frame(maxWidth: .infinity, alignment: .leading)
-            DetailText("Level", .Table)
-            DetailText("Power", .Table)
-            DetailText("Accuracy", .Table)
-            DetailText("PP", .Table)
-            DetailText("Type", .Table)
-            DetailText("Category", .Table)
-            
+        Grid(alignment: .leading, verticalSpacing: 10) {
+            GridRow {
+                Text("").frame(maxWidth: .infinity, alignment: .leading)
+                DetailText("Level", .Table)
+                DetailText("Power", .Table)
+                DetailText("Accuracy", .Table)
+                DetailText("PP", .Table)
+                DetailText("Type", .Table)
+                DetailText("Category", .Table)
+            }
             ForEach(1..<10) { _ in
-                SkeletonView(cellFrame: (100, 20), cornerRadius: 5)
-                SkeletonView(cellFrame: (28, 20), cornerRadius: 5)
-                SkeletonView(cellFrame: (28, 20), cornerRadius: 5)
-                SkeletonView(cellFrame: (44, 20), cornerRadius: 5)
-                SkeletonView(cellFrame: (18, 20), cornerRadius: 5)
-                SkeletonView(cellFrame: (22, 20), cornerRadius: 5)
-                SkeletonView(cellFrame: (44, 20), cornerRadius: 5)
+                GridRow {
+                    SkeletonView(cellFrame: (100, 20), cornerRadius: 5)
+                    SkeletonView(cellFrame: (28, 20), cornerRadius: 5)
+                    SkeletonView(cellFrame: (28, 20), cornerRadius: 5)
+                    SkeletonView(cellFrame: (44, 20), cornerRadius: 5)
+                    SkeletonView(cellFrame: (18, 20), cornerRadius: 5)
+                    SkeletonView(cellFrame: (22, 20), cornerRadius: 5)
+                    SkeletonView(cellFrame: (44, 20), cornerRadius: 5)
+                }
             }
         }
     }
@@ -147,13 +143,18 @@ struct MovementsSkeletonView: View {
 struct PokemonDetailView_Previews: PreviewProvider {
     static var previews: some View {
         PokemonDetailView(pokemon: 133)
-            .environmentObject(LanguageManager())
     }
 }
 
 struct DetailSkeletonView_Previews: PreviewProvider {
     static var previews: some View {
         DetailSkeletonView()
+    }
+}
+
+struct MovementsSkeletonView_Previews: PreviewProvider {
+    static var previews: some View {
+        MovementsSkeletonView()
     }
 }
 
