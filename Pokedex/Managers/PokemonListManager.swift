@@ -21,14 +21,3 @@ class PokemonListManager {
         }
     }
 }
-
-enum ItemPocket: Int, CaseIterable {
-    case misc = 1
-    case medicine = 2
-    case pokeballs = 3
-    case machines = 4
-    case berries = 5
-    case mail = 6
-    case battle = 7
-    case key = 8
-}

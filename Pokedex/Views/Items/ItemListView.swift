@@ -11,11 +11,10 @@ struct ItemListView: View {
     @StateObject var viewModel = ItemListViewModel()
     
     var body: some View {
-        let tabs = ItemPocket.allCases.map{Tab(icon: nil, title: "\($0)")}
-        VStack {
+        VStack(spacing: 0) {
             ScrollView(.horizontal) {
                 HStack {
-                    Tabs(tabs: tabs, selectedTab: $viewModel.selected)
+                    Tabs(tabs: Icons, selectedTab: $viewModel.selected)
                 }
             }.scrollIndicators(.hidden)
             ScrollView {
@@ -30,6 +29,7 @@ struct ItemListView: View {
                     }
                 }
             }
+            .padding(.horizontal)
         }
     }
     

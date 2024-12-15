@@ -29,3 +29,14 @@ final class ItemListViewModel: ObservableObject {
         }
     }
 }
+
+let Icons: [Tab] = [
+    Tab(icon: "Items/63", title: "misc"),
+    Tab(icon: "Items/17", title: "medicine"),
+    Tab(icon: "Items/4", title: "pokeballs"),
+    Tab(icon: "Items/0", title: "machines"),
+    Tab(icon: "Items/132", title: "berries"),
+    Tab(icon: "Items/123", title: "mail"),
+    Tab(icon: "Items/56", title: "battle"),
+    Tab(icon: "Items/440", title: "key")
+]
