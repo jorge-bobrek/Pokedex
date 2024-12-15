@@ -22,20 +22,21 @@ class LanguageManager: ObservableObject {
         selectedLanguage = language
     }
     
-    func isLatin() -> Bool {
+    var isLatin: Bool {
         let transform: Set<Language> = [.japanese, .korean, .chinese]
         return !transform.contains(self.selectedLanguage)
     }
     
     func getLanguage(from names: [LanguageModel]?) -> String {
         if self.latinToggle {
-            return (names?.first(where: { $0.id == selectedLanguage.rawValue })?.name ?? "").applyingTransform(.toLatin, reverse: false) ?? "Traducción no disponible"
+            return (names?.first(where: { $0.id == selectedLanguage.rawValue })?.name ?? "Traducción no disponible")
+                .applyingTransform(.toLatin, reverse: false) ?? "Traducción no disponible"
         }
         return names?.first(where: { $0.id == selectedLanguage.rawValue })?.name ?? "Traducción no disponible"
     }
 }
 
-let Flags: [String] = ["🇯🇵", "🇰🇷", "🇨🇳", "🇫🇷", "🇩🇪", "🇪🇸", "🇮🇹", "🇺🇸"]
+let Flags: [String] = ["🇯🇵", "", "🇰🇷", "🇨🇳", "🇫🇷", "🇩🇪", "🇪🇸", "🇮🇹", "🇺🇸"]
 
 enum Language: Int, CaseIterable {
     case japanese = 1

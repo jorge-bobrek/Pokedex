@@ -76,8 +76,8 @@ struct ContentView: View {
             // MARK: Bottom View
             HStack {
                 Spacer()
-                DropdownLanguage()
-                if !languageManager.isLatin() {
+                DropDownLanguage()
+                if !languageManager.isLatin {
                     Toggle(isOn: $languageManager.latinToggle) {
                         DetailText("To latin", .Typing)
                     }
@@ -85,48 +85,52 @@ struct ContentView: View {
                 }
                 Spacer()
             }
-            .animation(.bouncy(duration: 0.3, extraBounce: 0.2), value: languageManager.isLatin())
             .padding(.top, 10)
             .background(.tertiary)
         }
     }
     
-    struct DropdownLanguage: View {
+    struct DropDownLanguage: View {
         @EnvironmentObject var languageManager: LanguageManager
         
-        var body: some View {
-            DetailText("\(languageManager.selectedLanguage)", .Detail)
-                .frame(width: 120)
-                .padding(4)
-                .borderBackground(cornerRadius: 20)
-                .onTapGesture {
-                    withAnimation(.snappy(duration: 0.2)) {
+        var body: some  View {
+            VStack(spacing: 0) {
+                if languageManager.showDropdown {
+                    VStack(alignment: .leading, spacing: 0) {
+                        ForEach(Language.allCases, id: \.self) { language in
+                            Button {
+                                withAnimation(.snappy(duration: 0.15)) {
+                                    languageManager.selectedLanguage = language
+                                    languageManager.showDropdown.toggle()
+                                    UserDefaults.standard.set(language.rawValue, forKey: "language")
+                                }
+                            } label: {
+                                DetailText("\(Flags[language.rawValue - 1]) \(language)", .Detail)
+                                    .padding(.top, 4)
+                            }
+                        }
+                    }
+                }
+                // selected item
+                Button {
+                    withAnimation(.snappy(duration: 0.15)) {
                         languageManager.showDropdown.toggle()
                     }
+                } label: {
+                    DetailText("\(Flags[languageManager.selectedLanguage.rawValue - 1]) \(languageManager.selectedLanguage)", .Detail)
+                        .frame(width: 140)
+                        .padding(.vertical, 4)
                 }
-                .overlay(alignment: .bottom) {
-                    VStack {
-                        if languageManager.showDropdown {
-                            VStack(alignment: .leading, spacing: 12) {
-                                ForEach(Array(Language.allCases.enumerated()), id: \.element) { id, language in
-                                    Button {
-                                        withAnimation(.snappy(duration: 0.2)) {
-                                            languageManager.selectedLanguage = language
-                                            languageManager.showDropdown.toggle()
-                                            UserDefaults.standard.set(language.rawValue, forKey: "language")
-                                        }
-                                    } label: {
-                                        DetailText("\(Flags[id]) \(language)", .Detail).tag(language)
-                                    }
-                                }
-                            }
-                            .padding(10)
-                            .borderBackground(cornerRadius: 4)
-                        }
-                        Spacer(minLength: 36)
-                    }
-                    .frame(width: 160)
+            }
+            .foregroundStyle(.primary)
+            .borderBackground(cornerRadius: 4)
+            .frame(height: 36, alignment: .bottom)
+            .onTapBackground(enabled: languageManager.showDropdown) {
+                withAnimation(.snappy(duration: 0.15)) {
+                    languageManager.showDropdown.toggle()
                 }
+            }
         }
     }
 }
+

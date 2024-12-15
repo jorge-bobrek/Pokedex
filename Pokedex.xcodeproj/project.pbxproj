@@ -213,8 +213,6 @@
 				F796730929CBC3CA0091DE83 /* PokemonItemView.swift */,
 				F796730729CBC1410091DE83 /* PokemonDetailView.swift */,
 				FF9EB5962CB0BAF200D4FA0C /* NaturesView.swift */,
-				F7BE555B29CCAA8B006CAE3E /* UIUtils.swift */,
-				FF79249D2CB1EF2600442090 /* SkeletonView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -249,6 +247,8 @@
 			isa = PBXGroup;
 			children = (
 				FF90F3A72D0F126300E8E2F6 /* Tabs.swift */,
+				F7BE555B29CCAA8B006CAE3E /* UIUtils.swift */,
+				FF79249D2CB1EF2600442090 /* SkeletonView.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
