@@ -4,6 +4,7 @@
 //
 //  Created by Jorge Bobrek on 31/03/23.
 //
+
 import SwiftUI
 
 struct PokemonInformation: View {

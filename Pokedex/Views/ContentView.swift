@@ -37,7 +37,7 @@ struct ContentView: View {
                             }
                         }
                         Spacer()
-                        NavigationLink(destination: Text("TO DO")) {
+                        NavigationLink(destination: ItemListView()) {
                             HStack {
                                 Image(systemName: "gym.bag.fill")
                                     .foregroundStyle(.orange)

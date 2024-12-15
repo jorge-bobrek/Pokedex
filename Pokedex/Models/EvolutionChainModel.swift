@@ -70,17 +70,6 @@ struct EvolutionTrigger: Decodable {
     let name: String
 }
 
-// Modelo para el objeto Item
-struct Item: Decodable {
-    let id: Int
-    let names: [LanguageModel]
-
-    enum CodingKeys: String, CodingKey {
-        case id
-        case names = "pokemon_v2_itemnames"
-    }
-}
-
 // Modelo para las ubicaciones
 struct Location: Decodable {
     let id: Int

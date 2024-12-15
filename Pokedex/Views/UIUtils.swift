@@ -44,7 +44,7 @@ struct PokemonImage: View {
     }
     
     var body: some View{
-        Image(String(id))
+        Image("Sprites/\(id)")
             .resizable()
             .scaledToFit()
             .frame(width: size, height: size)
