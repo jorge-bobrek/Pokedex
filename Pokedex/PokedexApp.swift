@@ -15,7 +15,7 @@ import Foundation
     
     var body: some Scene {
         WindowGroup {
-            ContentView(viewModel: PokemonListViewModel())
+            ContentView(viewModel: PokemonListViewModel(languageManager))
                 .environmentObject(languageManager)
         }
     }

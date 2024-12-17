@@ -21,7 +21,7 @@ struct PokemonEvolution: View {
                 }
             }
         } else {
-            DetailText("Este pokémon no evoluciona", .Info)
+            DetailText("Este pokémon no evoluciona", .Detail)
         }
     }
     

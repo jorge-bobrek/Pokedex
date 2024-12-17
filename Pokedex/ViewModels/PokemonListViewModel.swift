@@ -9,11 +9,17 @@ import Foundation
 import SwiftUI
 
 final class PokemonListViewModel: ObservableObject {
-    private let pokemonManager = PokemonListManager()
-    @EnvironmentObject var languageManager: LanguageManager
+    private let speciesRepository = SpeciesRepository()
+    private let languageManager: LanguageManager
     @Published private var pokemonList = [Species]()
     @Published var generation: Int
     @Published var searchText = ""
+    
+    init(_ languageManager: LanguageManager) {
+        self.languageManager = languageManager
+        self.generation = UserDefaults.standard.integer(forKey: "generation")
+        self.pokemonList = self.speciesRepository.getAllSpecies()
+    }
     
     var filteredPokemon: [Species] {
         var filtered = pokemonList
@@ -24,13 +30,6 @@ final class PokemonListViewModel: ObservableObject {
         }
         return searchText.isEmpty ? filtered : filtered.filter {
             languageManager.getLanguage(from: $0.names).lowercased().contains(searchText.lowercased())
-        }
-    }
-    
-    init() {
-        self.generation = UserDefaults.standard.integer(forKey: "generation")
-        self.pokemonManager.getPokemonList { data in
-            self.pokemonList = data
         }
     }
 }
