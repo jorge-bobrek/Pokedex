@@ -7,17 +7,21 @@
 
 import Foundation
 import SwiftUI
+import Combine
 
 final class PokemonDetailViewModel: ObservableObject {
-    private let pokemonManager = PokemonDetailManager()
-    private let movesManager = PokemonMovesManager()
-    private let evolutionManager = EvolutionManager()
-    private let playerManager = PlayerManager()
-    
     @Published var pokemonDetails: PokemonDetail?
     @Published var pokemonEvolutionChain: EvolutionChain?
     @Published var pokemonMoves: [PokemonMoveDetail] = []
     @Published var selected: Int = 1
+    
+    private let pokemonRepository = PokemonRepository()
+    private let movesManager = PokemonMovesManager()
+    private let evolutionManager = EvolutionManager()
+    private let playerManager = PlayerManager()
+    private let languageManager = LanguageManager.shared
+    private var languageCancellable: AnyCancellable?
+    
     var games: [Int] = [] {
         didSet {
             if !games.contains(self.selected) {
@@ -26,29 +30,40 @@ final class PokemonDetailViewModel: ObservableObject {
         }
     }
     
-    func getPokemon(_ pokemon: Int) {
-        self.reset()
-        self.getPokemonData(pokemon)
-        self.getMovements(pokemon)
+    init() {
+        languageCancellable = languageManager.$selectedLanguage
+            .sink { [weak self] newLanguage in
+                guard let self = self else { return }
+                self.onLanguageChange(newLanguage)
+            }
     }
     
-    func reset() {
+    private func onLanguageChange(_ language: Language) {
+        if let currentPokemon = self.pokemonDetails?.id {
+            self.getPokemon(currentPokemon, in: language)
+        }
+    }
+    
+    func getPokemon(_ pokemon: Int, in language: Language) {
+        withAnimation {
+            self.reset()
+            self.getPokemonData(pokemon, language)
+            self.getMovements(pokemon)
+        }
+    }
+    
+    private func reset() {
         self.pokemonDetails = nil
         self.pokemonEvolutionChain = nil
         self.pokemonMoves = []
         self.games = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 14, 15, 16, 17, 18, 20, 23, 25]
     }
     
-    func getPokemonData(_ pokemon: Int) {
-        self.pokemonManager.getPokemon(id: pokemon) { data in
-            self.pokemonDetails = data
-            if let evo = data?.species.evolutionChainId {
-                self.getEvolutionChain(evo)
-            }
-        }
+    private func getPokemonData(_ pokemon: Int,_ language: Language) {
+        self.pokemonDetails = self.pokemonRepository.getPokemon(id: pokemon, language: language)
     }
     
-    func getEvolutionChain(_ chain: Int) {
+    private func getEvolutionChain(_ chain: Int) {
         self.evolutionManager.getEvolutionChain(for: chain) { data in
             self.pokemonEvolutionChain = data
         }

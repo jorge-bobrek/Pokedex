@@ -34,7 +34,7 @@ struct PokemonEvolution: View {
                 HStack {
                     VStack(spacing: 0) {
                         PokemonURLImage(url: Bundle.main.getSpriteArtwork(for: species.id)!, size: 100)
-                        DetailLanguageText(of: species.names, .Typing)
+                        DetailText(species.name, .Typing)
                     }
                     .onTapGesture {
                         completion(species.id)

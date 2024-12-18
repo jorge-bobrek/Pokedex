@@ -42,6 +42,5 @@ struct ItemListView: View {
 struct ItemListView_Previews: PreviewProvider {
     static var previews: some View {
         ItemListView()
-            .environmentObject(LanguageManager())
     }
 }

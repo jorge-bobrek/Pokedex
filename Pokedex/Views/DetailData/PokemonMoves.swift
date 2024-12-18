@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct PokemonMoves: View {
-    @EnvironmentObject var languageManager: LanguageManager
     @Binding var selected: Int
+    @StateObject var languageManager = LanguageManager.shared
     let moves: [PokemonMoveDetail]
     
     // Definir las columnas para la cuadrícula

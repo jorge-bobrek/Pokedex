@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var languageManager: LanguageManager
     @StateObject var viewModel: PokemonListViewModel
+    @StateObject var languageManager = LanguageManager.shared
     
     var body: some View {
         VStack(spacing: 0) {
@@ -91,7 +91,7 @@ struct ContentView: View {
     }
     
     struct DropDownLanguage: View {
-        @EnvironmentObject var languageManager: LanguageManager
+        @StateObject var languageManager = LanguageManager.shared
         
         var body: some  View {
             VStack(spacing: 0) {

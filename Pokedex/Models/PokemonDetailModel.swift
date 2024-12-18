@@ -5,14 +5,6 @@
 //  Created by Jorge Bobrek on 29/03/23.
 //
 
-struct PokemonDetailResponse: Decodable {
-    let pokemonDetails: [PokemonDetail]
-    
-    enum CodingKeys: String, CodingKey {
-        case pokemonDetails = "pokemon_v2_pokemon"
-    }
-}
-
 struct PokemonDetail: Identifiable, Decodable {
     let id: Int
     let species: PokemonSpecies
@@ -20,63 +12,36 @@ struct PokemonDetail: Identifiable, Decodable {
     let types: [PokemonType]
     let stats: [PokemonStat]
     
-    enum CodingKeys: String, CodingKey {
-        case id
-        case species = "pokemon_v2_pokemonspecy"
-        case abilities = "pokemon_v2_pokemonabilities"
-        case types = "pokemon_v2_pokemontypes"
-        case stats = "pokemon_v2_pokemonstats"
-    }
     static let template = PokemonDetail(
         id: 133,
         species: PokemonSpecies(
             genderRate: 1,
-            captureRate: 45,
-            hatchCounter: 35,
             evolutionChainId: 67,
-            speciesNames: [
-                LanguageModel(id: 7, name: "Eevee")
-            ],
-            color: PokemonColor(
-                id: 3,
-                colorNames: [
-                    LanguageModel(id: 7, name: "Marrón")
-                ]
-            ),
-            growthRate: LanguageModel(id: 0, name: ""),
-            generation: Generation(id: 1)
+            speciesName: "Eevee",
+            color: "Marrón",
+            generation: 1
         ),
         abilities: [
             PokemonAbility(
                 id: 351,
-                isHidden: false,
-                ability: AbilityDetail(abilityNames: [
-                    LanguageModel(id: 7, name: "Fuga")
-                ])
+                name: "Fuga",
+                isHidden: false
             ),
             PokemonAbility(
                 id: 352,
-                isHidden: false,
-                ability: AbilityDetail(abilityNames: [
-                    LanguageModel(id: 7, name: "Adaptable")
-                ])
+                name: "Adaptable",
+                isHidden: false
             ),
             PokemonAbility(
                 id: 353,
-                isHidden: true,
-                ability: AbilityDetail(abilityNames: [
-                    LanguageModel(id: 7, name: "Anticipación")
-                ])
+                name: "Anticipación",
+                isHidden: true
             )
         ],
         types: [
             PokemonType(
-                type: TypeDetail(
-                    id: 1,
-                    typeNames: [
-                        LanguageModel(id: 7, name: "Normal")
-                    ]
-                )
+                id: 1,
+                typeName: "Normal"
             )
         ], stats: [
             PokemonStat(id: 1, stat: 55),
@@ -87,85 +52,30 @@ struct PokemonDetail: Identifiable, Decodable {
             PokemonStat(id: 6, stat: 55)
         ]
     )
+     
 }
 struct PokemonSpecies: Decodable {
     let genderRate: Int
-    let captureRate: Int
-    let hatchCounter: Int?
     let evolutionChainId: Int?
-    let speciesNames: [LanguageModel]
-    let color: PokemonColor
-    let growthRate: LanguageModel
-    let generation: Generation
-    
-    enum CodingKeys: String, CodingKey {
-        case genderRate = "gender_rate"
-        case captureRate = "capture_rate"
-        case hatchCounter = "hatch_counter"
-        case evolutionChainId = "evolution_chain_id"
-        case speciesNames = "pokemon_v2_pokemonspeciesnames"
-        case color = "pokemon_v2_pokemoncolor"
-        case growthRate = "pokemon_v2_growthrate"
-        case generation = "pokemon_v2_generation"
-    }
+    let speciesName: String
+    let color: String
+    let generation: Int
 }
 
 struct PokemonAbility: Decodable {
     let id: Int
+    let name: String
     let isHidden: Bool
-    let ability: AbilityDetail
-    
-    enum CodingKeys: String, CodingKey {
-        case id
-        case isHidden = "is_hidden"
-        case ability = "pokemon_v2_ability"
-    }
-}
-
-struct AbilityDetail: Decodable {
-    let abilityNames: [LanguageModel]
-    
-    enum CodingKeys: String, CodingKey {
-        case abilityNames = "pokemon_v2_abilitynames"
-    }
-}
-
-struct PokemonType: Decodable {
-    let type: TypeDetail
-    
-    enum CodingKeys: String, CodingKey {
-        case type = "pokemon_v2_type"
-    }
 }
 
 struct PokemonStat: Decodable, Identifiable {
     let id: Int
     let stat: Int
-    
-    enum CodingKeys: String, CodingKey {
-        case id = "stat_id"
-        case stat = "base_stat"
-    }
 }
 
-struct TypeDetail: Decodable {
+struct PokemonType: Decodable, Identifiable {
     let id: Int
-    let typeNames: [LanguageModel]
-    
-    enum CodingKeys: String, CodingKey {
-        case id
-        case typeNames = "pokemon_v2_typenames"
-    }
-}
-
-struct PokemonColor: Decodable {
-    let id: Int
-    let colorNames: [LanguageModel]
-    
-    enum CodingKeys: String, CodingKey {
-        case id
-        case colorNames = "pokemon_v2_pokemoncolornames"
-    }
+    let typeName: String
 }
 
 struct Generation: Decodable {

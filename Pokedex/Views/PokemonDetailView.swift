@@ -28,7 +28,7 @@ struct PokemonDetailView: View {
                                 if let pokemonImageURL {
                                     PokemonURLImage(url: pokemonImageURL, size: 300) { vm.playCry(details.id) }
                                 }
-                                DetailLanguageText(of: details.species.speciesNames, .Title)
+                                DetailText(details.species.speciesName, .Title)
                             }
                             PokemonInformation(details: details)
                             
@@ -49,7 +49,7 @@ struct PokemonDetailView: View {
                                 if let chain = vm.pokemonEvolutionChain {
                                     PokemonEvolution(chain: chain) { index in
                                         withAnimation {
-                                            vm.getPokemon(index)
+                                            vm.getPokemon(index, in: LanguageManager.shared.selectedLanguage)
                                             print("getPokemon called with index: \(index)")
                                             proxy.scrollTo("top", anchor: .top)
                                         }
@@ -73,7 +73,7 @@ struct PokemonDetailView: View {
             }
         }
         .onAppear {
-            vm.getPokemon(pokemon)
+            vm.getPokemon(pokemon, in: LanguageManager.shared.selectedLanguage)
         }
     }
 }

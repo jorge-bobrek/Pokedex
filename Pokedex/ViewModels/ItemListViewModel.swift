@@ -11,8 +11,6 @@ import SwiftUI
 final class ItemListViewModel: ObservableObject {
     private let itemsManager = PokemonItemsManager()
     
-    @EnvironmentObject var languageManager: LanguageManager
-    
     @Published var items: [Item] = []
     @Published var selected: Int = 0
     

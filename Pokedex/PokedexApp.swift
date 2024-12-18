@@ -10,13 +10,10 @@ import Combine
 import Foundation
 
 @main
- struct PokedexApp: App {
-    @StateObject var languageManager = LanguageManager()
-    
+ struct PokedexApp: App {    
     var body: some Scene {
         WindowGroup {
-            ContentView(viewModel: PokemonListViewModel(languageManager))
-                .environmentObject(languageManager)
+            ContentView(viewModel: PokemonListViewModel())
         }
     }
 }

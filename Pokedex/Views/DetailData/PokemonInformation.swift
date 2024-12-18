@@ -21,9 +21,9 @@ struct PokemonInformation: View {
             // Tipos de Pokémon
             DetailText("Tipos", .Info)
             HStack {
-                ForEach(details.types, id: \.type.id) { type in
-                    if let monType = MonType[type.type.id] {
-                        DetailLanguageText(of: type.type.typeNames, .Typing)
+                ForEach(details.types) { type in
+                    if let monType = MonType[type.id] {
+                        DetailText(type.typeName, .Typing)
                             .multilineTextAlignment(.center)
                             .foregroundStyle(.white)
                             .frame(width: 90, height: 30)
@@ -39,7 +39,7 @@ struct PokemonInformation: View {
             DetailText(details.abilities.filter({!$0.isHidden}).count > 1 ? "Habilidades" : "Habilidad", .Info)
             VStack(alignment: .leading) {
                 ForEach(details.abilities.filter { !$0.isHidden }, id: \.id) { ability in
-                    DetailLanguageText(of: ability.ability.abilityNames, .Detail)
+                    DetailText(ability.name, .Detail)
                 }
             }
             
@@ -49,26 +49,18 @@ struct PokemonInformation: View {
                 DetailText("Hab. Oculta", .Info)
                 VStack(alignment: .leading) {
                     ForEach(hidden, id: \.id) { ability in
-                        DetailLanguageText(of: ability.ability.abilityNames, .Detail)
+                        DetailText(ability.name, .Detail)
                     }
                 }
             }
-            
-            // Tasa de captura
-            // DetailText("Rat. Captura", .Info)
-            // DetailText(String(details.species.captureRate), .Detail)
             
             // Tasa de género
             DetailText("Rat. Género", .Info)
             GenderRate(rate: details.species.genderRate)
             
-            // Ciclos de eclosión
-            // DetailText("Ciclos ecl.", .Info)
-            // DetailText(String(details.species.hatchCounter ?? 0), .Detail)
-            
             // Color
             DetailText("Color", .Info)
-            DetailLanguageText(of: details.species.color.colorNames, .Detail)
+            DetailText(details.species.color, .Detail)
         }
     }
     
@@ -121,6 +113,5 @@ struct PokemonInformation: View {
 struct PokemonInformation_Previews: PreviewProvider {
     static var previews: some View {
         PokemonInformation(details: PokemonDetail.template)
-            .environmentObject(LanguageManager())
     }
 }

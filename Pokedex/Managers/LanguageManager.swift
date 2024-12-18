@@ -8,12 +8,14 @@
 import Foundation
 import SwiftUI
 
-class LanguageManager: ObservableObject {
-    var selectedLanguage: Language
+final class LanguageManager: ObservableObject {
+    static let shared = LanguageManager()
+    
+    @Published var selectedLanguage: Language
     @Published var latinToggle: Bool = false
     @Published var showDropdown: Bool = false
     
-    init() {
+    private init() {
         self.selectedLanguage = Language(rawValue: UserDefaults.standard.integer(forKey: "language")) ?? .english
     }
     

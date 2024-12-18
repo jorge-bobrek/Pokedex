@@ -7,18 +7,29 @@
 
 import Foundation
 import SwiftUI
+import Combine
 
 final class PokemonListViewModel: ObservableObject {
-    private let speciesRepository = SpeciesRepository()
-    private let languageManager: LanguageManager
     @Published private var pokemonList = [Species]()
     @Published var generation: Int
     @Published var searchText = ""
     
-    init(_ languageManager: LanguageManager) {
-        self.languageManager = languageManager
+    private let speciesRepository = SpeciesRepository()
+    private let languageManager = LanguageManager.shared
+    private var languageCancellable: AnyCancellable?
+    
+    init() {
         self.generation = UserDefaults.standard.integer(forKey: "generation")
-        self.pokemonList = self.speciesRepository.getAllSpecies()
+        languageCancellable = languageManager.$selectedLanguage
+            .sink { [weak self] newLanguage in
+                guard let self = self else { return }
+                self.getPokemonList(for: newLanguage)
+            }
+        self.getPokemonList(for: languageManager.selectedLanguage)
+    }
+    
+    private func getPokemonList(for language: Language) {
+        self.pokemonList = self.speciesRepository.getAllSpecies(language)
     }
     
     var filteredPokemon: [Species] {
@@ -29,7 +40,7 @@ final class PokemonListViewModel: ObservableObject {
             }
         }
         return searchText.isEmpty ? filtered : filtered.filter {
-            languageManager.getLanguage(from: $0.names).lowercased().contains(searchText.lowercased())
+            $0.name.contains(searchText.lowercased())
         }
     }
 }

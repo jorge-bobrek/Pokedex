@@ -71,7 +71,7 @@ struct TypeImage: View {
 }
 
 struct DetailLanguageText: View {
-    @EnvironmentObject var languageManager: LanguageManager
+    @StateObject var languageManager = LanguageManager.shared
     let names: [LanguageModel]?
     let size: Size
     
