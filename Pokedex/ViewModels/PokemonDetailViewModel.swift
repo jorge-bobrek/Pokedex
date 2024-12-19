@@ -7,20 +7,17 @@
 
 import Foundation
 import SwiftUI
-import Combine
 
 final class PokemonDetailViewModel: ObservableObject {
     @Published var pokemonDetails: PokemonDetail?
-    @Published var pokemonEvolutionChain: EvolutionChain?
-    @Published var pokemonMoves: [PokemonMoveDetail] = []
+    @Published var pokemonEvolutionChain: [SpeciesChain]?
+    @Published var pokemonMoves: [PokemonMove] = []
     @Published var selected: Int = 1
     
     private let pokemonRepository = PokemonRepository()
-    private let movesManager = PokemonMovesManager()
-    private let evolutionManager = EvolutionManager()
+    private let movesRepository = MovesRepository()
+    private let evolutionRepository = EvolutionRepository()
     private let playerManager = PlayerManager()
-    private let languageManager = LanguageManager.shared
-    private var languageCancellable: AnyCancellable?
     
     var games: [Int] = [] {
         didSet {
@@ -30,15 +27,7 @@ final class PokemonDetailViewModel: ObservableObject {
         }
     }
     
-    init() {
-        languageCancellable = languageManager.$selectedLanguage
-            .sink { [weak self] newLanguage in
-                guard let self = self else { return }
-                self.onLanguageChange(newLanguage)
-            }
-    }
-    
-    private func onLanguageChange(_ language: Language) {
+    func onLanguageChange(_ language: Language) {
         if let currentPokemon = self.pokemonDetails?.id {
             self.getPokemon(currentPokemon, in: language)
         }
@@ -48,7 +37,7 @@ final class PokemonDetailViewModel: ObservableObject {
         withAnimation {
             self.reset()
             self.getPokemonData(pokemon, language)
-            self.getMovements(pokemon)
+            self.getMovements(pokemon, language)
         }
     }
     
@@ -61,19 +50,16 @@ final class PokemonDetailViewModel: ObservableObject {
     
     private func getPokemonData(_ pokemon: Int,_ language: Language) {
         self.pokemonDetails = self.pokemonRepository.getPokemon(id: pokemon, language: language)
+        self.getEvolutionChain(pokemonDetails!.species.evolutionChainId!)
     }
     
     private func getEvolutionChain(_ chain: Int) {
-        self.evolutionManager.getEvolutionChain(for: chain) { data in
-            self.pokemonEvolutionChain = data
-        }
+        self.pokemonEvolutionChain = self.evolutionRepository.getEvolutionChain(forChainId: chain)
     }
     
-    func getMovements(_ pokemon: Int) {
-        self.movesManager.loadPokemonMoves(forPokemonId: pokemon) { data in
-            self.pokemonMoves = data
-            self.games = Array(Set(data.map { $0.move.versionGroupId })).sorted()
-        }
+    func getMovements(_ pokemon: Int,_ language: Language) {
+        self.pokemonMoves = movesRepository.getAllMoves(forPokemonId: pokemon, language)
+        self.games = Array(Set(self.pokemonMoves.map { $0.versionGroupId })).sorted()
     }
     
     func playCry(_ pokemon: Int) {

@@ -10,12 +10,10 @@ import SwiftUI
 struct PokemonURLImage: View {
     let url: URL
     let size: Double
-    let onAppear: (() -> Void)?
     
-    init(url: URL, size: Double, onAppear: (() -> Void)? = nil) {
+    init(url: URL, size: Double) {
         self.url = url
         self.size = size
-        self.onAppear = onAppear
     }
     
     var body: some View{
@@ -24,7 +22,6 @@ struct PokemonURLImage: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: size, height: size)
-                .onAppear(perform: onAppear)
         } placeholder: {
             ProgressView()
                 .frame(width: size, height: size)
@@ -48,7 +45,6 @@ struct PokemonImage: View {
             .resizable()
             .scaledToFit()
             .frame(width: size, height: size)
-            .onAppear(perform: onAppear)
     }
 }
 
@@ -86,6 +82,7 @@ struct DetailLanguageText: View {
 }
 
 struct DetailText: View {
+    @StateObject var languageManager = LanguageManager.shared
     let text: String
     let size: Size
     
@@ -95,7 +92,7 @@ struct DetailText: View {
     }
     
     var body: some View{
-        Text(text.uppercased())
+        Text(languageManager.latinToggle ? text.applyingTransform(.toLatin, reverse: false)?.uppercased() ?? text.uppercased() : text.uppercased())
             .font(.custom("Pokemon Regular", size: size.rawValue))
             .lineLimit(2)
     }

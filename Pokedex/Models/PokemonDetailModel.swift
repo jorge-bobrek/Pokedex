@@ -52,7 +52,6 @@ struct PokemonDetail: Identifiable, Decodable {
             PokemonStat(id: 6, stat: 55)
         ]
     )
-     
 }
 struct PokemonSpecies: Decodable {
     let genderRate: Int

@@ -19,7 +19,6 @@ final class LanguageManager: ObservableObject {
         self.selectedLanguage = Language(rawValue: UserDefaults.standard.integer(forKey: "language")) ?? .english
     }
     
-    // Cambiar el idioma utilizando el enum Language
     func changeLanguage(to language: Language) {
         selectedLanguage = language
     }

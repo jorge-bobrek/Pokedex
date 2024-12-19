@@ -8,62 +8,44 @@
 import SwiftUI
 
 struct PokemonEvolution: View {
-    let chain: EvolutionChain
+    let chain: [SpeciesChain]
     let completion: (Int) -> ()
     
     var body: some View {
-        if let rootSpecies = chain.pokemonSpecies.first(where: { $0.evolvesFromSpeciesId == nil }), chain.pokemonSpecies.count > 1 {
-            ScrollView(.horizontal) {
-                HStack {
-                    Spacer()
-                    EvolutionLine(species: rootSpecies, groupedSpecies: groupSpeciesByEvolvesFrom(species: chain), completion: completion)
-                    Spacer()
-                }
-            }
+        if let rootSpecies = chain.first(where: { $0.evolvesFromSpeciesId == 0 }), chain.count > 1 {
+            EvolutionLine(species: rootSpecies, chain: chain, completion: completion)
         } else {
             DetailText("Este pokémon no evoluciona", .Detail)
         }
     }
     
     struct EvolutionLine: View {
-        let species: Species
-        let groupedSpecies: [Int: [Species]]
+        let species: SpeciesChain
+        let chain: [SpeciesChain]
         let completion: (Int) -> ()
+        
         var body: some View {
-            HStack(alignment: .center) {
-                HStack {
-                    VStack(spacing: 0) {
-                        PokemonURLImage(url: Bundle.main.getSpriteArtwork(for: species.id)!, size: 100)
-                        DetailText(species.name, .Typing)
-                    }
-                    .onTapGesture {
-                        completion(species.id)
-                    }
-                    if let evolutions = groupedSpecies[species.id], !evolutions.isEmpty {
-                        VStack {
-                            ForEach(evolutions, id: \.id) { evolution in
-                                HStack {
-                                    Image(systemName: "arrow.right")
-                                    // Mostrar la cadena evolutiva de la siguiente especie
-                                    EvolutionLine(species: evolution, groupedSpecies: groupedSpecies, completion: completion)
-                                }
+            HStack {
+                VStack(spacing: 0) {
+                    PokemonURLImage(url: Bundle.main.getSpriteArtwork(for: species.id)!, size: 100)
+                    //DetailText(species.name, .Typing)
+                }
+                .onTapGesture {
+                    completion(species.id)
+                }
+                let evolutions = chain.filter({ $0.evolvesFromSpeciesId == species.id })
+                if !evolutions.isEmpty {
+                    VStack {
+                        ForEach(evolutions, id: \.id) { evolution in
+                            HStack {
+                                Image(systemName: "arrow.right")
+                                // Mostrar la cadena evolutiva de la siguiente especie
+                                EvolutionLine(species: evolution, chain: chain, completion: completion)
                             }
                         }
                     }
                 }
             }
         }
-    }
-    
-    // Función para agrupar las especies por evolvesFromSpeciesId
-    private func groupSpeciesByEvolvesFrom(species: EvolutionChain) -> [Int: [Species]] {
-        var speciesDict: [Int: [Species]] = [:]
-        
-        for specie in species.pokemonSpecies {
-            if let evolvesFromId = specie.evolvesFromSpeciesId {
-                speciesDict[evolvesFromId, default: []].append(specie)
-            }
-        }
-        return speciesDict
     }
 }

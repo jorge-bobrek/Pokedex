@@ -47,9 +47,9 @@ struct Tab {
 
 struct Tabs_Previews: PreviewProvider {
     static var previews: some View {
-        Tabs(tabs: [Tab(icon: "Items/-1", title: "Tab 1"),
-                    Tab(icon: "Items/-1", title: "Tab 2"),
-                    Tab(icon: "Items/-1", title: "Tab 3")],
+        Tabs(tabs: [Tab(icon: "Items/00", title: "Tab 1"),
+                    Tab(icon: "Items/00", title: "Tab 2"),
+                    Tab(icon: "Items/00", title: "Tab 3")],
              selectedTab: .constant(0))
     }
 }

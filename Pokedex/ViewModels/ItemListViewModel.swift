@@ -15,7 +15,7 @@ final class ItemListViewModel: ObservableObject {
     @Published var selected: Int = 0
     
     var filteredItems: [Item] {
-        var filtered = items
+        let filtered = items
         return filtered.filter {
             $0.category.itemPocketID == selected + 1
         }

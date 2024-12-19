@@ -15,6 +15,7 @@ struct ContentView: View {
         VStack(spacing: 0) {
             NavigationView {
                 VStack {
+                    // MARK: Top View
                     HStack {
                         Spacer()
                         Picker("Gen", selection: $viewModel.generation) {
@@ -47,6 +48,9 @@ struct ContentView: View {
                         }
                         Spacer()
                     }
+                    // MARK: Pokemon List View
+                    SearchBar(searchText: $viewModel.searchText)
+                        .padding(.horizontal)
                     ScrollViewReader { proxy in
                         ScrollView {
                             LazyVStack(alignment: .leading, spacing: 0) {
@@ -60,7 +64,6 @@ struct ContentView: View {
                             .padding(.horizontal, 10)
                             .animation(.easeIn(duration: 0.3), value: viewModel.filteredPokemon.count)
                             .navigationBarTitleDisplayMode(.inline)
-                            .searchable(text: $viewModel.searchText, placement: .toolbar)
                             .onChange(of: viewModel.filteredPokemon) { newValue in
                                 UserDefaults.standard.set(viewModel.generation, forKey: "generation")
                                 if let firstPokemonId = newValue.first?.id {
@@ -70,6 +73,9 @@ struct ContentView: View {
                                 }
                             }
                         }
+                    }
+                    .onChange(of: languageManager.selectedLanguage) { newLanguage in
+                        viewModel.getPokemonList(for: newLanguage)
                     }
                 }
             }
@@ -87,6 +93,45 @@ struct ContentView: View {
             }
             .padding(.top, 10)
             .background(.tertiary)
+        }
+        .ignoresSafeArea(.keyboard)
+    }
+    
+    struct SearchBar: View {
+        @Binding var searchText: String
+        @FocusState var isFocused: Bool
+        
+        var body: some View {
+            HStack {
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundStyle(.primary)
+                    TextField("Search Pokémon", text: $searchText)
+                        .font(.custom("Pokemon Regular", size: 20))
+                        .focused($isFocused)
+                        .autocorrectionDisabled()
+                    if !searchText.isEmpty {
+                        Button {
+                            searchText.removeAll()
+                        } label: {
+                            Image(systemName: "x.circle.fill")
+                        }
+                        .foregroundStyle(.secondary)
+                    }
+                }
+                .padding(.vertical, 4)
+                .padding(.horizontal, 8)
+                .borderBackground(cornerRadius: 22)
+                if isFocused {
+                    Button {
+                        isFocused.toggle()
+                    } label: {
+                        DetailText("Cancel", .Typing)
+                    }
+                }
+            }
+            .padding(.vertical, 1)
+            .animation(.bouncy(duration: 0.3, extraBounce: 0.2), value: isFocused)
         }
     }
     

@@ -9,8 +9,7 @@ import SwiftUI
 
 struct PokemonMoves: View {
     @Binding var selected: Int
-    @StateObject var languageManager = LanguageManager.shared
-    let moves: [PokemonMoveDetail]
+    let moves: [PokemonMove]
     
     // Definir las columnas para la cuadrícula
     let columns = [
@@ -34,17 +33,17 @@ struct PokemonMoves: View {
             DetailText("Type", .Table)
             DetailText("Category", .Table)
             
-            ForEach(moves.filter { $0.move.versionGroupId == selected && $0.move.level > 0 }, id: \.move.id) { move in
-                DetailText(languageManager.getLanguage(from: move.detail.moveNames), .Typing)
+            ForEach(moves.filter { $0.versionGroupId == selected && $0.level > 0 }, id: \.self) { move in
+                DetailText(move.moveName, .Typing)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                DetailText("\(move.move.level)", .Typing)
-                DetailText(move.detail.power == nil ? "--" : "\(move.detail.power!)", .Typing)
-                DetailText(move.detail.accuracy == nil ? "--" : "\(move.detail.accuracy!)%", .Typing)
-                DetailText("\(move.detail.pp!)", .Typing)
-                Image(MonType[move.detail.typeId!]!)
+                DetailText("\(move.level)", .Typing)
+                DetailText(move.power == nil ? "--" : "\(move.power!)", .Typing)
+                DetailText(move.accuracy == nil ? "--" : "\(move.accuracy!)%", .Typing)
+                DetailText("\(move.pp!)", .Typing)
+                Image(MonType[move.typeId!]!)
                     .resizable()
                     .frame(width: 19, height: 19)
-                DamageType(damageId: move.detail.moveDamageClassId!)
+                DamageType(damageId: move.moveDamageClassId!)
             }
         }
     }

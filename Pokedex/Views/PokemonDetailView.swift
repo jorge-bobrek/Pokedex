@@ -9,6 +9,7 @@ import SwiftUI
 
 struct PokemonDetailView: View {
     @StateObject private var vm: PokemonDetailViewModel = PokemonDetailViewModel()
+    @StateObject var languageManager = LanguageManager.shared
     let pokemon: Int
     
     var body: some View {
@@ -26,7 +27,8 @@ struct PokemonDetailView: View {
                                 }
                                 .id("top")
                                 if let pokemonImageURL {
-                                    PokemonURLImage(url: pokemonImageURL, size: 300) { vm.playCry(details.id) }
+                                    PokemonURLImage(url: pokemonImageURL, size: 300) 
+                                        .onAppear { vm.playCry(details.id) }
                                 }
                                 DetailText(details.species.speciesName, .Title)
                             }
@@ -50,7 +52,7 @@ struct PokemonDetailView: View {
                                     PokemonEvolution(chain: chain) { index in
                                         withAnimation {
                                             vm.getPokemon(index, in: LanguageManager.shared.selectedLanguage)
-                                            print("getPokemon called with index: \(index)")
+                                            vm.playCry(index)
                                             proxy.scrollTo("top", anchor: .top)
                                         }
                                     }
@@ -64,16 +66,20 @@ struct PokemonDetailView: View {
                                 DetailText("Características", .Title)
                                 PokemonStats(stats: details.stats)
                             }
+                            Spacer(minLength: 10)
                         }
                     } else {
                         DetailSkeletonView()
                     }
                 }
+                .onChange(of: languageManager.selectedLanguage) { newLanguage in
+                    vm.onLanguageChange(newLanguage)
+                }
                 .padding(.horizontal, 10)
             }
         }
         .onAppear {
-            vm.getPokemon(pokemon, in: LanguageManager.shared.selectedLanguage)
+            vm.getPokemon(pokemon, in: languageManager.selectedLanguage)
         }
     }
 }

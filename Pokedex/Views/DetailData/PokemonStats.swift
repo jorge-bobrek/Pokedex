@@ -9,18 +9,17 @@ import SwiftUI
 
 struct PokemonStats: View {
     let stats: [PokemonStat]
-    let columns = [
-        GridItem(.fixed(40), alignment: .center),
-        GridItem(.fixed(28), alignment: .center),
-        GridItem(.flexible(), alignment: .leading)
-    ]
+
     var body: some View {
-        LazyVGrid(columns: columns, spacing: 10) {
+        Grid(alignment: .leading, verticalSpacing: 10) {
             ForEach(stats) { stat in
                 if let statName = Stat[stat.id] {
-                    DetailText(statName, .Typing)
-                    DetailText(String(stat.stat), .Typing)
-                    StatColor(stat: stat.stat)
+                    GridRow {
+                        DetailText(statName, .Typing)
+                        DetailText(String(stat.stat), .Typing)
+                        StatColor(stat: stat.stat)
+                        Spacer()
+                    }
                 }
             }
         }

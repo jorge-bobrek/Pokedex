@@ -34,7 +34,7 @@ struct ItemListView: View {
     }
     
     func SafeImage(_ named: String) -> Image {
-        let uiImage = (UIImage(named: named) ?? UIImage(named: "Items/-1"))!
+        let uiImage = (UIImage(named: named) ?? UIImage(named: "Items/00"))!
         return Image(uiImage: uiImage)
     }
 }
