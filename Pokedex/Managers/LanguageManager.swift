@@ -37,7 +37,7 @@ final class LanguageManager: ObservableObject {
     }
 }
 
-let Flags: [String] = ["🇯🇵", "", "🇰🇷", "🇨🇳", "🇫🇷", "🇩🇪", "🇪🇸", "🇮🇹", "🇺🇸"]
+let Flags: [String] = ["🇯🇵", "?", "🇰🇷", "🇨🇳", "🇫🇷", "🇩🇪", "🇪🇸", "🇮🇹", "🇺🇸", "?", "?", "?"]
 
 enum Language: Int, CaseIterable {
     case japanese = 1

@@ -21,23 +21,37 @@ struct PokemonURLImage: View {
             image
                 .resizable()
                 .scaledToFit()
-                .frame(width: size, height: size)
-        } placeholder: {
-            ProgressView()
-                .frame(width: size, height: size)
+                .frame(width: size, height: size, alignment: .center)
+        } placeholder: {            
+            SkeletonView(cellFrame: (size, size), cornerRadius: 8)
         }
     }
 }
 
 struct PokemonImage: View {
+    let name: String
+    let size: Double
+    
+    init(name: String, size: Double) {
+        self.name = name
+        self.size = size
+    }
+    
+    var body: some View{
+        SafeImage(name, alter: "missingno")
+            .resizable()
+            .scaledToFit()
+            .frame(width: size, height: size)
+    }
+}
+
+struct PokemonSpriteImage: View {
     let id: Int
     let size: Double
-    let onAppear: (() -> Void)?
     
-    init(id: Int, size: Double, onAppear: (() -> Void)? = nil) {
+    init(id: Int, size: Double) {
         self.id = id
         self.size = size
-        self.onAppear = onAppear
     }
     
     var body: some View{
@@ -94,8 +108,12 @@ struct DetailText: View {
     var body: some View{
         Text(languageManager.latinToggle ? text.applyingTransform(.toLatin, reverse: false)?.uppercased() ?? text.uppercased() : text.uppercased())
             .font(.custom("Pokemon Regular", size: size.rawValue))
-            .lineLimit(2)
     }
+}
+
+func SafeImage(_ named: String, alter: String) -> Image {
+    let uiImage = (UIImage(named: named) ?? UIImage(named: alter))!
+    return Image(uiImage: uiImage)
 }
 
 enum Size: CGFloat {
@@ -129,7 +147,7 @@ let MonType: [Int: String] = [
 ]
 
 let Stat: [Int: String] = [
-    1: "hp",
+    1: "hp ",
     2: "atk",
     3: "def",
     4: "spa",

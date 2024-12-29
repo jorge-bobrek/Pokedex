@@ -12,16 +12,16 @@ struct ItemListView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            ScrollView(.horizontal) {
+            ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
                     Tabs(tabs: Icons, selectedTab: $viewModel.selected)
                 }
-            }.scrollIndicators(.hidden)
+            }
             ScrollView {
                 LazyVStack {
                     ForEach(viewModel.filteredItems) { item in
                         HStack {
-                            SafeImage("Items/\(viewModel.selected == 3 ? 0 : item.id)")
+                            SafeImage("Items/\(viewModel.selected == 3 ? 0 : item.id)", alter: "Items/00")
                             DetailLanguageText(of: item.names, .Detail)
                             Spacer()
                             Text("\(item.id)")
@@ -31,11 +31,6 @@ struct ItemListView: View {
             }
             .padding(.horizontal)
         }
-    }
-    
-    func SafeImage(_ named: String) -> Image {
-        let uiImage = (UIImage(named: named) ?? UIImage(named: "Items/00"))!
-        return Image(uiImage: uiImage)
     }
 }
 

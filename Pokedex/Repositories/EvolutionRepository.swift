@@ -11,7 +11,7 @@ import SQLite3
 class EvolutionRepository {
     func getEvolutionChain(forChainId chainId: Int) -> [SpeciesChain] {
         let query = """
-            SELECT p.pokemon_id, p.evolves_from_species_id
+            SELECT p.species_id, p.evolves_from_species_id, p.name
             FROM pokemon_v2_pokemonspecy p
             WHERE p.evolution_chain_id = \(chainId);
         """
@@ -21,8 +21,9 @@ class EvolutionRepository {
             while sqlite3_step(stmt) == SQLITE_ROW {
                 let pokemonId = Int(sqlite3_column_int(stmt, 0))
                 let evolvesfromSpeciesId = Int(sqlite3_column_int(stmt, 1))
+                let name = String(cString: sqlite3_column_text(stmt, 2))
                 
-                species.append(SpeciesChain(id: pokemonId, evolvesFromSpeciesId: evolvesfromSpeciesId))
+                species.append(SpeciesChain(id: pokemonId, evolvesFromSpeciesId: evolvesfromSpeciesId, name: name))
             }
             sqlite3_finalize(stmt)
         }

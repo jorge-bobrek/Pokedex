@@ -16,4 +16,5 @@ struct Species: Identifiable, Decodable, Equatable {
 struct SpeciesChain: Decodable, Identifiable {
     let id: Int
     let evolvesFromSpeciesId: Int?
+    let name: String
 }

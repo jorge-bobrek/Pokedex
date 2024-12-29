@@ -11,39 +11,38 @@ struct PokemonMoves: View {
     @Binding var selected: Int
     let moves: [PokemonMove]
     
-    // Definir las columnas para la cuadrícula
     let columns = [
         GridItem(.flexible(), alignment: .leading),
         GridItem(.fixed(28), alignment: .center),
         GridItem(.fixed(28), alignment: .center),
         GridItem(.fixed(44), alignment: .center),
-        GridItem(.fixed(18), alignment: .center),
+        // GridItem(.fixed(18), alignment: .center),
         GridItem(.fixed(22), alignment: .center),
         GridItem(.fixed(44), alignment: .center)
     ]
     
     var body: some View {
         LazyVGrid(columns: columns, spacing: 10) {
-            // Encabezado de la tabla
             Text("").frame(maxWidth: .infinity, alignment: .leading)
             DetailText("Level", .Table)
             DetailText("Power", .Table)
             DetailText("Accuracy", .Table)
-            DetailText("PP", .Table)
+            // DetailText("PP", .Table)
             DetailText("Type", .Table)
             DetailText("Category", .Table)
             
             ForEach(moves.filter { $0.versionGroupId == selected && $0.level > 0 }, id: \.self) { move in
                 DetailText(move.moveName, .Typing)
+                    .lineLimit(1)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 DetailText("\(move.level)", .Typing)
-                DetailText(move.power == nil ? "--" : "\(move.power!)", .Typing)
-                DetailText(move.accuracy == nil ? "--" : "\(move.accuracy!)%", .Typing)
-                DetailText("\(move.pp!)", .Typing)
-                Image(MonType[move.typeId!]!)
+                DetailText(move.power == 0 ? "--" : "\(move.power)", .Typing)
+                DetailText(move.accuracy == 0 ? "--" : "\(move.accuracy)%", .Typing)
+                // DetailText("\(move.pp)", .Typing)
+                Image(MonType[move.typeId]!)
                     .resizable()
                     .frame(width: 19, height: 19)
-                DamageType(damageId: move.moveDamageClassId!)
+                DamageType(damageId: move.moveDamageClassId)
             }
         }
     }
@@ -86,10 +85,10 @@ struct VersionsSection: View {
         ("USUM",[Color("ultrasun"), Color("ultramoon")]), // 18
         ("SWSH",[Color("sword"), Color("shield")]), // 20
         ("BDSP",[Color("brilliantdiamond"), Color("shiningpearl")]), // 23
+        ("LA",[Color("black"), Color("gold")]), // 24
         ("SV",[Color("scarlet"), Color("violet")]), // 25
     ]
-    // Array que contiene los valores correspondientes al índice comentado
-    let versionIndices: [Int] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 14, 15, 16, 17, 18, 20, 23, 25]
+    let versionIndices: [Int] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 14, 15, 16, 17, 18, 20, 23, 24, 25]
     
     var body: some View {
         ScrollView(.horizontal) {

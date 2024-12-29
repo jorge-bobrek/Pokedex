@@ -21,19 +21,18 @@ struct Tabs: View {
                 } label: {
                     VStack(alignment: .center, spacing: 0) {
                         HStack {
-                            // Image
-                            Image(tabs[row].icon)
+                            SafeImage(tabs[row].icon, alter: "Sprites/0")
+                                .resizable()
+                                .frame(width: 40, height: 40)
                                 .foregroundColor(.primary)
-                            // Text
                             DetailText(tabs[row].title, .Detail)
                                 .foregroundColor(.primary)
                         }
                         .padding()
-                        // Bar Indicator
-                        Rectangle().fill(selectedTab == row ? Color.primary : Color.clear)
+                        Rectangle()
+                            .fill(selectedTab == row ? Color.primary : Color.clear)
                             .frame(height: 3)
                     }
-                    .borderBackground()
                 }
             }
         }
@@ -45,7 +44,7 @@ struct Tab {
     var title: String
 }
 
-struct Tabs_Previews: PreviewProvider {
+struct ItemTabs_Previews: PreviewProvider {
     static var previews: some View {
         Tabs(tabs: [Tab(icon: "Items/00", title: "Tab 1"),
                     Tab(icon: "Items/00", title: "Tab 2"),

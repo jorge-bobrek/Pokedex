@@ -8,61 +8,133 @@
 import SwiftUI
 
 struct PokemonInformation: View {
+    @State private var selection = 0
+    @State private var selectedAbilityId: Int? = nil
+    let species: PokemonSpecies
     let details: PokemonDetail
     
-    // Definir las columnas para la cuadrícula
     let columns = [
-        GridItem(.fixed(150), alignment: .leading),
-        GridItem(.flexible(), alignment: .leading)
+        GridItem(.fixed(150), alignment: .topLeading),
+        GridItem(.flexible(), alignment: .topLeading)
     ]
     
     var body: some View {
-        LazyVGrid(columns: columns, spacing: 10) {            
-            // Tipos de Pokémon
-            DetailText("Tipos", .Info)
-            HStack {
-                ForEach(details.types) { type in
-                    if let monType = MonType[type.id] {
-                        DetailText(type.typeName, .Typing)
-                            .multilineTextAlignment(.center)
-                            .foregroundStyle(.white)
-                            .frame(width: 90, height: 30)
-                            .background(Color(UIColor(named: monType) ?? .white))
-                            .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
-                            .shadow(color: .gray, radius: 1)
-                            .stroke()
+        VStack {
+            if !details.pokemonForms.isEmpty {
+                TabView(selection : $selection) {
+                    ForEach(details.pokemonForms) { form in
+                        VStack {
+                            DetailText(form.flavor, .Title)
+                                .id("top")
+                            PokemonImage(name: "\(species.name)-\(form.formName)", size: 300)
+                        }
                     }
                 }
-            }
-            
-            // Habilidades visibles
-            DetailText(details.abilities.filter({!$0.isHidden}).count > 1 ? "Habilidades" : "Habilidad", .Info)
-            VStack(alignment: .leading) {
-                ForEach(details.abilities.filter { !$0.isHidden }, id: \.id) { ability in
-                    DetailText(ability.name, .Detail)
+                .tabViewStyle(.page)
+                .indexViewStyle(
+                    .page(backgroundDisplayMode: .always)
+                )
+                .frame(height: 360)
+                .padding()
+            } else {
+                VStack {
+                    DetailText(species.name, .Title)
+                        .id("top")
+                    PokemonImage(name: species.name, size: 300)
                 }
+                .frame(height: 360)
+                .padding()
             }
             
-            // Habilidad oculta
-            let hidden = details.abilities.filter({ $0.isHidden })
-            if hidden.count > 0 {
-                DetailText("Hab. Oculta", .Info)
+            LazyVGrid(columns: columns, spacing: 10) {
+                // Tipos de Pokémon
+                DetailText("Tipos", .Info)
+                HStack {
+                    ForEach(details.pokemonTypes) { type in
+                        if let monType = MonType[type.id] {
+                            DetailText(type.typeName, .Typing)
+                                .multilineTextAlignment(.center)
+                                .foregroundStyle(.white)
+                                .frame(width: 90, height: 30)
+                                .background(Color(UIColor(named: monType) ?? .white))
+                                .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
+                                .shadow(color: .gray, radius: 1)
+                                .stroke()
+                        }
+                    }
+                }
+                
+                DetailText(details.pokemonAbilities.filter({!$0.isHidden}).count > 1 ? "Habilidades" : "Habilidad", .Info)
+                VStack(alignment: .leading, spacing: 4) {
+                    ForEach(details.pokemonAbilities.filter { !$0.isHidden }, id: \.id) { ability in
+                        AbilityInfo(ability: ability, showing: selectedAbilityId == ability.id) {
+                            withAnimation { selectedAbilityId = (selectedAbilityId == ability.id) ? nil : ability.id }
+                        }
+                    }
+                }
+                let hidden = details.pokemonAbilities.filter({ $0.isHidden })
+                if hidden.count > 0 {
+                    DetailText("Hab. Oculta", .Info)
+                    VStack(alignment: .leading, spacing: 4) {
+                        ForEach(hidden, id: \.id) { ability in
+                            VStack(alignment: .leading) {
+                                AbilityInfo(ability: ability, showing: selectedAbilityId == ability.id) {
+                                    withAnimation { selectedAbilityId = (selectedAbilityId == ability.id) ? nil : ability.id }
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                // Tasa de género
+                DetailText("Rat. Género", .Info)
+                GenderRate(rate: species.genderRate)
+                
+                // Color
+                DetailText("Color", .Info)
+                DetailText(species.colorName, .Detail)
+                
+                DetailText("Grupo Huevo", .Info)
                 VStack(alignment: .leading) {
-                    ForEach(hidden, id: \.id) { ability in
-                        DetailText(ability.name, .Detail)
+                    ForEach(species.eggGroups, id: \.id) { group in
+                        DetailText(group.name, .Detail)
                     }
                 }
+                
+                // Tamaño
+                DetailText("Altura", .Info)
+                DetailText(String(details.height), .Detail)
+                
+                DetailText("Anchura", .Info)
+                DetailText(String(details.weight), .Detail)
             }
-            
-            // Tasa de género
-            DetailText("Rat. Género", .Info)
-            GenderRate(rate: details.species.genderRate)
-            
-            // Color
-            DetailText("Color", .Info)
-            DetailText(details.species.color, .Detail)
         }
     }
+    
+    private struct AbilityInfo: View {
+        let ability: PokemonAbility
+        let showing: Bool
+        let onTap: () -> Void
+        
+        var body: some View {
+            VStack(alignment: .leading, spacing: 0) {
+                DetailText(ability.name, .Detail)
+                    .onTapGesture { onTap() }
+                if showing {
+                    DetailText(ability.flavor, .Typing)
+                        .padding(4)
+                        .borderBackground(cornerRadius: 4)
+                        .onTapBackground(enabled: showing) { onTap() }
+                        .padding(.top, 2)
+                }
+            }
+        }
+    }
+    
+    //.onTapBackground(
+    //    enabled: showingDetails[ability.id],
+    //    { withAnimation { showingDetails[ability.id] = false } }
+    //)
     
     private struct GenderRate: View {
         let rate: Int
@@ -112,6 +184,6 @@ struct PokemonInformation: View {
 
 struct PokemonInformation_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonInformation(details: PokemonDetail.template)
+        PokemonInformation(species: PokemonSpecies.template, details: PokemonDetail.template)
     }
 }

@@ -12,7 +12,7 @@ struct PokemonItemView: View {
     
     var body: some View {
         HStack(spacing: 10) {
-            PokemonImage(id: pokemon.id, size: 100)
+            PokemonSpriteImage(id: pokemon.id, size: 100)
             DetailText(pokemon.name, .Info)
                 .foregroundColor(.primary)
             Spacer(minLength: 0)

@@ -8,74 +8,59 @@
 import SwiftUI
 
 struct PokemonDetailView: View {
-    @StateObject private var vm: PokemonDetailViewModel = PokemonDetailViewModel()
+    @StateObject private var vm = PokemonDetailViewModel()
     @StateObject var languageManager = LanguageManager.shared
     let pokemon: Int
     
     var body: some View {
-        ZStack {
-            ScrollViewReader { proxy in
-                ScrollView {
-                    if let details = vm.pokemonDetails {
-                        let pokemonImageURL = Bundle.main.getSpriteArtwork(for: details.id, true)
-                        VStack(alignment: .center, spacing: 40) {
-                            //MARK: Information
-                            VStack {
-                                HStack {
-                                    DetailText(String(format: "#%04d", details.id), .Title)
-                                    Spacer()
-                                }
-                                .id("top")
-                                if let pokemonImageURL {
-                                    PokemonURLImage(url: pokemonImageURL, size: 300) 
-                                        .onAppear { vm.playCry(details.id) }
-                                }
-                                DetailText(details.species.speciesName, .Title)
-                            }
-                            PokemonInformation(details: details)
-                            
-                            //MARK: Moves
-                            VStack {
-                                DetailText("Movimientos", .Title)
-                                VersionsSection(selected: $vm.selected, games: vm.games)
-                                if !vm.pokemonMoves.isEmpty {
-                                    PokemonMoves(selected: $vm.selected, moves: vm.pokemonMoves)
-                                } else {
-                                    MovementsSkeletonView()
-                                }
-                            }
-                            
-                            //MARK: Evolution
-                            VStack {
-                                DetailText("Evolución", .Title)
-                                if let chain = vm.pokemonEvolutionChain {
-                                    PokemonEvolution(chain: chain) { index in
-                                        withAnimation {
-                                            vm.getPokemon(index, in: LanguageManager.shared.selectedLanguage)
-                                            vm.playCry(index)
-                                            proxy.scrollTo("top", anchor: .top)
-                                        }
-                                    }
-                                } else {
-                                    Text(String(details.species.evolutionChainId ?? -1))
-                                }
-                            }
-                            
-                            //MARK: Stats
-                            VStack {
-                                DetailText("Características", .Title)
-                                PokemonStats(stats: details.stats)
-                            }
-                            Spacer(minLength: 10)
-                        }
-                    } else {
-                        DetailSkeletonView()
+        VStack(spacing: 0) {
+            if let specy = vm.pokemonSpecies {
+                if specy.pokemons.count > 1 {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        Tabs(tabs: specy.pokemons.map { detail in
+                            Tab(icon: "Sprites/\(detail.id)", title: detail.id < 10000 ? specy.speciesName : detail.pokemonForms.first?.formName ?? specy.speciesName)
+                        }, selectedTab: $vm.selectedPokemon)
                     }
                 }
-                .onChange(of: languageManager.selectedLanguage) { newLanguage in
-                    vm.onLanguageChange(newLanguage)
+                let selected = specy.pokemons[vm.selectedPokemon]
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        VStack(alignment: .center, spacing: 40) {
+                            // MARK: Information
+                            PokemonInformation(species: specy, details: selected)
+                                .id("top")
+                                .navigationTitle("#\(String(format: "%04d", specy.id)) - \(specy.speciesName)")
+                            
+                            // MARK: Stats
+                            PokemonStats(stats: selected.pokemonStats)
+                            
+                            // MARK: Moves
+                            DetailText("Movimientos", .Title)
+                            VersionsSection(selected: $vm.selectedGame, games: vm.games)
+                            PokemonMoves(selected: $vm.selectedGame, moves: selected.pokemonMoves)
+                            
+                            // MARK: Evolution
+                            DetailText("Evolución", .Title)
+                            if let chain = vm.pokemonEvolutionChain {
+                                PokemonEvolution(chain: chain) { index in
+                                    withAnimation {
+                                        vm.getPokemon(index, in: LanguageManager.shared.selectedLanguage)
+                                        vm.playCry(index)
+                                        proxy.scrollTo("top", anchor: .top)
+                                    }
+                                }
+                            }
+                        }
+                        .padding(.horizontal)
+                    }
+                    .onChange(of: languageManager.selectedLanguage) { newLanguage in
+                        vm.onLanguageChange(newLanguage)
+                    }
                 }
-                .padding(.horizontal, 10)
+                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+            } else {
+                DetailSkeletonView()
+                MovementsSkeletonView()
             }
         }
         .onAppear {
@@ -121,8 +106,8 @@ struct DetailSkeletonView: View {
 
 struct MovementsSkeletonView: View {
     var body: some View {
-        Grid(alignment: .leading, verticalSpacing: 10) {
-            GridRow {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
                 Text("").frame(maxWidth: .infinity, alignment: .leading)
                 DetailText("Level", .Table)
                 DetailText("Power", .Table)
@@ -132,7 +117,7 @@ struct MovementsSkeletonView: View {
                 DetailText("Category", .Table)
             }
             ForEach(1..<10) { _ in
-                GridRow {
+                HStack(spacing: 10) {
                     SkeletonView(cellFrame: (100, 20), cornerRadius: 5)
                     SkeletonView(cellFrame: (28, 20), cornerRadius: 5)
                     SkeletonView(cellFrame: (28, 20), cornerRadius: 5)

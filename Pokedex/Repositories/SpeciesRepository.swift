@@ -11,10 +11,11 @@ import SQLite3
 class SpeciesRepository {
     func getAllSpecies(_ language: Language) -> [Species] {
         let query = """
-            SELECT p.pokemon_id, p.generation_id, pn.name
+            SELECT p.species_id, p.generation_id, pn.name
             FROM pokemon_v2_pokemonspecy p
-            LEFT JOIN pokemon_v2_pokemonspeciesnames pn ON p.pokemon_id = pn.pokemon_id
+            LEFT JOIN pokemon_v2_pokemonspeciesnames pn ON p.species_id = pn.species_id
             WHERE pn.language_id = \(language.rawValue)
+            ORDER BY p.species_id;
         """
         var species = [Species]()
 

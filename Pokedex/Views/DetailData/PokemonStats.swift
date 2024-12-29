@@ -11,12 +11,12 @@ struct PokemonStats: View {
     let stats: [PokemonStat]
 
     var body: some View {
-        Grid(alignment: .leading, verticalSpacing: 10) {
+        VStack(alignment: .leading, spacing: 10) {
             ForEach(stats) { stat in
                 if let statName = Stat[stat.id] {
-                    GridRow {
+                    HStack {
                         DetailText(statName, .Typing)
-                        DetailText(String(stat.stat), .Typing)
+                        DetailText(String(format: "%3d", stat.stat), .Typing)
                         StatColor(stat: stat.stat)
                         Spacer()
                     }
@@ -57,5 +57,5 @@ struct StatColor: View {
 }
 
 #Preview {
-    PokemonStats(stats: PokemonDetail.template.stats)
+    PokemonStats(stats: PokemonDetail.template.pokemonStats)
 }
