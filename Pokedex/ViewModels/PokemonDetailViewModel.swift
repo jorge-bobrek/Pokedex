@@ -32,6 +32,7 @@ final class PokemonDetailViewModel: ObservableObject {
         if let currentPokemon = self.pokemonSpecies?.id {
             self.getPokemon(currentPokemon, in: language)
         }
+        UserDefaults.standard.set(language.rawValue, forKey: "language")
     }
     
     func getPokemon(_ pokemon: Int, in language: Language) {

@@ -24,7 +24,7 @@ struct PokemonInformation: View {
                 TabView(selection : $selection) {
                     ForEach(details.pokemonForms) { form in
                         VStack {
-                            DetailText(form.flavor, .Title)
+                            DetailText(form.flavor, .Detail)
                                 .id("top")
                             PokemonImage(name: "\(species.name)-\(form.formName)", size: 300)
                         }
@@ -38,7 +38,7 @@ struct PokemonInformation: View {
                 .padding()
             } else {
                 VStack {
-                    DetailText(species.name, .Title)
+                    DetailText(species.name, .Detail)
                         .id("top")
                     PokemonImage(name: species.name, size: 300)
                 }
@@ -103,10 +103,10 @@ struct PokemonInformation: View {
                 
                 // Tamaño
                 DetailText("Altura", .Info)
-                DetailText(String(details.height), .Detail)
+                DetailText("\(Double(details.height)/10) m", .Detail)
                 
-                DetailText("Anchura", .Info)
-                DetailText(String(details.weight), .Detail)
+                DetailText("Peso", .Info)
+                DetailText("\(Double(details.weight)/10) kg", .Detail)
             }
         }
     }

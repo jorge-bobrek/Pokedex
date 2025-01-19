@@ -23,7 +23,7 @@ struct Tabs: View {
                         HStack {
                             SafeImage(tabs[row].icon, alter: "Sprites/0")
                                 .resizable()
-                                .frame(width: 40, height: 40)
+                                .frame(width: 48, height: 48)
                                 .foregroundColor(.primary)
                             DetailText(tabs[row].title, .Detail)
                                 .foregroundColor(.primary)

@@ -39,6 +39,19 @@ final class LanguageManager: ObservableObject {
 
 let Flags: [String] = ["🇯🇵", "?", "🇰🇷", "🇨🇳", "🇫🇷", "🇩🇪", "🇪🇸", "🇮🇹", "🇺🇸", "?", "?", "?"]
 
+enum Region: Int, CaseIterable{
+    case all = 0
+    case kanto = 1
+    case johto = 2
+    case hoenn = 3
+    case sinnoh = 4
+    case unova = 5
+    case kalos = 6
+    case alola = 7
+    case galar = 8
+    case paldea = 9
+}
+
 enum Language: Int, CaseIterable {
     case japanese = 1
     case korean = 3

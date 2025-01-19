@@ -16,7 +16,7 @@ struct PokemonMoves: View {
         GridItem(.fixed(28), alignment: .center),
         GridItem(.fixed(28), alignment: .center),
         GridItem(.fixed(44), alignment: .center),
-        // GridItem(.fixed(18), alignment: .center),
+        GridItem(.fixed(18), alignment: .center),
         GridItem(.fixed(22), alignment: .center),
         GridItem(.fixed(44), alignment: .center)
     ]
@@ -27,7 +27,7 @@ struct PokemonMoves: View {
             DetailText("Level", .Table)
             DetailText("Power", .Table)
             DetailText("Accuracy", .Table)
-            // DetailText("PP", .Table)
+            DetailText("PP", .Table)
             DetailText("Type", .Table)
             DetailText("Category", .Table)
             
@@ -38,7 +38,7 @@ struct PokemonMoves: View {
                 DetailText("\(move.level)", .Typing)
                 DetailText(move.power == 0 ? "--" : "\(move.power)", .Typing)
                 DetailText(move.accuracy == 0 ? "--" : "\(move.accuracy)%", .Typing)
-                // DetailText("\(move.pp)", .Typing)
+                DetailText("\(move.pp)", .Typing)
                 Image(MonType[move.typeId]!)
                     .resizable()
                     .frame(width: 19, height: 19)

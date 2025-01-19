@@ -31,14 +31,6 @@ struct PokemonDetailView: View {
                                 .id("top")
                                 .navigationTitle("#\(String(format: "%04d", specy.id)) - \(specy.speciesName)")
                             
-                            // MARK: Stats
-                            PokemonStats(stats: selected.pokemonStats)
-                            
-                            // MARK: Moves
-                            DetailText("Movimientos", .Title)
-                            VersionsSection(selected: $vm.selectedGame, games: vm.games)
-                            PokemonMoves(selected: $vm.selectedGame, moves: selected.pokemonMoves)
-                            
                             // MARK: Evolution
                             DetailText("Evolución", .Title)
                             if let chain = vm.pokemonEvolutionChain {
@@ -50,6 +42,19 @@ struct PokemonDetailView: View {
                                     }
                                 }
                             }
+                            
+                            // MARK: Stats
+                            DetailText("Estadísticas", .Title)
+                            PokemonStats(stats: selected.pokemonStats)
+                            
+                            // MARK: Moves
+                            if !selected.pokemonMoves.isEmpty {
+                                DetailText("Movimientos", .Title)
+                                VersionsSection(selected: $vm.selectedGame, games: vm.games)
+                                PokemonMoves(selected: $vm.selectedGame, moves: selected.pokemonMoves)
+                            }
+                            
+                            Spacer(minLength: 10)
                         }
                         .padding(.horizontal)
                     }
@@ -65,6 +70,7 @@ struct PokemonDetailView: View {
         }
         .onAppear {
             vm.getPokemon(pokemon, in: languageManager.selectedLanguage)
+            vm.playCry(pokemon)
         }
     }
 }

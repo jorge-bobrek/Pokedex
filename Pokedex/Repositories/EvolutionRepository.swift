@@ -11,9 +11,14 @@ import SQLite3
 class EvolutionRepository {
     func getEvolutionChain(forChainId chainId: Int) -> [SpeciesChain] {
         let query = """
-            SELECT p.species_id, p.evolves_from_species_id, p.name
+            SELECT p.species_id,
+                   p.evolves_from_species_id,
+                   p.name || COALESCE('-' || pf.form_name, '') AS name_with_form
             FROM pokemon_v2_pokemonspecy p
-            WHERE p.evolution_chain_id = \(chainId);
+            LEFT JOIN pokemon_v2_pokemons ps ON p.species_id = ps.species_id
+            LEFT JOIN pokemon_v2_pokemonforms pf ON ps.pokemon_id = pf.pokemon_id
+            WHERE p.evolution_chain_id = \(chainId)
+            GROUP BY p.species_id;
         """
         var species = [SpeciesChain]()
 
