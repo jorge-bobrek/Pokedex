@@ -9,11 +9,16 @@ import Foundation
 import AVKit
 
 class PlayerManager {
+    static let shared = PlayerManager()
+    
+    private init() { }
+    
     var player: AVPlayer?
     
     func play(url: URL) {
         let playerItem = AVPlayerItem(url: url)
-        self.player = AVPlayer(playerItem: playerItem)
+        player = AVPlayer(playerItem: playerItem)
         player?.play()
+        player = nil
     }
 }

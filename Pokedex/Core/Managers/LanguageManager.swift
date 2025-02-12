@@ -9,15 +9,13 @@ import Foundation
 import SwiftUI
 
 final class LanguageManager: ObservableObject {
-    static let shared = LanguageManager()
-    
     @Published var selectedLanguage: Language {
         didSet { UserDefaults.standard.set(selectedLanguage.rawValue, forKey: "language") }
     }
     @Published var latinToggle: Bool = false
     @Published var showDropdown: Bool = false
     
-    private init() {
+    init() {
         self.selectedLanguage = Language(rawValue: UserDefaults.standard.integer(forKey: "language")) ?? .english
     }
     
@@ -45,7 +43,7 @@ enum Language: Int, CaseIterable {
     case korean = 3
     case chinese = 4
     case french = 5
-    case deutsch = 6
+    case german = 6
     case spanish = 7
     case italian = 8
     case english = 9
@@ -58,7 +56,7 @@ enum Language: Int, CaseIterable {
         case .korean: return "ko"
         case .chinese: return "zh-Hant"
         case .french: return "fr"
-        case .deutsch: return "de"
+        case .german: return "de"
         case .italian: return "it"
         }
     }

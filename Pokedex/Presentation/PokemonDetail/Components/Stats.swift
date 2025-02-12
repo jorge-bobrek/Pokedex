@@ -11,16 +11,20 @@ struct PokemonStats: View {
     let stats: [PokemonStat]
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            ForEach(stats) { stat in
-                if let statName = Stat[stat.id] {
-                    HStack {
-                        Text(statName)
-                            .detailedText(size: .Typing)
-                        Text(String(format: "%3d", stat.stat))
-                            .detailedText(size: .Typing)
-                        StatColor(stat: stat.stat)
-                        Spacer()
+        VStack {
+            Text("Stats")
+                .detailedText(size: .Title)
+            VStack(alignment: .leading, spacing: 10) {
+                ForEach(stats) { stat in
+                    if let statName = Stat[stat.id] {
+                        HStack {
+                            Text(statName)
+                                .detailedText(size: .Typing)
+                            Text(String(format: "%3d", stat.stat))
+                                .detailedText(size: .Typing)
+                            StatColor(stat: stat.stat)
+                            Spacer()
+                        }
                     }
                 }
             }

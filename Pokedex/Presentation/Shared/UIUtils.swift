@@ -40,7 +40,8 @@ struct PokemonImage: View {
                 .scaledToFit()
                 .frame(width: size, height: size)
         } loading: {
-            SkeletonView(cellFrame: (size, size), cornerRadius: size/10)
+            SkeletonView(cellFrame: (size-(size/8), size-(size/8)), cornerRadius: size/8)
+                .frame(width: size, height: size)
         } placeholder: {
             Image(endpoint == .pokemon ? "missingno" : "missingitem")
                 .resizable()
@@ -86,7 +87,7 @@ struct InfoText: View {
 }
 
 struct LanguageText: View {
-    @StateObject var languageManager = LanguageManager.shared
+    @EnvironmentObject private var languageManager: LanguageManager
     let names: [LanguageModel]?
     
     init(of names: [LanguageModel]?) {
@@ -99,12 +100,12 @@ struct LanguageText: View {
 }
 
 enum Size: CGFloat {
-    case Title = 30
-    case Info = 22
-    case Detail = 20
-    case Typing = 16
-    case Hint = 12
-    case Table = 10
+    case Title = 36
+    case Info = 32
+    case Detail = 28
+    case Typing = 24
+    case Hint = 16
+    case Table = 14
 }
 
 let MonType: [Int: String] = [
@@ -190,7 +191,7 @@ private struct DetailText: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .font(.custom("Pokemon Regular", size: size.rawValue))
+            .font(.custom("PokemonDPPt", size: size.rawValue))
             .textCase(.uppercase)
     }
 }

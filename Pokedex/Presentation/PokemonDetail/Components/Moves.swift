@@ -8,8 +8,15 @@
 import SwiftUI
 
 struct PokemonMoves: View {
-    @Binding var selected: Int
+    @State var selectedGame: Int
     let moves: [PokemonMove]
+    let games: [Int]
+    
+    init(moves: [PokemonMove]) {
+        self.moves = moves
+        self.games = Array(Set(moves.map { $0.versionGroupId })).sorted()
+        self.selectedGame = games.first ?? 1
+    }
     
     let columns = [
         GridItem(.flexible(), alignment: .leading),
@@ -20,50 +27,64 @@ struct PokemonMoves: View {
         GridItem(.fixed(22), alignment: .center),
         GridItem(.fixed(50), alignment: .center)
     ]
-    
     var body: some View {
-        LazyVGrid(columns: columns, spacing: 10) {
-            Color.clear.frame(maxWidth: .infinity, alignment: .leading)
-            Text("Level")
-                .detailedText(size: .Table)
-            Text("Power")
-                .detailedText(size: .Table)
-            Text("Accuracy")
-                .detailedText(size: .Table)
-            Text("PP")
-                .detailedText(size: .Table)
-            Text("Type")
-                .detailedText(size: .Table)
-            Text("Category")
-                .detailedText(size: .Table)
-            
-            ForEach(moves.filter { $0.versionGroupId == selected && $0.level > 0 }, id: \.self) { move in
-                LanguageText(of: move.name)
-                    .detailedText(size: .Typing)
-                    .lineLimit(1)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                InfoText("\(move.level)")
-                    .detailedText(size: .Typing)
-                if let power = move.power {
-                    InfoText("\(power)")
-                        .detailedText(size: .Typing)
-                } else {
-                    InfoText("--")
-                        .detailedText(size: .Typing)
+        if !moves.isEmpty {
+            VStack {
+                Text("Moves")
+                    .detailedText(size: .Title)
+                VersionsSection(selected: $selectedGame, games: games)
+                LazyVGrid(columns: columns, spacing: 10) {
+                    Color.clear.frame(maxWidth: .infinity, alignment: .leading)
+                    Text("Level")
+                        .detailedText(size: .Table)
+                    Text("Power")
+                        .detailedText(size: .Table)
+                    Text("Accuracy")
+                        .detailedText(size: .Table)
+                    Text("PP")
+                        .detailedText(size: .Table)
+                    Text("Type")
+                        .detailedText(size: .Table)
+                    Text("Category")
+                        .detailedText(size: .Table)
+                    
+                    ForEach(moves.filter { $0.versionGroupId == selectedGame && $0.level > 0 }, id: \.self) { move in
+                        LanguageText(of: move.name)
+                            .detailedText(size: .Typing)
+                            .lineLimit(1)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        InfoText("\(move.level)")
+                            .detailedText(size: .Typing)
+                        if let power = move.power {
+                            InfoText("\(power)")
+                                .detailedText(size: .Typing)
+                        } else {
+                            InfoText("--")
+                                .detailedText(size: .Typing)
+                        }
+                        if let accuracy = move.accuracy {
+                            InfoText("\(accuracy)%")
+                                .detailedText(size: .Typing)
+                        } else {
+                            InfoText("--")
+                                .detailedText(size: .Typing)
+                        }
+                        InfoText("\(move.pp)")
+                            .detailedText(size: .Typing)
+                        Image(MonType[move.typeId]!)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 20)
+                        DamageType(damageId: move.moveDamageClassId)
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 40)
+                    }
                 }
-                if let accuracy = move.accuracy {
-                    InfoText("\(accuracy)%")
-                        .detailedText(size: .Typing)
-                } else {
-                    InfoText("--")
-                        .detailedText(size: .Typing)
+            }
+            .onChange(of: games) { newGames in
+                if !newGames.contains(selectedGame) {
+                    selectedGame = newGames.first ?? 1
                 }
-                InfoText("\(move.pp)")
-                    .detailedText(size: .Typing)
-                Image(MonType[move.typeId]!)
-                    .resizable()
-                    .frame(width: 19, height: 19)
-                DamageType(damageId: move.moveDamageClassId)
             }
         }
     }
@@ -72,13 +93,17 @@ struct PokemonMoves: View {
 struct DamageType: View {
     let damageId: Int
     var body: some View {
-        if damageId == 1 {
+        switch damageId {
+        case 1:
             Image("status")
-        } else if damageId == 2 {
+                .resizable()
+        case 2:
             Image("physical")
-        } else if damageId == 3 {
+                .resizable()
+        case 3:
             Image("special")
-        } else {
+                .resizable()
+        default:
             EmptyView()
         }
     }

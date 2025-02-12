@@ -11,25 +11,22 @@ import SwiftUI
 @MainActor
 final class PokemonListViewModel: ObservableObject {
     @Published private var pokemonList = [PokemonSpeciesList]()
-    @Published var generation: Region {
-        didSet { UserDefaults.standard.set(generation.rawValue, forKey: "generation") }
-    }
     @Published var searchText = ""
-    
-    private let speciesRepository = SpeciesRepository()
-    private let languageManager = LanguageManager.shared
-    
-    init() {
-        self.generation = Region(rawValue: UserDefaults.standard.integer(forKey:"generation")) ?? .all
-        Task { [weak self] in
-            guard let self else { return }
-            await self.getPokemonList(for: LanguageManager.shared.selectedLanguage)
-        }
+    @Published var generation: Region? {
+        didSet { UserDefaults.standard.set(generation?.rawValue, forKey: "generation") }
     }
     
-    func getPokemonList(for language: Language) async {
+    private let speciesRepository: SpeciesRepositoryProtocol
+    
+    init(speciesRepository: SpeciesRepositoryProtocol = SpeciesRepository()) {
+        self.speciesRepository = speciesRepository
+        self.generation = Region(rawValue: UserDefaults.standard.integer(forKey:"generation"))
+    }
+    
+    func getPokemonList() async {
         do {
-            self.pokemonList = try await self.speciesRepository.getAllSpecies()
+            let list = try await self.speciesRepository.getAllSpecies()
+            self.pokemonList = list
         } catch {
             print(error)
         }
@@ -37,7 +34,7 @@ final class PokemonListViewModel: ObservableObject {
     
     var filteredPokemon: [PokemonSpeciesList] {
         var filtered = pokemonList
-        if generation != .all {
+        if let generation {
             filtered = filtered.filter {
                 $0.generationId == generation.rawValue
             }
@@ -48,8 +45,7 @@ final class PokemonListViewModel: ObservableObject {
     }
 }
 
-enum Region: Int, CaseIterable{
-    case all = 0
+enum Region: Int, CaseIterable {
     case kanto = 1
     case johto = 2
     case hoenn = 3
@@ -59,4 +55,18 @@ enum Region: Int, CaseIterable{
     case alola = 7
     case galar = 8
     case paldea = 9
+    
+    var displayName: String {
+        switch self {
+        case .kanto: return "kanto"
+        case .johto: return "johto"
+        case .hoenn: return "hoenn"
+        case .sinnoh: return "sinnoh"
+        case .unova: return "unova"
+        case .kalos: return "kalos"
+        case .alola: return "alola"
+        case .galar: return "galar"
+        case .paldea: return "paldea"
+        }
+    }
 }

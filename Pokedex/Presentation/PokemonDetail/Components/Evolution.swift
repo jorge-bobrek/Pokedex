@@ -12,6 +12,24 @@ struct PokemonEvolution: View {
     let completion: (Int) -> ()
     
     var body: some View {
+        VStack {
+            Text("Evolution")
+                .detailedText(size: .Title)
+            if !chain.evolvesTo.isEmpty {
+                PokemonEvolutionChain(chain: chain, completion: completion)
+            } else {
+                Text("This species does not evolve")
+                    .detailedText(size: .Detail)
+            }
+        }
+    }
+}
+
+private struct PokemonEvolutionChain: View {
+    let chain: EvolutionChain
+    let completion: (Int) -> ()
+    
+    var body: some View {
         HStack {
             VStack(spacing: 0) {
                 PokemonImage(name: chain.name, size: 100, endpoint: .pokemon)
@@ -26,7 +44,7 @@ struct PokemonEvolution: View {
             }
             VStack {
                 ForEach(chain.evolvesTo) { chain in
-                    PokemonEvolution(chain: chain, completion: completion)
+                    PokemonEvolutionChain(chain: chain, completion: completion)
                 }
             }
         }

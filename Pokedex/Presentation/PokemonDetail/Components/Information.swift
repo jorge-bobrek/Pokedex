@@ -39,7 +39,7 @@ struct PokemonInformation: View {
                 .padding()
             } else {
                 VStack {
-                    Text(species.name)
+                    LanguageText(of: species.speciesNames)
                         .detailedText(size: .Detail)
                         .id("top")
                     PokemonImage(name: species.name, size: 300, endpoint: .pokemon)
@@ -143,12 +143,7 @@ struct PokemonInformation: View {
             }
         }
     }
-    
-    //.onTapBackground(
-    //    enabled: showingDetails[ability.id],
-    //    { withAnimation { showingDetails[ability.id] = false } }
-    //)
-    
+
     private struct GenderRate: View {
         let rate: Int
         
