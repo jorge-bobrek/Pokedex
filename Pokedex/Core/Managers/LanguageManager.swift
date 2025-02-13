@@ -47,18 +47,5 @@ enum Language: Int, CaseIterable {
     case spanish = 7
     case italian = 8
     case english = 9
-    
-    var code: String {
-        switch self {
-        case .japanese: return "ja"
-        case .english: return "en"
-        case .spanish: return "es"
-        case .korean: return "ko"
-        case .chinese: return "zh-Hant"
-        case .french: return "fr"
-        case .german: return "de"
-        case .italian: return "it"
-        }
-    }
 }
 

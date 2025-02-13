@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct PokemonInformation: View {
+    @EnvironmentObject private var appViewModel: InfoManager
     @State private var selection = 0
-    @State private var selectedAbilityId: Int? = nil
     let species: PokemonSpeciesDetail
     let details: PokemonDetail
     
@@ -70,9 +70,11 @@ struct PokemonInformation: View {
                     .detailedText(size: .Info)
                 VStack(alignment: .leading, spacing: 4) {
                     ForEach(details.pokemonAbilities.filter { !$0.isHidden }, id: \.id) { ability in
-                        AbilityInfo(ability: ability, showing: selectedAbilityId == ability.id) {
-                            withAnimation { selectedAbilityId = (selectedAbilityId == ability.id) ? nil : ability.id }
-                        }
+                        LanguageText(of: ability.name)
+                            .detailedText(size: .Detail)
+                            .onTapGesture {
+                                withAnimation { appViewModel.currentInfo = InfoLanguage(title: ability.name, flavor: ability.flavor) }
+                            }
                     }
                 }
                 let hidden = details.pokemonAbilities.filter({ $0.isHidden })
@@ -81,11 +83,12 @@ struct PokemonInformation: View {
                         .detailedText(size: .Info)
                     VStack(alignment: .leading, spacing: 4) {
                         ForEach(hidden, id: \.id) { ability in
-                            VStack(alignment: .leading) {
-                                AbilityInfo(ability: ability, showing: selectedAbilityId == ability.id) {
-                                    withAnimation { selectedAbilityId = (selectedAbilityId == ability.id) ? nil : ability.id }
+                            LanguageText(of: ability.name)
+                                .detailedText(size: .Detail)
+                                .onTapGesture {
+                                    withAnimation { appViewModel.currentInfo = InfoLanguage(title: ability.name, flavor: ability.flavor) }
                                 }
-                            }
+                            
                         }
                     }
                 }
@@ -117,28 +120,6 @@ struct PokemonInformation: View {
                     .detailedText(size: .Info)
                 Text(String(format: "%.1f kg", Double(details.weight)/10))
                     .detailedText(size: .Detail)
-            }
-        }
-    }
-    
-    private struct AbilityInfo: View {
-        let ability: PokemonAbility
-        let showing: Bool
-        let onTap: () -> Void
-        
-        var body: some View {
-            VStack(alignment: .leading, spacing: 0) {
-                LanguageText(of: ability.name)
-                    .detailedText(size: .Detail)
-                    .onTapGesture { onTap() }
-                if showing {
-                    LanguageText(of: ability.flavor)
-                        .detailedText(size: .Typing)
-                        .padding(4)
-                        .pixelRoundedBorder(cornerRadius: 4, borderColor: .primary)
-                        .onTapBackground(enabled: showing) { onTap() }
-                        .padding(.top, 2)
-                }
             }
         }
     }

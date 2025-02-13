@@ -9,15 +9,31 @@ import SwiftUI
 
 struct AppView: View {
     @EnvironmentObject private var languageManager: LanguageManager
+    @StateObject private var appViewModel: InfoManager = InfoManager()
     
     var body: some View {
         VStack(spacing: 0) {
-            NavigationView {
-                VStack(spacing: 0) {
-                    TopView()
-                    PokemonListView(viewModel: PokemonListViewModel())
+            ZStack {
+                NavigationView {
+                    VStack(spacing: 0) {
+                        TopView()
+                        PokemonListView(viewModel: PokemonListViewModel())
+                    }
+                    .background(Color(.secondarySystemBackground))
                 }
-                .background(Color(.secondarySystemBackground))
+                .environmentObject(appViewModel)
+                if let info = appViewModel.currentInfo {
+                    ZStack {
+                        Color.black.opacity(0.5)
+                            .edgesIgnoringSafeArea(.all)
+                            .transition(.opacity)
+                            .onTapGesture {
+                                withAnimation { appViewModel.currentInfo = nil }
+                            }
+                        Info(info)
+                            .transition(.scale)
+                    }
+                }
             }
             Divider()
             BottomView()
@@ -26,6 +42,28 @@ struct AppView: View {
         .ignoresSafeArea(.keyboard)
     }
     
+    
+    
+    private struct Info: View {
+        let info: InfoLanguage
+        
+        init(_ info: InfoLanguage) {
+            self.info = info
+        }
+        
+        var body: some View {
+            VStack(alignment: .center, spacing: 20) {
+                LanguageText(of: info.title)
+                    .detailedText(size: .Detail)
+                LanguageText(of: info.flavor)
+                    .detailedText(size: .Typing)
+            }
+            .padding()
+            .frame(maxWidth: .infinity, alignment: .center)
+            .pixelRoundedBorder(cornerRadius: 4, borderColor: .primary, fillColor: Color(.systemBackground))
+            .padding()
+        }
+    }
     
     // MARK: Top View
     struct TopView: View {

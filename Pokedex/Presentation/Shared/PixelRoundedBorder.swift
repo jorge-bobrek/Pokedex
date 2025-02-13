@@ -167,3 +167,25 @@ extension View {
         )
     }
 }
+
+/*
+struct ContentView: View {
+    var body: some View {
+        Text("Pixel Art Border")
+            .padding()
+            .pixelRoundedBorder(
+                cornerRadius: 16,
+                pixelSize: 1,
+                borderColor: .black,
+                fillColor: .yellow
+            )
+            .padding()
+    }
+}
+
+struct preview: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
+}
+*/
