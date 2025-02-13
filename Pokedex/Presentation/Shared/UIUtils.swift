@@ -171,21 +171,6 @@ private struct Stroke: ViewModifier {
     }
 }
 
-private struct BorderBackground: ViewModifier {
-    var radius: CGFloat
-    
-    func body(content: Content) -> some View {
-        content.background(
-            RoundedRectangle(cornerRadius: radius)
-                .stroke(.primary)
-                .background(
-                    RoundedRectangle(cornerRadius: radius)
-                        .fill(.background)
-                )
-        )
-    }
-}
-
 private struct DetailText: ViewModifier {
     let size: Size
     
@@ -202,9 +187,6 @@ extension View {
     }
     func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
         clipShape(RoundedCorner(radius: radius, corners: corners))
-    }
-    func borderBackground(cornerRadius: CGFloat = 0) -> some View {
-        modifier(BorderBackground(radius: cornerRadius))
     }
     func detailedText(size: Size) -> some View {
         modifier(DetailText(size: size))

@@ -31,7 +31,7 @@ struct SearchBar: View {
             }
             .padding(.vertical, 4)
             .padding(.horizontal, 8)
-            .borderBackground(cornerRadius: 18)
+            .pixelRoundedBorder(cornerRadius: 12, fillColor: Color(.systemBackground))
             if isFocused {
                 Button {
                     isFocused.toggle()

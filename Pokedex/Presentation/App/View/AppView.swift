@@ -19,6 +19,7 @@ struct AppView: View {
                 }
                 .background(Color(.secondarySystemBackground))
             }
+            Divider()
             BottomView()
                 .background(Color(.secondarySystemBackground))
         }

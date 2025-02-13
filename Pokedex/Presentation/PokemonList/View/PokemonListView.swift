@@ -12,18 +12,19 @@ struct PokemonListView: View {
     @StateObject var viewModel: PokemonListViewModel
     
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             HStack {
-                SearchBar(searchText: $viewModel.searchText)
-                Spacer(minLength: 10)
                 PickerView(selected: $viewModel.generation, items: [nil] + Region.allCases, direction: .down) { region in
                     Text(region?.displayName ?? "Todas")
                         .detailedText(size: .Detail)
                         .frame(width: 100)
                 }
+                Spacer(minLength: 10)
+                SearchBar(searchText: $viewModel.searchText)
             }
             .padding(10)
             .zIndex(1)
+            Divider()
             ScrollViewReader { proxy in
                 ScrollView {
                     if !viewModel.filteredPokemon.isEmpty {

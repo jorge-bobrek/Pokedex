@@ -162,10 +162,7 @@ struct VersionsSection: View {
                                 .cornerRadius(8)
                                 .foregroundColor(.white)
                         }
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(.secondary, lineWidth: 1)
-                        )
+                        .pixelRoundedBorder(cornerRadius: 8, pixelSize: 2)
                     }
                 }
             }

@@ -25,7 +25,7 @@ struct PickerView<T: Hashable, Content: View>: View {
             }
         }
         .foregroundStyle(.primary)
-        .borderBackground(cornerRadius: 4)
+        .pixelRoundedBorder(cornerRadius: 8, fillColor: Color(.systemBackground))
         .frame(height: 36, alignment: direction == .down ? .top : .bottom)
         .onTapBackground(enabled: showPicker) {
             withAnimation(.snappy(duration: 0.15)) {

@@ -40,6 +40,7 @@ final class PokemonListViewModel: ObservableObject {
             }
         }
         return searchText.isEmpty ? filtered : filtered.filter {
+            // TODO: Get list from "names" instead of "name"
             $0.name.lowercased().contains(searchText.lowercased())
         }
     }

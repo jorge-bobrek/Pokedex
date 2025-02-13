@@ -14,3 +14,9 @@ struct LanguageModel: Decodable, Identifiable, Hashable {
         case name
     }
 }
+// TODO: Global Language Manager
+//extension [LanguageModel] {
+//    var current: String {
+//        return LanguageManager().getLanguage(from: self)
+//    }
+//}

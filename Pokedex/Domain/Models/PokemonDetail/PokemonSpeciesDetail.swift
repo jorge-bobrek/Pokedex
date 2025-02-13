@@ -18,5 +18,5 @@ struct PokemonSpeciesDetail: Decodable, Identifiable {
     let eggGroups: [LanguageIdentifier]
     let pokemons: [PokemonDetail]
     
-    static let template = PokemonSpeciesDetail(id: 151, name: "mew", genderRate: -1, hasGenderDifferences: false, evolvesFromSpeciesId: nil, generationId: 1, evolutionChain: .template, speciesNames: [LanguageModel(id: 9, name: "Mew")], color: LanguageIdentifier(id: 6, name: [LanguageModel(id: 9, name: "Pink")]), eggGroups: [LanguageIdentifier(id: 15, name: [LanguageModel(id: 9, name: "Undiscovered")])], pokemons: [.template])
+    static let template = PokemonSpeciesDetail(id: 151, name: "mew", genderRate: -1, hasGenderDifferences: false, evolvesFromSpeciesId: nil, generationId: 1, evolutionChain: .template, speciesNames: [LanguageModel(id: 9, name: "Mew")], color: LanguageIdentifier(id: 6, name: [LanguageModel(id: 9, name: "Pink")]), eggGroups: [LanguageIdentifier(id: 15, name: [LanguageModel(id: 9, name: "Undiscovered")])], pokemons: [.mew])
 }

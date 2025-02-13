@@ -61,8 +61,7 @@ struct PokemonInformation: View {
                                 .frame(width: 90, height: 30)
                                 .background(Color(UIColor(named: monType) ?? .white))
                                 .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
-                                .shadow(color: .gray, radius: 1)
-                                .stroke()
+                                .pixelRoundedBorder(cornerRadius: 4)
                         }
                     }
                 }
@@ -136,7 +135,7 @@ struct PokemonInformation: View {
                     LanguageText(of: ability.flavor)
                         .detailedText(size: .Typing)
                         .padding(4)
-                        .borderBackground(cornerRadius: 4)
+                        .pixelRoundedBorder(cornerRadius: 4, borderColor: .primary)
                         .onTapBackground(enabled: showing) { onTap() }
                         .padding(.top, 2)
                 }
@@ -168,6 +167,7 @@ struct PokemonInformation: View {
                             .cornerRadius(16, corners: [.topRight, .bottomRight])
                     }
                 }
+                .pixelRoundedBorder(cornerRadius: 4, borderColor: .primary)
                 HStack(alignment: .center) {
                     if rate == -1 {
                         Text("Gender unknown")
@@ -197,6 +197,7 @@ struct PokemonInformation: View {
 
 struct PokemonInformation_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonInformation(species: PokemonSpeciesDetail.template, details: PokemonDetail.template)
+        PokemonInformation(species: PokemonSpeciesDetail.template, details: PokemonDetail.mew)
+            .environmentObject(LanguageManager())
     }
 }

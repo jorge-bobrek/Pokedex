@@ -35,13 +35,9 @@ struct PokemonStats: View {
 struct StatColor: View {
     let stat: Int
     var body: some View {
-        RoundedRectangle(cornerRadius: 4)
-            .fill(getColor(stat).opacity(0.8))
+        Color.clear
             .frame(width: CGFloat(stat), height: 16)
-            .overlay(
-                RoundedRectangle(cornerRadius: 4)
-                    .stroke(getColor(stat), lineWidth: 2)
-            )
+            .pixelRoundedBorder(cornerRadius: 8, pixelSize: 2, borderColor: getColor(stat), fillColor: getColor(stat).opacity(0.8))
     }
     
     func getColor(_ stat: Int) -> Color {
@@ -63,5 +59,5 @@ struct StatColor: View {
 }
 
 #Preview {
-    PokemonStats(stats: PokemonDetail.template.pokemonStats)
+    PokemonStats(stats: PokemonDetail.mew.pokemonStats)
 }
