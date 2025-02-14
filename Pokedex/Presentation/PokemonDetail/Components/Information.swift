@@ -51,17 +51,20 @@ struct PokemonInformation: View {
             LazyVGrid(columns: columns, spacing: 10) {
                 Text("Types")
                     .detailedText(size: .Info)
+                    .shadowed()
                 HStack {
                     ForEach(details.pokemonTypes) { type in
                         if let monType = MonType[type.id] {
                             LanguageText(of: type.typeName)
                                 .detailedText(size: .Typing)
-                                .multilineTextAlignment(.center)
-                                .foregroundStyle(.white)
-                                .frame(width: 90, height: 30)
-                                .background(Color(UIColor(named: monType) ?? .white))
-                                .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
-                                .pixelRoundedBorder(cornerRadius: 4)
+                                .shadowed()
+                                .background(
+                                    Image("type")
+                                        .resizable()
+                                        .frame(width: 90, height: 30)
+                                        .colorMultiply(Color(UIColor(named: monType) ?? UIColor(named: "???")!))
+                                        .offset(y: 2)
+                                )
                         }
                     }
                 }

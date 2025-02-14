@@ -198,6 +198,26 @@ private struct DetailText: ViewModifier {
     }
 }
 
+private struct ShadowedTextModifier: ViewModifier {
+    let offsets: [(x: CGFloat, y: CGFloat, color: Color)] = [
+        (1, 1, .gray),
+        (1, 0, .gray),
+        (0, 1, .gray),
+        (0, 0, .white)
+    ]
+    
+    func body(content: Content) -> some View {
+        ZStack {
+            ForEach(0..<offsets.count, id: \.self) { index in
+                let offset = offsets[index]
+                content
+                    .foregroundStyle(offset.color)
+                    .offset(x: offset.x, y: offset.y)
+            }
+        }
+    }
+}
+
 extension View {
     func stroke(color: Color = .primary, width: CGFloat = 1) -> some View {
         modifier(Stroke(width: width, color: color))
@@ -207,6 +227,9 @@ extension View {
     }
     func detailedText(size: Size) -> some View {
         modifier(DetailText(size: size))
+    }
+    func shadowed() -> some View {
+        self.modifier(ShadowedTextModifier())
     }
     
     @ViewBuilder
