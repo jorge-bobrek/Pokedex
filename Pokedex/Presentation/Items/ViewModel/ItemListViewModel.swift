@@ -10,16 +10,10 @@ import SwiftUI
 @MainActor
 final class ItemListViewModel: ObservableObject {
     @Published var items: [Item] = []
-    @Published var selected: Int = 0
+    @Published var pocket: ItemPocket = .items
+    @Published var item: Item?
     
     private let itemsRepository = ItemsRepository()
-    
-    var filteredItems: [Item] {
-        let filtered = items
-        return filtered.filter {
-            $0.itemPocketId == selected + 1
-        }
-    }
     
     init() {
         Task { [weak self] in
@@ -30,7 +24,9 @@ final class ItemListViewModel: ObservableObject {
     
     func getItemList() async {
         do {
-            self.items = try await self.itemsRepository.getAllItems()
+            let list = try await self.itemsRepository.getAllItems()
+            self.items = list
+            self.item = list.first(where: {$0.itemPocketId == 1})
         } catch {
             print(error)
         }

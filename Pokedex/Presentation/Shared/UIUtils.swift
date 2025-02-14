@@ -50,6 +50,22 @@ struct PokemonImage: View {
         }
     }
 }
+struct ItemImage: View {
+    let name: String
+    let size: Double
+    
+    var body: some View {
+        AsyncImage(url: URL(string: "http://149.130.182.84:26999/sprites\(SpriteEndpoint.item.rawValue)/\(name).png")) { image in
+            image
+                .resizable()
+                .scaledToFit()
+                .frame(width: size, height: size)
+        } placeholder: {
+            SkeletonView(cellFrame: (size-(size/8), size-(size/8)), cornerRadius: size/8)
+                .frame(width: size, height: size)
+        }
+    }
+}
 
 enum SpriteEndpoint: String {
     case pokemon = "/pokemon"
@@ -104,6 +120,7 @@ enum Size: CGFloat {
     case Info = 32
     case Detail = 28
     case Typing = 24
+    case Text = 20
     case Hint = 16
     case Table = 14
 }
@@ -165,7 +182,7 @@ private struct Stroke: ViewModifier {
                 content.offset(x: -width, y:  width)
                 content.offset(x:  width, y: -width)
             }
-            .foregroundColor(color)
+            .foregroundStyle(color)
             content
         }
     }

@@ -160,7 +160,7 @@ struct VersionsSection: View {
                                     )
                                 )
                                 .cornerRadius(8)
-                                .foregroundColor(.white)
+                                .foregroundStyle(.white)
                         }
                         .pixelRoundedBorder(cornerRadius: 8, pixelSize: 2)
                     }

@@ -40,7 +40,7 @@ struct TabContent: View {
             Image(iconName)
                 .resizable()
                 .frame(width: 48, height: 48)
-                .foregroundColor(.primary)
+                .foregroundStyle(.primary)
             Text(title)
                 .detailedText(size: .Detail)
         }

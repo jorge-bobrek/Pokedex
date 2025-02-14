@@ -72,6 +72,16 @@
         }
       }
     },
+    "Bag" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bolsa"
+          }
+        }
+      }
+    },
     "Cancel" : {
       "localizations" : {
         "es" : {
@@ -178,16 +188,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "HP"
-          }
-        }
-      }
-    },
-    "Items" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Objetos"
           }
         }
       }

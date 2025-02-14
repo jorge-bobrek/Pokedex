@@ -163,7 +163,7 @@ extension View {
                 pixelSize: pixelSize
             )
             .fill(borderColor)
-            .padding(-0.5)
+            .padding(-1)
         )
     }
 }

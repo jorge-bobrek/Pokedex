@@ -15,11 +15,11 @@ struct PokemonItemView: View {
             PokemonImage(name: pokemon.name, size: 100, endpoint: .pokemon)
             LanguageText(of: pokemon.names)
                 .detailedText(size: .Info)
-                .foregroundColor(.primary)
+                .foregroundStyle(.primary)
             Spacer(minLength: 0)
             InfoText("#\(String(format: "%04d", pokemon.id))")
                 .detailedText(size: .Info)
-                .foregroundColor(.primary)
+                .foregroundStyle(.primary)
         }
     }
 }

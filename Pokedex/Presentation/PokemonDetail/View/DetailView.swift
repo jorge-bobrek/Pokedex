@@ -27,7 +27,7 @@ struct PokemonDetailView: View {
                                         .detailedText(size: .Detail)
                                 }
                             }
-                            .foregroundColor(.primary)
+                            .foregroundStyle(.primary)
                             .padding()
                         }, selectedTab: $vm.selectedPokemon)
                     }

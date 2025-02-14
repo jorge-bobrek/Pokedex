@@ -30,10 +30,10 @@ final class LanguageManager: ObservableObject {
     
     func getLanguage(from names: [LanguageModel]?) -> String {
         if self.latinToggle {
-            return (names?.first(where: { $0.id == selectedLanguage.rawValue })?.name ?? "Traducción no disponible")
+            return (names?.first(where: { $0.id == selectedLanguage.rawValue })?.name?.replacingOccurrences(of: "\n", with: " ") ?? "Traducción no disponible")
                 .applyingTransform(.toLatin, reverse: false) ?? "Traducción no disponible"
         }
-        return names?.first(where: { $0.id == selectedLanguage.rawValue })?.name ?? "Traducción no disponible"
+        return names?.first(where: { $0.id == selectedLanguage.rawValue })?.name?.replacingOccurrences(of: "\n", with: " ") ?? "Traducción no disponible"
     }
 }
 

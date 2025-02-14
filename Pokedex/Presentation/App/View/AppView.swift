@@ -10,14 +10,24 @@ import SwiftUI
 struct AppView: View {
     @EnvironmentObject private var languageManager: LanguageManager
     @StateObject private var appViewModel: InfoManager = InfoManager()
+    @State private var selected = 0
     
     var body: some View {
         VStack(spacing: 0) {
             ZStack {
                 NavigationView {
                     VStack(spacing: 0) {
-                        TopView()
-                        PokemonListView(viewModel: PokemonListViewModel())
+                        HomeTabsView(tabs: [
+                            HomeTab(icon: Image("pokedex"), title: "Pokédex"),
+                            HomeTab(icon: Image("bag"), title: "Bag")
+                        ], selectedTab: $selected)
+                        TabView(selection: $selected) {
+                            PokemonListView(viewModel: PokemonListViewModel())
+                                .tag(0)
+                            ItemListView(viewModel: ItemListViewModel())
+                                .tag(1)
+                        }
+                        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                     }
                     .background(Color(.secondarySystemBackground))
                 }
@@ -41,8 +51,6 @@ struct AppView: View {
         }
         .ignoresSafeArea(.keyboard)
     }
-    
-    
     
     private struct Info: View {
         let info: InfoLanguage
@@ -91,11 +99,11 @@ struct AppView: View {
                             .foregroundStyle(.primary)
                     }
                 }
-                NavigationLink(destination: ItemListView()) {
+                NavigationLink(destination: ItemListView(viewModel: ItemListViewModel())) {
                     HStack {
                         Image(systemName: "bag.fill")
                             .foregroundStyle(.orange)
-                        Text("Items")
+                        Text("Bag")
                             .detailedText(size: .Detail)
                             .foregroundStyle(.primary)
                     }
@@ -135,4 +143,3 @@ struct AppView: View {
     }
     
 }
-
